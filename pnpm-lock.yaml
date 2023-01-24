@@ -4,6 +4,7 @@ specifiers:
   '@playwright/test': ^1.28.1
   '@sveltejs/adapter-auto': ^1.0.0
   '@sveltejs/kit': ^1.0.0
+  moduli: github:michdorf/moduli
   prettier: ^2.8.0
   prettier-plugin-svelte: ^2.8.1
   svelte: ^3.54.0
@@ -12,6 +13,9 @@ specifiers:
   typescript: ^4.9.3
   vite: ^4.0.0
   vitest: ^0.25.3
+
+dependencies:
+  moduli: github.com/michdorf/moduli/89e7c32c21a2f50214bc8493113c2c71d24b2b40
 
 devDependencies:
   '@playwright/test': 1.29.2
@@ -1033,7 +1037,6 @@ packages:
   /svelte/3.55.1:
     resolution: {integrity: sha512-S+87/P0Ve67HxKkEV23iCdAh/SX1xiSfjF1HOglno/YTbSTW7RniICMCofWGdJJbdjw3S+0PfFb1JtGfTXE0oQ==}
     engines: {node: '>= 8'}
-    dev: true
 
   /tiny-glob/0.2.9:
     resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}
@@ -1216,3 +1219,11 @@ packages:
   /wrappy/1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
+
+  github.com/michdorf/moduli/89e7c32c21a2f50214bc8493113c2c71d24b2b40:
+    resolution: {commit: 89e7c32c21a2f50214bc8493113c2c71d24b2b40, repo: git+ssh://git@github.com/michdorf/moduli.git, type: git}
+    name: moduli
+    version: 1.0.0
+    dependencies:
+      svelte: 3.55.1
+    dev: false
