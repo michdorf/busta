@@ -1,3 +1,10 @@
+# Mine tanker/ideer
+
+Jeg er meget glad for You Need a Budget. 
+Min ide er at gå i samme retning.
+**Mht.** buste/envelopes, så mener jeg at man bør kunne lave dem og assigne penge til dem, som så "går" videre hvis man bruger for meget/for lidt (men målet bliver "nulstillet").
+Ift. "Ready to assign" så bør det være en beregnet værdi, som opdateres ift. hvor der ligger penge henne (hvor de er assignet).
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
