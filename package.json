@@ -28,6 +28,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"moduli": "github:michdorf/moduli"
+		"moduli": "github:michdorf/moduli",
+		"oauth-client": "github:michdorf/oauth-client"
 	}
 }

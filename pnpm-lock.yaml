@@ -5,6 +5,7 @@ specifiers:
   '@sveltejs/adapter-auto': ^1.0.2
   '@sveltejs/kit': ^1.2.6
   moduli: github:michdorf/moduli
+  oauth-client: github:michdorf/oauth-client
   prettier: ^2.8.3
   prettier-plugin-svelte: ^2.9.0
   svelte: ^3.55.1
@@ -16,6 +17,7 @@ specifiers:
 
 dependencies:
   moduli: github.com/michdorf/moduli/9ef56bda655e931e51133d75c3c3204faf00dec7
+  oauth-client: github.com/michdorf/oauth-client/c8ed03a5c215d946af4ec92175084b19face1adc
 
 devDependencies:
   '@playwright/test': 1.29.2
@@ -390,6 +392,11 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
+
+  /base64-arraybuffer/1.0.2:
+    resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
+    engines: {node: '>= 0.6.0'}
+    dev: false
 
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -1226,4 +1233,13 @@ packages:
     version: 1.0.0
     dependencies:
       svelte: 3.55.1
+    dev: false
+
+  github.com/michdorf/oauth-client/c8ed03a5c215d946af4ec92175084b19face1adc:
+    resolution: {commit: c8ed03a5c215d946af4ec92175084b19face1adc, repo: git+ssh://git@github.com/michdorf/oauth-client.git, type: git}
+    name: oauth-client
+    version: 1.1.0
+    dependencies:
+      base64-arraybuffer: 1.0.2
+      moduli: github.com/michdorf/moduli/9ef56bda655e931e51133d75c3c3204faf00dec7
     dev: false
