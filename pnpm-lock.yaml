@@ -1,21 +1,21 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@playwright/test': ^1.28.1
-  '@sveltejs/adapter-auto': ^1.0.0
-  '@sveltejs/kit': ^1.0.0
+  '@playwright/test': ^1.29.2
+  '@sveltejs/adapter-auto': ^1.0.2
+  '@sveltejs/kit': ^1.2.6
   moduli: github:michdorf/moduli
-  prettier: ^2.8.0
-  prettier-plugin-svelte: ^2.8.1
-  svelte: ^3.54.0
-  svelte-check: ^3.0.1
+  prettier: ^2.8.3
+  prettier-plugin-svelte: ^2.9.0
+  svelte: ^3.55.1
+  svelte-check: ^3.0.2
   tslib: ^2.4.1
-  typescript: ^4.9.3
-  vite: ^4.0.0
-  vitest: ^0.25.3
+  typescript: ^4.9.4
+  vite: ^4.0.4
+  vitest: ^0.25.8
 
 dependencies:
-  moduli: github.com/michdorf/moduli/89e7c32c21a2f50214bc8493113c2c71d24b2b40
+  moduli: github.com/michdorf/moduli/9ef56bda655e931e51133d75c3c3204faf00dec7
 
 devDependencies:
   '@playwright/test': 1.29.2
@@ -1220,8 +1220,8 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
-  github.com/michdorf/moduli/89e7c32c21a2f50214bc8493113c2c71d24b2b40:
-    resolution: {commit: 89e7c32c21a2f50214bc8493113c2c71d24b2b40, repo: git+ssh://git@github.com/michdorf/moduli.git, type: git}
+  github.com/michdorf/moduli/9ef56bda655e931e51133d75c3c3204faf00dec7:
+    resolution: {commit: 9ef56bda655e931e51133d75c3c3204faf00dec7, repo: git+ssh://git@github.com/michdorf/moduli.git, type: git}
     name: moduli
     version: 1.0.0
     dependencies:
