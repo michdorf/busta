@@ -1,4 +1,4 @@
-import oauthclient from "./oauth-client";
+import oauthclient, { autoLogin } from "./oauth-client";
 
 if (typeof window != "undefined") {
     let accessToken = oauthclient.getAccessToken();
@@ -11,7 +11,9 @@ export function sync(payload?: any) {
     return new Promise((resolve: (response: string) => void, reject) => {
         let token = oauthclient.getAccessToken();
         if (!token) {
-            reject("no token");
+            if (!autoLogin()) {
+                reject("no token");
+            }
         }
 
         let options: RequestInit = {
