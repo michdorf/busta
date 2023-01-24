@@ -1,8 +1,5 @@
 <script lang="ts">
     import Stato from '$lib/stato/main'; // Ensure load
-    import {sync} from '$lib/api';
-
-    sync({id:"asdasd"});
 </script>
 
 <nav>

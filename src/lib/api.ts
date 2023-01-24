@@ -7,20 +7,27 @@ if (typeof window != "undefined") {
     }
 }
 
-export function sync(payload: any) {
-    let token = oauthclient.getAccessToken();
-    if (!token) {
-        return;
-    }
+export function sync(payload?: any) {
+    return new Promise((resolve: (response: string) => void, reject) => {
+        let token = oauthclient.getAccessToken();
+        if (!token) {
+            reject("no token");
+        }
 
-    fetch("https://dechiffre.dk/busta/api/", {
-        method: 'POST',
-        mode: 'cors',
-        headers: new Headers({
-            'Authorization': 'Bearer ' + token
-        }),
-        body: JSON.stringify(payload)
-    }).then((response) => {
-        console.log(response.text());
-    })
+        let options: RequestInit = {
+            method: 'POST',
+            mode: 'cors',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + token
+            })
+        };
+
+        if (payload) {
+            options.body = JSON.stringify(payload);
+        }
+
+        fetch("https://dechiffre.dk/busta/api/", options).then(async (response) => {
+            resolve(await response.text());
+        }).catch(reject)
+    });
 }
