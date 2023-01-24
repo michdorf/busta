@@ -17,7 +17,7 @@ specifiers:
 
 dependencies:
   moduli: github.com/michdorf/moduli/9ef56bda655e931e51133d75c3c3204faf00dec7
-  oauth-client: github.com/michdorf/oauth-client/c8ed03a5c215d946af4ec92175084b19face1adc
+  oauth-client: github.com/michdorf/oauth-client/9b8da0ad4a18242fdc398a4b01d047c78847eabc
 
 devDependencies:
   '@playwright/test': 1.29.2
@@ -1235,8 +1235,8 @@ packages:
       svelte: 3.55.1
     dev: false
 
-  github.com/michdorf/oauth-client/c8ed03a5c215d946af4ec92175084b19face1adc:
-    resolution: {commit: c8ed03a5c215d946af4ec92175084b19face1adc, repo: git+ssh://git@github.com/michdorf/oauth-client.git, type: git}
+  github.com/michdorf/oauth-client/9b8da0ad4a18242fdc398a4b01d047c78847eabc:
+    resolution: {commit: 9b8da0ad4a18242fdc398a4b01d047c78847eabc, repo: git+ssh://git@github.com/michdorf/oauth-client.git, type: git}
     name: oauth-client
     version: 1.1.0
     dependencies:
