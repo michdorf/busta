@@ -37,7 +37,11 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     appState.subscribe((v) => {
         if (primoAuth && v.authState == 'authorized') {
             sync().then((responseTxt) => {
-                localStorage.setItem(storKey, responseTxt);
+                if (responseTxt[0] == "{") {
+                    localStorage.setItem(storKey, responseTxt);
+                } else {
+                    console.log("Sembra un errore da dechiffre.dk", responseTxt);
+                }
                 init();
             });
 
