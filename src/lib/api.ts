@@ -8,12 +8,11 @@ if (typeof window != "undefined") {
 }
 
 export function sync(payload?: any) {
-    return new Promise((resolve: (response: string) => void, reject) => {
+    return new Promise(async (resolve: (response: string) => void, reject) => {
         let token = oauthclient.getAccessToken();
         if (!token) {
-            if (!autoLogin()) {
-                reject("no token");
-            }
+            reject("no token")
+            return;
         }
 
         let options: RequestInit = {

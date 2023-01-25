@@ -1,8 +1,9 @@
-import { derived } from 'svelte/store'
+import { derived, get } from 'svelte/store'
 import Buste from './buste';
 import Conti from './conti'
 import Trasferimenti from './trasferimenti'
 import {sync} from '$lib/api';
+import appState from './app';
 
 let Stato = derived([Conti, Trasferimenti, Buste], ([$conti, $trasferimenti, $buste]) => {
     return {
@@ -28,17 +29,25 @@ if (typeof window != "undefined" && 'localStorage' in window) {
             if (!primoSinc) {
                 sync(valore);
             }
-
             primoSinc = false;
         });
     }
     
-    sync().then((responseTxt) => {
-        localStorage.setItem(storKey, responseTxt);
-        init();
-    }).catch(() => {
-        init();
+    let primoAuth = true;
+    appState.subscribe((v) => {
+        if (primoAuth && v.authState == 'authorized') {
+            sync().then((responseTxt) => {
+                localStorage.setItem(storKey, responseTxt);
+                init();
+            });
+
+            primoAuth = false;
+        }
     });
+    
+    if (get(appState).authState != "authorized") { // If user has been authorized beforehand
+        init();
+    }
 }
 
 export default Stato;

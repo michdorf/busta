@@ -3,5 +3,5 @@
 </script>
 
 {#each $Buste as busta}
-    <b>{busta.nome}</b><br>
+    <b>{busta.nome}</b> Assegnato: {busta.target - busta.assegnato} ({busta.assegnato} - {busta.target})<br>
 {/each}

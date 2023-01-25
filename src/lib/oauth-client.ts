@@ -1,5 +1,6 @@
 import { PUBLIC_CLIENT_ID, PUBLIC_CLIENT_SECRET } from '$env/static/public';
 import OAuthClient from 'oauth-client/src/oauthclient'
+import appState, { updateAuthState } from './stato/app';
 
 // TODO: update oauth-client to work when window and localStorage are undefined
 
@@ -12,15 +13,26 @@ let oauthclient = new OAuthClient({
 });
 
 export function autoLogin() {
-    let authState = getAuthState();
-    if (authState == 'authorized') {
-        return true;
-    }
-    if (authState == 'access-token expired') {
-        oauthclient.refreshToken();
-        return true;
-    }
-    return false;
+    return new Promise<string | false>((resolve, reject) => {
+        let authState = getAuthState();
+        if (authState == 'authorized') {
+            updateAuthState('authorized');
+            resolve(oauthclient.getAccessToken());
+            return;
+        }
+        if (authState == 'access-token expired') {
+            oauthclient.refreshToken().then((accesstoken) => {
+                updateAuthState('authorized');
+                resolve(accesstoken.access_token);
+            }).catch(() => {
+                updateAuthState("no token");
+                reject();
+            });
+            return;
+        }
+        updateAuthState("no token");
+        reject(false);
+    });
 }
 
 export type LoginState = 'authorized' | 'access-token expired' | 'refresh-token expired' | 'no token';
@@ -40,7 +52,6 @@ function getAuthState(): LoginState {
         refreshExpire = new Date(refreshExpire);
         refreshExpire.setDate(refreshExpire.getDate() + refreshTokenExpireTime);
         if (refreshExpire.getTime() < Date.now()) {
-            
             return 'refresh-token expired';
         } else {
             return 'access-token expired';
