@@ -2,7 +2,7 @@
  * Questo stato non viene salvato su refresh
  */
 
-import { autoLogin, type LoginState } from "$lib/oauth-client";
+import { autoLogin, useOauth, type LoginState } from "$lib/oauth-client";
 import { writable } from "svelte/store";
 
 const appState = writable<{
@@ -16,6 +16,11 @@ export function updateAuthState(state: LoginState) {
 }
 
 async function initLogin() {
+    if (!useOauth) {
+        updateAuthState("authorized");
+        return;
+    }
+
     try {
         let authed = await autoLogin();
         if (authed == false) {
