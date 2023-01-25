@@ -28,6 +28,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^1.0.5",
 		"moduli": "github:michdorf/moduli",
 		"oauth-client": "github:michdorf/oauth-client"
 	}
