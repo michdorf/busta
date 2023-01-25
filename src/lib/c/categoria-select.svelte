@@ -1,12 +1,12 @@
 <script lang="ts">
-import buste, { nuovaBusta as genBusta, type Busta } from "$lib/stato/buste";
 import { salvaWritable } from "$lib/salvabile";
-import CategoriaSelect from "$lib/c/categoria-select.svelte";
+import categorie, { nuovaCategoria as genCategoria, type Categoria } from "$lib/stato/categorie";
 
 export let value: string | null;
+export let placeholder = "";
 
 let aggiungi = false;
-let nuovaBusta: Busta = genBusta();
+let nuovaCategoria: Categoria = genCategoria();
 function onChange() {
     if (value == "agg") {
         aggiungi = true;
@@ -16,9 +16,9 @@ function onChange() {
     }
 }
 
-function salvaBusta() {
-    salvaWritable(nuovaBusta, buste);
-    console.log($buste);
+function salvaCategoria() {
+    salvaWritable(nuovaCategoria, categorie);
+    console.log($categorie);
 
     aggiungi = false;
 }
@@ -26,22 +26,20 @@ function salvaBusta() {
 
 {#if aggiungi}
 <div class="modal">
-    <h3 style="margin:0;padding:0">Aggiungi busta</h3>
+    <h3 style="margin:0;padding:0">Aggiungi categoria</h3>
     <div style="float: right" on:click={() => {aggiungi = false}}>X</div>
-    <form on:submit|preventDefault={salvaBusta}>
+    <form on:submit|preventDefault={salvaCategoria}>
         <label for="nome">Nome</label>
-        <input bind:value={nuovaBusta.nome} placeholder="Nome della busta" /><br>
-        <label for="categoria">Categoria</label>
-        <CategoriaSelect bind:value={nuovaBusta.categoria} placeholder="Categoria" /><br>
+        <input bind:value={nuovaCategoria.nome} placeholder="Nome della busta" /><br>
         <button type="submit">Salva</button>
     </form>
 </div>
 {/if}
 
 <select bind:value={value} on:change={onChange}>
-    <option value="" disabled>Buste</option>
-    {#each $buste as busta}
-        <option value={busta.id}>{busta.nome} {(busta.target - busta.assegnato)}</option>
+    <option value="" disabled>{placeholder}</option>
+    {#each $categorie as categoria}
+        <option value={categoria.id}>{categoria.nome}</option>
     {/each}
     <option value="agg">Aggiungi</option>
 </select>

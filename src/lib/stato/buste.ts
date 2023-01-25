@@ -1,14 +1,11 @@
 import { get, writable } from "svelte/store";
 import Ricorrente from 'moduli/moduli/ricorrente'
-
-interface Categoria {
-    id: string;
-    nome: string;
-}
+import type { Categoria } from "./categorie";
 
 export interface Busta {
     id: string;
     nome: string;
+    categoria: string;
     assegnato: number;
     target: number;
     ripeti: Ricorrente;
@@ -22,6 +19,7 @@ export function nuovaBusta(): Busta {
         id: "-1",
         nome: "",
         assegnato: 0,
+        categoria: "",
         target: 0,
         ripeti: new Ricorrente('m', 1, new Date()),
         creato: new Date()

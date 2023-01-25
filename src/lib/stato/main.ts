@@ -4,12 +4,14 @@ import Conti from './conti'
 import Trasferimenti from './trasferimenti'
 import {sync} from '$lib/api';
 import appState from './app';
+import Categorie from './categorie';
 
-let Stato = derived([Conti, Trasferimenti, Buste], ([$conti, $trasferimenti, $buste]) => {
+let Stato = derived([Conti, Trasferimenti, Buste, Categorie], ([$conti, $trasferimenti, $buste, $categorie]) => {
     return {
         conti: $conti,
         trasferimenti: $trasferimenti,
-        buste: $buste
+        buste: $buste,
+        categorie: $categorie
     }
 });
 
@@ -21,6 +23,7 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         Trasferimenti.set(stato.trasferimenti || []);
         Conti.set(stato.conti || []);
         Buste.set(stato.buste || []);
+        Categorie.set(stato.categorie || []);
         
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */
@@ -52,6 +55,13 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     if (get(appState).authState != "authorized") { // If user has been authorized beforehand
         init();
     }
+}
+
+export function reset() {
+    Conti.set([]);
+    Trasferimenti.set([]);
+    Buste.set([]);
+    Categorie.set([]);
 }
 
 export default Stato;
