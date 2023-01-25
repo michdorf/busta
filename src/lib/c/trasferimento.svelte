@@ -23,12 +23,23 @@
         }
     }
 
-    const dispatch = createEventDispatcher<{salva:{trasferimento: Trasferimento}}>();
+    const dispatch = createEventDispatcher<{
+        salva:{trasferimento: Trasferimento},
+        elimina:{trasferimento: Trasferimento}
+    }>();
     function salva() {
         trasferimento.amount = inflow ? inflow : -(outflow || 0);
         dispatch("salva", {
             trasferimento
         });
+    }
+
+    function elimina() {
+        if (confirm("Vuoi veramente eliminarlo?")) {
+            dispatch("elimina", {
+                trasferimento
+            });
+        }
     }
 </script>
 
@@ -41,4 +52,7 @@
     <AmmontaInput name="inflow" bind:value={inflow} placeholder="Inflow" on:blur={() => preventInOutFlow('in')} />
 
     <button type="submit">Salva</button>
+    {#if trasferimento.id}
+    <button type="button" on:click={elimina}>Elimina</button>
+    {/if}
 </form>

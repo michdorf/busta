@@ -1,7 +1,7 @@
 <script lang="ts">
     import {page} from '$app/stores'
 	import Trasferimento from '$lib/c/trasferimento.svelte';
-	import { salvaWritable } from '$lib/salvabile';
+	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
 
@@ -27,8 +27,18 @@
     }
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
+        if (event.detail.trasferimento.id == "") {
+            trasInEdita = initialTras();
+        }
         salvaWritable(event.detail.trasferimento, trasferimentiStato);
-        trasInEdita = initialTras();
+    }
+
+    function elimina(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
+        if (event.detail.trasferimento.id == "") {
+            console.error("Richiede un id per eliminare");
+            return;
+        }
+        eliminaWritable(event.detail.trasferimento, trasferimentiStato);
     }
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
@@ -36,7 +46,7 @@
 <h3>Ingen overførsler</h3>
 {:else}
     {#each trasferimenti as trasferimento (trasferimento.id)}
-        <Trasferimento trasferimento={trasferimento} on:salva={salva}></Trasferimento>
+        <Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento>
     {/each}
 {/if}
 

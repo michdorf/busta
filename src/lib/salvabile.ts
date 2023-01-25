@@ -30,3 +30,13 @@ export function salvaWritable<T>(daSalvare: T, writable: Writable<T[]>) {
         })
     }
 }
+
+export function eliminaWritable<T>(daEliminare: T, writable: Writable<T[]>) {
+    if ((daEliminare as any).id) {
+        writable.update((v) => {
+            return v.filter((_el) => {
+                return (_el as WithId).id !== (daEliminare as WithId).id;
+            });
+        });
+    }
+}
