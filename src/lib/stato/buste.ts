@@ -1,13 +1,14 @@
 import { get, writable } from "svelte/store";
 import Ricorrente from 'moduli/moduli/ricorrente'
-import type { Categoria } from "./categorie";
+import type TargetT from "../interfacce/target";
 
 export interface Busta {
     id: string;
     nome: string;
     categoria: string;
     assegnato: number;
-    target: number;
+    targetAbilitato: boolean;
+    target: TargetT;
     ripeti: Ricorrente;
     creato: Date;
 }
@@ -20,7 +21,11 @@ export function nuovaBusta(): Busta {
         nome: "",
         assegnato: 0,
         categoria: "",
-        target: 0,
+        targetAbilitato: false,
+        target: {
+            target: 0,
+            tipo: 'spending'
+        },
         ripeti: new Ricorrente('m', 1, new Date()),
         creato: new Date()
     }

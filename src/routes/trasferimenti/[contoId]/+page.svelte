@@ -1,6 +1,7 @@
 <script lang="ts">
     import {page} from '$app/stores'
 	import Trasferimento from '$lib/c/trasferimento.svelte';
+	import { toISOstr } from '$lib/date';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
@@ -21,10 +22,7 @@
         };
     }
     let trasInEdita = initialTras();
-
-    function toISOstr(d: Date) {
-        return d.toISOString().split('T')[0];
-    }
+    $: saldo = trasferimenti.reduce((prev, cur) => prev + cur.amount, conto.balance);
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
         if (event.detail.trasferimento.id == "") {
@@ -42,6 +40,7 @@
     }
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
+<h3>{saldo}</h3>
 {#if trasferimenti.length < 1}
 <h3>Ingen overførsler</h3>
 {:else}

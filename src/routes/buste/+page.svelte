@@ -1,4 +1,5 @@
 <script lang="ts">
+    import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
 	import { salvaWritable } from "$lib/salvabile";
     import Buste, {type Busta as BustaT} from "$lib/stato/buste";
@@ -23,6 +24,16 @@
         }
     }
 
+    function salvaBustaDetail(event: CustomEvent<{busta: BustaT}>) {
+        const busta = event.detail.busta;
+        bustaSelez.targetAbilitato = busta.targetAbilitato;
+        bustaSelez.target = busta.target;
+        bustaSelez.ripeti = busta.ripeti;
+
+        salvaWritable(bustaSelez, Buste);
+    }
+
+    let bustaSelez: BustaT;
     $: balance = $Trasferimenti.reduce((prev, cur) => prev + cur.amount, 0);
     $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0); 
 
@@ -31,32 +42,40 @@
 
 <div>
     <span style="font-size: 2rem;">Da assegnare {daAssegnare}</span><br/>
-    {balance} - {assegnato}
+    {balance} balance - {assegnato} assegnato
 </div>
 
-{#each $Categorie as categoria, i}
-<details open>
-    <summary>
-        {categoria.nome}
-        <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
-    </summary>
-    {#each conCategoria[i] as busta}
-        <Busta {busta} />
-    {/each}
-</details>
-{/each}
+<div class="grid-cont">
+    <div>
+        {#each $Categorie as categoria, i}
+        <details open>
+            <summary>
+                {categoria.nome}
+                <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
+            </summary>
+            {#each conCategoria[i] as busta}
+                <span on:click={() => {bustaSelez = busta}}><Busta {busta} /></span>
+            {/each}
+        </details>
+        {/each}
 
-{#if senzaCategoria.length}
-<details open>
-    <summary>
-      Senza categoria
-      <!---<span class="icon">👇</span>-->
-    </summary>
-    {#each senzaCategoria as busta}
-    <Busta {busta} />
-    {/each}
-</details>
-{/if}
+        {#if senzaCategoria.length}
+        <details open>
+            <summary>
+            Senza categoria
+            <!---<span class="icon">👇</span>-->
+            </summary>
+            {#each senzaCategoria as busta}
+            <Busta {busta} />
+            {/each}
+        </details>
+        {/if}
+    </div>
+    
+    <div>
+       <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail}/>
+    </div>
+</div>
 
 <style>
 details[open] summary span.icon {
@@ -65,5 +84,24 @@ details[open] summary span.icon {
 
 summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
+}
+
+.grid-cont {
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    grid-template-rows: 1fr; 
+    grid-column-gap: 5px;
+    grid-row-gap: 5px; 
+}
+
+@media only screen and (max-width: 640px) {
+    .grid-cont {
+        gap: 0;
+        grid-template-columns: 1fr; /* 1x kolonner fyldende 1 fraction hver */
+    }
+
+    .grid-cont > div {
+        margin-top: 2rem;
+    }
 }
 </style>

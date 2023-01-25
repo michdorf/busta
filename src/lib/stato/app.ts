@@ -6,9 +6,11 @@ import { autoLogin, useOauth, type LoginState } from "$lib/oauth-client";
 import { writable } from "svelte/store";
 
 const appState = writable<{
-    authState: LoginState
+    authState: LoginState;
+    meseSelez: Date;
 }>({
     authState: "no token",
+    meseSelez: new Date()
 });
 
 export function updateAuthState(state: LoginState) {
