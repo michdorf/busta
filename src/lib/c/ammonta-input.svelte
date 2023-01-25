@@ -4,7 +4,11 @@ export let name = "";
 export let placeholder = "Estimat"
 
 function comma2dot() {
-    value = Math.round(parseFloat(`${value}`.replace(/,/g, "."))*100) / 100;
+    let num = parseFloat(`${value}`.replace(/,/g, "."));
+    if (isNaN(num)) {
+        num = 0;
+    }
+    value = Math.round(num * 100) / 100;
 }
 </script>
 
