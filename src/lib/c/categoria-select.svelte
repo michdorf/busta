@@ -27,7 +27,7 @@ function salvaCategoria() {
 {#if aggiungi}
 <div class="modal">
     <h3 style="margin:0;padding:0">Aggiungi categoria</h3>
-    <div style="float: right" on:click={() => {aggiungi = false}}>X</div>
+    <button style="float: right" on:click={() => {aggiungi = false}}>X</button>
     <form on:submit|preventDefault={salvaCategoria}>
         <label for="nome">Nome</label>
         <input bind:value={nuovaCategoria.nome} placeholder="Nome della busta" /><br>

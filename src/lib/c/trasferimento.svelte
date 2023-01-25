@@ -51,6 +51,8 @@
     <AmmontaInput name="outflow" bind:value={outflow} placeholder="Outflow" on:blur={() => preventInOutFlow('out')}/>
     <AmmontaInput name="inflow" bind:value={inflow} placeholder="Inflow" on:blur={() => preventInOutFlow('in')} />
 
+    <input type="checkbox" bind:checked={trasferimento.cleared} />
+
     <button type="submit">Salva</button>
     {#if trasferimento.id}
     <button type="button" on:click={elimina}>Elimina</button>

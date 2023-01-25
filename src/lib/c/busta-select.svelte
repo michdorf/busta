@@ -17,8 +17,11 @@ function onChange() {
 }
 
 function salvaBusta() {
+    if (!nuovaBusta.categoria) {
+        alert("Deve avere una categoria");
+        return;
+    }
     salvaWritable(nuovaBusta, buste);
-    console.log($buste);
 
     aggiungi = false;
 }
@@ -27,7 +30,7 @@ function salvaBusta() {
 {#if aggiungi}
 <div class="modal">
     <h3 style="margin:0;padding:0">Aggiungi busta</h3>
-    <div style="float: right" on:click={() => {aggiungi = false}}>X</div>
+    <button style="float: right" on:click={() => {aggiungi = false}}>X</button>
     <form on:submit|preventDefault={salvaBusta}>
         <label for="nome">Nome</label>
         <input bind:value={nuovaBusta.nome} placeholder="Nome della busta" /><br>
@@ -39,10 +42,11 @@ function salvaBusta() {
 {/if}
 
 <select bind:value={value} on:change={onChange}>
-    <option value="" disabled>Buste</option>
+    <option value="--hdr-placeholder" disabled>Buste</option>
     {#each $buste as busta}
         <option value={busta.id}>{busta.nome} {(busta.target - busta.assegnato)}</option>
     {/each}
+    <option value="">Da asegnare</option>
     <option value="agg">Aggiungi</option>
 </select>
 

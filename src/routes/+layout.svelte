@@ -15,7 +15,7 @@
     }
 </script>
 
-<nav>
+<nav style="margin-bottom: 2rem;">
     <a href={`${BASEPATH}/conti`}>Agg. conto</a>
     <a href={`${BASEPATH}/buste`}>Buste/bilanci</a>
 </nav>
