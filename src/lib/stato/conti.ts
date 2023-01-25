@@ -1,14 +1,10 @@
-import type Ammonta from "$lib/interfacce/ammonta";
-import { toAmmonta } from "$lib/interfacce/ammonta";
 import { get, writable } from "svelte/store";
-import type { UUID_T } from 'moduli/moduli/uuid';
-
 
 export interface Conto {
-    id: UUID_T | "";
+    id:  string;
     nome: string;
     note: string;
-    balance: Ammonta;
+    balance: number;
     creato: Date;
 }
 
@@ -19,12 +15,12 @@ export function nuovoConto(): Conto {
         id: "",
         nome: "",
         note: "",
-        balance: toAmmonta(0,"dkk"),
+        balance: 0,
         creato: new Date()
     }
 }
 
-export function getConto(contoId: UUID_T | string) {
+export function getConto(contoId: string) {
     return get(conti).filter((conto) => conto.id == contoId)[0];
 }
 

@@ -1,15 +1,13 @@
 import { writable } from "svelte/store";
-import type Ammonta from "../interfacce/ammonta";
-import type { UUID_T } from "moduli/moduli/uuid";
 
 export interface Trasferimento {
-    id: UUID_T;
-    contoId: UUID_T; /* conto id */
+    id: string;
+    contoId: string; /* conto id */
     payee: string;
     memo: string;
-    amount: Ammonta;
+    amount: number;
     data: string; /* ISO date string */
-    busta: UUID_T | null; /* busta id */
+    busta: string | null; /* busta id */
     cleared: boolean;
 }
 

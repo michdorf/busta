@@ -1,5 +1,9 @@
 import type { Writable } from "svelte/store";
-import uuid, { type UUID_T } from 'moduli/moduli/uuid';
+
+interface WithId {
+    id: string;
+    [key: string]: any;
+}
 
 export function salvaWritable<T>(daSalvare: T, writable: Writable<T[]>) {
     let essiste = false;
@@ -7,7 +11,7 @@ export function salvaWritable<T>(daSalvare: T, writable: Writable<T[]>) {
     if ((daSalvare as any).id) {
         writable.update((v) => {
             return v.map((_el) => {
-                if ((_el as any).id == (daSalvare as any).id) {
+                if ((_el as WithId).id == (daSalvare as WithId).id) {
                     essiste = true;
                     return daSalvare;
                 } else {
@@ -19,7 +23,9 @@ export function salvaWritable<T>(daSalvare: T, writable: Writable<T[]>) {
 
     if (!essiste) {
         writable.update((v) => {
-            (daSalvare as any).id = uuid();
+            let max = 0;
+            v.forEach((e) => max = Math.max(max, parseInt((e as WithId).id)));
+            (daSalvare as WithId).id = `${max + 1}`;
             return [...v, daSalvare];
         })
     }

@@ -1,16 +1,13 @@
-import type Ammonta from "$lib/interfacce/ammonta";
-import { toAmmonta } from "$lib/interfacce/ammonta";
 import { get, writable } from "svelte/store";
-import uuid, { type UUID_T } from 'moduli/moduli/uuid';
 import Ricorrente from 'moduli/moduli/ricorrente'
 
 interface Categoria {
-    id: UUID_T;
+    id: string;
     nome: string;
 }
 
 export interface Busta {
-    id: UUID_T;
+    id: string;
     nome: string;
     assegnato: number;
     target: number;
@@ -22,7 +19,7 @@ let buste = writable<Busta[]>([]);
 
 export function nuovaBusta(): Busta {
     return {
-        id: uuid(),
+        id: "-1",
         nome: "",
         assegnato: 0,
         target: 0,
@@ -31,7 +28,7 @@ export function nuovaBusta(): Busta {
     }
 }
 
-export function getBusta(bustaId: UUID_T) {
+export function getBusta(bustaId: string) {
     return get(buste).filter((busta) => busta.id == bustaId)[0];
 }
 

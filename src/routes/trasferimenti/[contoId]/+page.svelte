@@ -1,7 +1,7 @@
 <script lang="ts">
     import {page} from '$app/stores'
+	import AmmontaInput from '$lib/c/ammonta-input.svelte';
 	import BustaSelect from '$lib/c/busta-select.svelte';
-	import { toAmmonta } from '$lib/interfacce/ammonta';
 	import { salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {type Trasferimento} from '$lib/stato/trasferimenti';
@@ -15,29 +15,30 @@
         contoId: contoId, /* conto id */
         payee: "",
         memo: "",
-        amount: "0:dkk",
+        amount: 0,
         data: toISOstr(new Date()),
         busta: null, /* busta id */
         cleared: false
     }
 
-    let inflow = "";
-    let outflow = "";
+    let inflow: number | undefined = undefined;
+    let outflow: number | undefined = undefined;
 
     function toISOstr(d: Date) {
         return d.toISOString().split('T')[0];
     }
 
     function preventInOutFlow(inorout: 'in' | 'out') {
-        if (inorout == 'in' && outflow != "" && inflow != "") {
-            outflow = "";
-        } else if (inorout == 'out' && inflow != "" && outflow != "") {
-            inflow = ""
+        const bothFilled = outflow && inflow;
+        if (inorout == 'in' && bothFilled) {
+            outflow = undefined;
+        } else if (inorout == 'out' && bothFilled) {
+            inflow = undefined;
         }
     }
 
     function salva() {
-        trasInEdita.amount = toAmmonta(inflow != "" ? parseFloat(inflow) : -parseFloat(outflow));
+        trasInEdita.amount = inflow ? inflow : -(outflow || 0);
         salvaWritable(trasInEdita, trasferimentiStato);
     }
 </script>
@@ -55,8 +56,8 @@
     <input name="payee" bind:value={trasInEdita.payee} placeholder="Payee" />
     <BustaSelect bind:value={trasInEdita.busta}></BustaSelect>
     <input name="memo" bind:value={trasInEdita.memo} placeholder="Memo" />
-    <input name="outflow" bind:value={outflow} type="number" step=".01" placeholder="Outflow" on:blur={() => preventInOutFlow('out')}/>
-    <input name="inflow" bind:value={inflow} type="number" step=".01" placeholder="Inflow" on:blur={() => preventInOutFlow('in')} />
+    <AmmontaInput name="outflow" bind:value={outflow} placeholder="Outflow" on:blur={() => preventInOutFlow('out')}/>
+    <AmmontaInput name="inflow" bind:value={inflow} placeholder="Inflow" on:blur={() => preventInOutFlow('in')} />
 
     <button on:click={salva}>Salva</button>
 </form>

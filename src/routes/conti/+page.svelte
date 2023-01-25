@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
-	import AmmontaSelect from "$lib/c/ammonta-select.svelte";
+	import AmmontaInput from "$lib/c/ammonta-input.svelte";
 	import ContiLista from "$lib/c/conti-lista.svelte";
     import conti, { getConto, nuovoConto, type Conto } from "$lib/stato/conti";
     import { salvaWritable } from '$lib/salvabile';
@@ -31,7 +31,7 @@
     <input id="note"  bind:value={conto.note}/><br/>
 
     <label for="balance">Bilancio attuale</label>
-    <AmmontaSelect bind:value={conto.balance} /><br/>
+    <AmmontaInput bind:value={conto.balance} /><br/>
 
     <button on:click={salva}>Salva</button>
     {/if}
