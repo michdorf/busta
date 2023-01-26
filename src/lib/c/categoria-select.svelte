@@ -48,8 +48,8 @@ function salvaCategoria() {
     .modal {
         position: absolute; 
         width: 248px; 
-        top: 48px;
-        left: calc(50vw - 124px);
+        top: 16px;
+        left: 0;
         background-color: white;
         border: 1px solid black;
         padding: 8px;

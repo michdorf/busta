@@ -36,7 +36,7 @@
     }
 </script>
 
-<div style="padding: 1rem; background-color: bisque">
+<div style="padding: 1rem; background-color: bisque; position: sticky; top: 1rem;">
 {#if busta}
 
 <form on:submit|preventDefault={salva}>

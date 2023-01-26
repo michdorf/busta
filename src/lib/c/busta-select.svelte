@@ -52,7 +52,7 @@ function salvaBusta() {
 
 <style>
     .modal {
-        position: absolute; 
+        position: fixed; 
         width: 248px; 
         top: 48px;
         left: calc(50vw - 124px);
