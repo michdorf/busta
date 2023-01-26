@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { monthsDiff, primoDelMese, toISOstr } from "$lib/date";
+	import { monthsDiff, primoDelMese, primoProssMese, toISOstr } from "$lib/date";
 	import { roundAmount } from "$lib/numeri";
 	import appState from "$lib/stato/app-state";
 	import type { BustaT } from "$lib/stato/buste";
@@ -9,7 +9,7 @@
     export let available: number;
     export let busta: BustaT;
 
-    $: nMesi = numMesi(busta);
+    $: nnMesi = numMesi(busta);
     let finMese = new Date();
 
     function numMesi(busta: BustaT) {
@@ -18,7 +18,9 @@
 
         if (busta.target.tipo == 'spending' && 'ripeti' in busta.target) {
             busta.target.ripeti.primoGiorno = typeof busta.target.ripeti.primoGiorno == "string" ? new Date(busta.target.ripeti.primoGiorno) : busta.target.ripeti.primoGiorno;
-            finMese = Ricorrente.prossima(busta.target.ripeti);
+
+            let giornoOffset = primoDelMese($appState.meseSelez);
+            finMese = Ricorrente.prossima(busta.target.ripeti, giornoOffset);
             console.table({riccorente: busta.target.ripeti, prossima: finMese})
         } else if ('deadline' in busta.target) {
             if (busta.target.deadlineAbil) {
@@ -28,7 +30,7 @@
             }
         }
 
-        return monthsDiff(primoDelMese($appState.meseSelez), primoDelMese(finMese)) + (busta.target.tipo == 'saving' ? 1 : 0);
+        return monthsDiff($appState.meseSelez, finMese) + 1;
     }
 
     function calcTargetXMese(busta: BustaT) {
@@ -61,5 +63,5 @@
     Manchi ancora {mancaAlTarget}
     {/if}
     ({targetXmese} ogni mese) per <strong>{busta.target.tipo}</strong>
-    #mesi: {nMesi} finMese: {toISOstr(finMese)}
+    #mesi: {nnMesi} finMese: {toISOstr(finMese)}
 </div>

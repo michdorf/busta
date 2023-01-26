@@ -1,4 +1,4 @@
-import Ricorrente from 'moduli/moduli/ricorrente';
+import Ricorrente from './lib/ricorrente';
 import { describe, it, expect } from 'vitest';
 
 describe('sum test', () => {

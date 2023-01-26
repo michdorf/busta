@@ -9,6 +9,13 @@ export function primoDelMese(d: Date) {
     return new Date(d.getFullYear(), d.getMonth(), 1);
 }
 
+export function primoProssMese(d: Date) {
+    return new Date(d.getFullYear(), d.getMonth() + 1, 1);
+}
+export function ultimoDelMese(d: Date) {
+    return new Date(d.getFullYear(), d.getMonth() + 1, 0);
+}
+
 export function monthsDiff(d1: Date, d2: Date) {
     d1 = typeof d1 == "string" ? new Date(d1) : d1;
     d2 = typeof d2 == "string" ? new Date(d2) : d2;
