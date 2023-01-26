@@ -1,6 +1,7 @@
 <script lang="ts">
     import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
+	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
     import Buste, {type BustaT} from "$lib/stato/buste";
     import Categorie, { type Categoria } from "$lib/stato/categorie";
@@ -42,7 +43,21 @@
     $: balance = $Trasferimenti.reduce((prev, cur) => prev + cur.amount, 0);
     $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0);
 
-    $: daAssegnare = balance - assegnato;
+    function saldoPrec() {
+        let mese = primoDelMese(new Date());
+        return $Trasferimenti.reduce((prev, cur) => {
+            if (new Date(cur.data).getTime() < mese.getTime()) {
+                return prev + cur.amount;
+            }
+            return prev;
+        }, 0);
+    }
+
+    // TODO: daAssegnare skal være balancen fra forrige måned + alle INDKOMSTER 
+    $: mesePrec = saldoPrec();     
+    $: daAssegnare = mesePrec - assegnato + $Trasferimenti.reduce((prev, cur) => {
+        return cur.amount > 0 ? prev + cur.amount : prev; 
+    },0);
 </script>
 
 <div>
