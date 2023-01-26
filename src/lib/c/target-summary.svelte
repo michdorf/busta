@@ -19,7 +19,7 @@
         if (busta.target.tipo == 'spending' && 'ripeti' in busta.target) {
             busta.target.ripeti.primoGiorno = typeof busta.target.ripeti.primoGiorno == "string" ? new Date(busta.target.ripeti.primoGiorno) : busta.target.ripeti.primoGiorno;
 
-            let giornoOffset = primoDelMese($appState.meseSelez);
+            let giornoOffset = $appState.meseSelez;
             finMese = Ricorrente.prossima(busta.target.ripeti, giornoOffset);
             console.table({riccorente: busta.target.ripeti, prossima: finMese})
         } else if ('deadline' in busta.target) {
@@ -30,6 +30,10 @@
             }
         }
 
+        let deviIncrementare = 1;
+        if (busta.target.tipo == "spending") {
+            
+        }
         return monthsDiff($appState.meseSelez, finMese) + 1;
     }
 

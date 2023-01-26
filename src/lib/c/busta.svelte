@@ -10,7 +10,7 @@
     export let busta: BustaT;
 
     $: activity = calcActivity(busta);
-    $: available = busta.assegnato + activity;
+    $: available = busta.assegnato + activity + busta.precAmonta;
 
     function salva() {
         salvaWritable(busta, buste);
@@ -24,7 +24,7 @@
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div><AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /></div>
         <div>{activity}</div>
-        <div><b>{available}</b></div>
+        <div><b>{available}</b> ({busta.assegnato + activity}[balance] - {busta.precAmonta}[prec])</div>
         <div><button type="submit">Salva</button></div>
     </div>
 </form><br>

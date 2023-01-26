@@ -53,7 +53,9 @@
     <label for="target">Quanto</label>
     <AmmontaInput id="target" bind:value={busta.target.target} /><br>
     {#if busta.target.tipo == 'spending'}
-    <RicorrenteSelect bind:value={busta.target.ripeti} /><br>
+    {#key busta.id} <!-- Ensure rerender on new props -->
+    <RicorrenteSelect bind:value={busta.target.ripeti} id={busta.id} /><br>
+    {/key}
     {:else}
     <input id="deadlineAbil" type="checkbox" bind:checked={busta.target.deadlineAbil} />
     <label for="deadlineAbil">By date</label><br>
