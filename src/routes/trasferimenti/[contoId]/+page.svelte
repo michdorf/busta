@@ -9,6 +9,8 @@
     const contoId = $page.params.contoId;
     const conto = getConto(contoId);
     $: trasferimenti = ($trasferimentiStato as TrasferimentoT[]).filter(v => v.contoId == contoId);
+    $: filteredTras = trasferimenti.concat().sort((a, b) => (new Date(b.data)).getTime() - (new Date(a.data)).getTime());
+
     function initialTras() {
         return nuovoTransferimento(contoId);
     }
@@ -32,11 +34,12 @@
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
 <h3>{saldo}</h3>
+#{trasInEdita.id}:
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {#if trasferimenti.length < 1}
 <h3>Ingen overførsler</h3>
 {:else}
-    {#each trasferimenti as trasferimento (trasferimento.id)}
-        <Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento>
+    {#each filteredTras as trasferimento (trasferimento.id)}
+        <span title={JSON.stringify(trasferimento)}>#{trasferimento.id}: <Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento></span>
     {/each}
 {/if}

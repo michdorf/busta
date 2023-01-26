@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { monthsDiff, primoDelMese } from "$lib/date";
+	import { monthsDiff, primoDelMese, toISOstr } from "$lib/date";
 	import { roundAmount } from "$lib/numeri";
 	import appState from "$lib/stato/app-state";
 	import type { BustaT } from "$lib/stato/buste";
@@ -9,13 +9,17 @@
     export let available: number;
     export let busta: BustaT;
 
+    $: nMesi = numMesi(busta);
+    let finMese = new Date();
+
     function numMesi(busta: BustaT) {
         // debugger;
-        let finMese: Date = new Date();
+        // let finMese: Date = new Date();
 
         if (busta.target.tipo == 'spending' && 'ripeti' in busta.target) {
             busta.target.ripeti.primoGiorno = typeof busta.target.ripeti.primoGiorno == "string" ? new Date(busta.target.ripeti.primoGiorno) : busta.target.ripeti.primoGiorno;
             finMese = Ricorrente.prossima(busta.target.ripeti);
+            console.table({riccorente: busta.target.ripeti, prossima: finMese})
         } else if ('deadline' in busta.target) {
             if (busta.target.deadlineAbil) {
                 finMese = new Date(busta.target.deadline);
@@ -24,7 +28,7 @@
             }
         }
 
-        return monthsDiff(primoDelMese($appState.meseSelez), primoDelMese(finMese)) + 1;
+        return monthsDiff(primoDelMese($appState.meseSelez), primoDelMese(finMese)) + (busta.target.tipo == 'saving' ? 1 : 0);
     }
 
     function calcTargetXMese(busta: BustaT) {
@@ -56,5 +60,6 @@
     {:else}
     Manchi ancora {mancaAlTarget}
     {/if}
-    ({targetXmese} ogni mese) per {busta.target.tipo}
+    ({targetXmese} ogni mese) per <strong>{busta.target.tipo}</strong>
+    #mesi: {nMesi} finMese: {toISOstr(finMese)}
 </div>
