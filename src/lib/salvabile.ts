@@ -7,6 +7,7 @@ interface WithId {
 
 export function salvaWritable<T>(daSalvare: T, writable: Writable<T[]>) {
     let essiste = false;
+    daSalvare = Object.assign({}, daSalvare);
 
     if ((daSalvare as any).id) {
         writable.update((v) => {

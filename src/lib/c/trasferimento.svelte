@@ -43,6 +43,7 @@
     }
 </script>
 
+#{trasferimento.id}:
 <form on:submit|preventDefault={salva}>
     <input name="date" type="date" bind:value={trasferimento.data} placeholder="Data" />
     <input name="payee" bind:value={trasferimento.payee} placeholder="Payee" />

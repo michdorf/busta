@@ -19,6 +19,7 @@
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
         salvaWritable(event.detail.trasferimento, trasferimentiStato);
+
         if (event.detail.trasferimento.id == "") {
             trasInEdita = initialTras();
         }
@@ -34,12 +35,13 @@
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
 <h3>{saldo}</h3>
-#{trasInEdita.id}:
+{#key trasInEdita.id}
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
+{/key}
 {#if trasferimenti.length < 1}
 <h3>Ingen overførsler</h3>
 {:else}
     {#each filteredTras as trasferimento (trasferimento.id)}
-        <span title={JSON.stringify(trasferimento)}>#{trasferimento.id}: <Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento></span>
+        <span title={JSON.stringify(trasferimento)}><Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento></span>
     {/each}
 {/if}
