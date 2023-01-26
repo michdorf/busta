@@ -16,10 +16,10 @@
     $: saldo = trasferimenti.reduce((prev, cur) => prev + cur.amount, 0);
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
+        salvaWritable(event.detail.trasferimento, trasferimentiStato);
         if (event.detail.trasferimento.id == "") {
             trasInEdita = initialTras();
         }
-        salvaWritable(event.detail.trasferimento, trasferimentiStato);
     }
 
     function elimina(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
@@ -32,6 +32,7 @@
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
 <h3>{saldo}</h3>
+<Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {#if trasferimenti.length < 1}
 <h3>Ingen overførsler</h3>
 {:else}
@@ -39,5 +40,3 @@
         <Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento>
     {/each}
 {/if}
-
-<Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>

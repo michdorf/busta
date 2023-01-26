@@ -6,6 +6,7 @@ interface BustaBase {
     id: string;
     nome: string;
     categoria: string;
+    precAmonta: number; /* ammonta dal mese precedente (balance + assegnato) */
     assegnato: number;
     targetAbilitato: boolean;
     target: SpendingTarget | SavingTarget;
@@ -25,6 +26,7 @@ export function nuovaBusta(): SpendingBusta {
     return {
         id: "-1",
         nome: "",
+        precAmonta: 0,
         assegnato: 0,
         categoria: "",
         targetAbilitato: false,

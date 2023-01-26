@@ -1,12 +1,12 @@
 <script lang="ts">
-import buste, { nuovaBusta as genBusta, type Busta } from "$lib/stato/buste";
+import buste, { nuovaBusta as genBusta, type BustaT } from "$lib/stato/buste";
 import { salvaWritable } from "$lib/salvabile";
 import CategoriaSelect from "$lib/c/categoria-select.svelte";
 
 export let value: string | null;
 
 let aggiungi = false;
-let nuovaBusta: Busta = genBusta();
+let nuovaBusta: BustaT = genBusta();
 function onChange() {
     if (value == "agg") {
         aggiungi = true;

@@ -3,11 +3,13 @@ import Buste from './buste';
 import Conti from './conti'
 import Trasferimenti from './trasferimenti'
 import {sync} from '$lib/api';
-import appState from './app';
+import appState from './app-state';
 import Categorie from './categorie';
+import { toISOstr } from '$lib/date';
 
-let Stato = derived([Conti, Trasferimenti, Buste, Categorie], ([$conti, $trasferimenti, $buste, $categorie]) => {
+let Stato = derived([Conti, Trasferimenti, Buste, Categorie, appState], ([$conti, $trasferimenti, $buste, $categorie, $appState]) => {
     return {
+        aggiornato: $appState.aggiornato,
         conti: $conti,
         trasferimenti: $trasferimenti,
         buste: $buste,
@@ -24,6 +26,10 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         Conti.set(stato.conti || []);
         Buste.set(stato.buste || []);
         Categorie.set(stato.categorie || []);
+        appState.update(($appState) => {
+            $appState.aggiornato = stato.aggiornato || toISOstr(new Date());
+            return $appState;
+        });
         
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */

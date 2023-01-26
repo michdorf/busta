@@ -1,7 +1,8 @@
 <script lang="ts">
-	import appState from '$lib/stato/app';
+	import appState from '$lib/stato/app-state';
 	import oauthclient from '$lib/oauth-client';
     import Stato, { reset } from '$lib/stato/main'; // Ensure load
+    import {} from '$lib/workers/aggiorna-bilanci';
 	import { BASEPATH } from '$lib/base-path';
 
     function login() {
