@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Busta } from "$lib/stato/buste";
 	import { createEventDispatcher } from "svelte";
+	import AmmontaInput from "./ammonta-input.svelte";
 	import RicorrenteSelect from "./ricorrente-select.svelte";
 
     export let busta: Busta | undefined;
@@ -28,7 +29,7 @@
     </select>
     <br>
     <label for="target">Quanto</label>
-    <input id="target" bind:value={busta.target.target} /><br>
+    <AmmontaInput id="target" bind:value={busta.target.target} /><br>
     <RicorrenteSelect bind:value={busta.ripeti} /><br>
     <br />
     {/if}
