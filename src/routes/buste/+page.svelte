@@ -3,6 +3,7 @@
     import Busta from "$lib/c/busta.svelte";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
+	import appState from "$lib/stato/app-state";
     import Buste, {type BustaT} from "$lib/stato/buste";
     import Categorie, { type Categoria } from "$lib/stato/categorie";
 	import Trasferimenti from "$lib/stato/trasferimenti";
@@ -53,16 +54,24 @@
         }, 0);
     }
 
+    function stessoMese(d1: Date, d2: Date) {
+        return d1.getMonth() == d2.getMonth() && d1.getFullYear() == d2.getFullYear();
+    }
+
     // TODO: daAssegnare skal være balancen fra forrige måned + alle INDKOMSTER 
     $: mesePrec = saldoPrec();     
     $: daAssegnare = mesePrec - assegnato + $Trasferimenti.reduce((prev, cur) => {
-        return cur.amount > 0 ? prev + cur.amount : prev; 
+        if (stessoMese(new Date(cur.data), $appState.meseSelez) && (cur.amount > 0)) {
+            return prev + cur.amount; 
+        } else {
+            return prev;
+        }
     },0);
 </script>
 
 <div>
     <span style="font-size: 2rem;">Da assegnare {daAssegnare}</span><br/>
-    {balance} balance - {assegnato} assegnato
+    {balance} balance - {assegnato} assegnato. {mesePrec} il mese precedente.
 </div>
 
 <div class="grid-cont">

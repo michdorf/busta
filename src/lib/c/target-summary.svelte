@@ -19,7 +19,7 @@
         if (busta.target.tipo == 'spending' && 'ripeti' in busta.target) {
             busta.target.ripeti.primoGiorno = typeof busta.target.ripeti.primoGiorno == "string" ? new Date(busta.target.ripeti.primoGiorno) : busta.target.ripeti.primoGiorno;
 
-            let giornoOffset = $appState.meseSelez;
+            let giornoOffset = new Date($appState.meseSelez.getTime()); // Clona (forse aggiungi a ricorrente TODO)
             finMese = Ricorrente.prossima(busta.target.ripeti, giornoOffset);
             console.table({riccorente: busta.target.ripeti, prossima: finMese})
         } else if ('deadline' in busta.target) {
