@@ -22,12 +22,18 @@ export function salvaWritable<T>(daSalvare: T, writable: Writable<T[]>) {
     }
 
     if (!essiste) {
+        let nuovoId = '';
         writable.update((v) => {
             let max = 0;
             v.forEach((e) => max = Math.max(max, parseInt((e as WithId).id)));
-            (daSalvare as WithId).id = `${max + 1}`;
+            nuovoId = `${max + 1}`;
+            (daSalvare as WithId).id = nuovoId;
             return [...v, daSalvare];
-        })
+        });
+
+        return nuovoId;
+    } else {
+        return (daSalvare as WithId).id;
     }
 }
 

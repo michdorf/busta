@@ -40,7 +40,7 @@
 
     let bustaSelez: BustaT;
     $: balance = $Trasferimenti.reduce((prev, cur) => prev + cur.amount, 0);
-    $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0); 
+    $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0);
 
     $: daAssegnare = balance - assegnato;
 </script>

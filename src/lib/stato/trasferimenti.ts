@@ -1,3 +1,4 @@
+import { toISOstr } from "$lib/date";
 import { writable } from "svelte/store";
 
 export interface Trasferimento {
@@ -12,5 +13,18 @@ export interface Trasferimento {
 }
 
 let trasferimenti = writable<Trasferimento[]>([]);
+
+export function nuovoTransferimento(contoId: string) {
+    return {
+        id: "",
+        contoId: contoId, /* conto id */
+        payee: "",
+        memo: "",
+        amount: 0,
+        data: toISOstr(new Date()),
+        busta: null, /* busta id */
+        cleared: false
+    };
+}
 
 export default trasferimenti;

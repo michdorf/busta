@@ -4,25 +4,16 @@
 	import { toISOstr } from '$lib/date';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
-	import trasferimentiStato, {type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
+	import trasferimentiStato, {nuovoTransferimento, type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
 
     const contoId = $page.params.contoId;
     const conto = getConto(contoId);
     $: trasferimenti = ($trasferimentiStato as TrasferimentoT[]).filter(v => v.contoId == contoId);
     function initialTras() {
-        return {
-            id: "",
-            contoId: contoId, /* conto id */
-            payee: "",
-            memo: "",
-            amount: 0,
-            data: toISOstr(new Date()),
-            busta: null, /* busta id */
-            cleared: false
-        };
+        return nuovoTransferimento(contoId);
     }
     let trasInEdita = initialTras();
-    $: saldo = trasferimenti.reduce((prev, cur) => prev + cur.amount, conto.balance);
+    $: saldo = trasferimenti.reduce((prev, cur) => prev + cur.amount, 0);
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
         if (event.detail.trasferimento.id == "") {

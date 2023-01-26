@@ -24,6 +24,7 @@
 
 
     function numMesi(busta: BustaT) {
+        // debugger;
         let finMese: Date = new Date();
 
         if (busta.target.tipo == 'spending' && 'ripeti' in busta.target) {

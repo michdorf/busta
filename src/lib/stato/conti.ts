@@ -4,7 +4,7 @@ export interface Conto {
     id:  string;
     nome: string;
     note: string;
-    balance: number;
+    /* balance: number; */
     creato: Date;
 }
 
@@ -15,7 +15,6 @@ export function nuovoConto(): Conto {
         id: "",
         nome: "",
         note: "",
-        balance: 0,
         creato: new Date()
     }
 }
