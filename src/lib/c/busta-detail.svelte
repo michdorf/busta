@@ -1,12 +1,33 @@
 <script lang="ts">
-	import type { Busta } from "$lib/stato/buste";
+	import { toISOstr } from "$lib/date";
+	import  type { BustaT, SavingBusta, SpendingBusta } from "$lib/stato/buste";
+	import Ricorrente from "moduli/moduli/ricorrente";
 	import { createEventDispatcher } from "svelte";
 	import AmmontaInput from "./ammonta-input.svelte";
 	import RicorrenteSelect from "./ricorrente-select.svelte";
 
-    export let busta: Busta | undefined;
+    export let busta: BustaT | undefined;
 
-    let dispatch = createEventDispatcher<{salva: {busta: Busta}}>();
+    let curBustaTipo = busta?.target.tipo;
+    $: {
+        if (busta?.target.tipo != curBustaTipo) {
+            const oldBusta = busta;
+            // Cambiato tipo - manipula data
+            if (busta?.target.tipo == "saving") {
+                busta = busta as SavingBusta;
+                busta.target.deadline = busta.target.deadline || toISOstr((oldBusta as SpendingBusta).target.ripeti.primoGiorno);
+                busta.target.deadlineAbil = busta.target.deadlineAbil || false;
+                
+                // Keep old values for easier recover
+                // delete (busta as any).target.ripeti;
+            } else {
+                busta = busta as SpendingBusta;
+                busta.target.ripeti = busta.target.ripeti || new Ricorrente('m',1,new Date((oldBusta as SavingBusta).target.deadline));
+            }
+        }
+    }
+
+    let dispatch = createEventDispatcher<{salva: {busta: BustaT}}>();
     function salva() {
         if (busta) {
             dispatch("salva", {busta});
@@ -15,6 +36,7 @@
     }
 </script>
 
+<div style="padding: 1rem; background-color: bisque">
 {#if busta}
 
 <form on:submit|preventDefault={salva}>
@@ -30,7 +52,16 @@
     <br>
     <label for="target">Quanto</label>
     <AmmontaInput id="target" bind:value={busta.target.target} /><br>
-    <RicorrenteSelect bind:value={busta.ripeti} /><br>
+    {#if busta.target.tipo == 'spending'}
+    <RicorrenteSelect bind:value={busta.target.ripeti} /><br>
+    {:else}
+    <input id="deadlineAbil" type="checkbox" bind:checked={busta.target.deadlineAbil} />
+    <label for="deadlineAbil">By date</label><br>
+        {#if busta.target.deadlineAbil}
+        <input type="date" bind:value={busta.target.deadline} />
+        <br />
+        {/if}
+    {/if}
     <br />
     {/if}
     <button type="submit">Salva</button>
@@ -39,3 +70,4 @@
 {:else}
 Nessuna busta selezionato
 {/if}
+</div>

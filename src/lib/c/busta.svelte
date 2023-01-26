@@ -3,14 +3,15 @@
 	import { roundAmount } from "$lib/numeri";
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app";
-	import type { Busta } from "$lib/stato/buste";
+	import type { BustaT, SavingBusta, SpendingBusta } from "$lib/stato/buste";
 	import buste from "$lib/stato/buste";
 	import Trasferimenti from "$lib/stato/trasferimenti";
 	import Ricorrente from "moduli/moduli/ricorrente";
 	import AmmontaInput from "./ammonta-input.svelte";
 	import CategoriaSelect from "./categoria-select.svelte";
+	import RicorrenteSelect from "./ricorrente-select.svelte";
 
-    export let busta: Busta;
+    export let busta: BustaT;
 
     $: activity = $Trasferimenti.reduce((prev, cur) => {
         if (cur.busta == busta.id) {
@@ -21,19 +22,33 @@
     }, 0);
     $: available = busta.assegnato + activity;
 
-    function calcTargetXMese(busta: Busta) {
+    function calcXmeseSpending(busta: SpendingBusta) {
+        let result = 0;
+        let numMesi = 1;
+        busta.target.ripeti.primoGiorno = typeof busta.target.ripeti.primoGiorno == "string" ? new Date(busta.target.ripeti.primoGiorno) : busta.target.ripeti.primoGiorno;
+        numMesi = monthsDiff($appState.meseSelez, Ricorrente.prossima(busta.target.ripeti)) + 1;
+
+        console.table({numMesi,primoGiorno: busta.target.ripeti.primoGiorno, prossimo: Ricorrente.prossima(busta.target.ripeti), intervalloN: busta.target.ripeti.intervalloN, target: busta.target.target});
+
+        result = busta.target.target / numMesi;
+        return result;
+    } 
+
+    function calcXmeseSaving(busta: SavingBusta) {
+        return 10;
+    }
+
+    function calcTargetXMese(busta: BustaT) {
         let result = 0;
         if (!busta.targetAbilitato) {
             return 0;
         }
 
-        let numMesi = 1;
-        if (busta.ripeti.intervallo == "a") {
-            busta.ripeti.primoGiorno = typeof busta.ripeti.primoGiorno == "string" ? new Date(busta.ripeti.primoGiorno) : busta.ripeti.primoGiorno;
-            numMesi = monthsDiff($appState.meseSelez, Ricorrente.prossima(busta.ripeti));
+        if (busta.target.tipo == 'spending') {
+            result = calcXmeseSpending(busta as SpendingBusta);
+        } else {
+            result = calcXmeseSaving(busta as SavingBusta);
         }
-
-        result = busta.target.target / numMesi;
 
         return roundAmount(result);
     }
@@ -46,6 +61,7 @@
     }
 </script>
 
+<div style="background-color: aliceblue; margin: 0.4rem; padding: 0.6rem">
 <form on:submit|preventDefault={salva}>
     <div class="busta-cont">
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
@@ -67,8 +83,9 @@
         {/if}
         ({targetXmese} ogni mese) per {busta.target.tipo}
     {:else}
-        Non si puo parlare del path, pero hai speso {activity} e assegnato {busta.assegnato}.
+        Spending x mese: {targetXmese} activity: {activity} e assegnato {busta.assegnato}.
     {/if}
+</div>
 </div>
 
 <style>

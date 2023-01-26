@@ -2,12 +2,12 @@
     import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
 	import { salvaWritable } from "$lib/salvabile";
-    import Buste, {type Busta as BustaT} from "$lib/stato/buste";
+    import Buste, {type BustaT} from "$lib/stato/buste";
     import Categorie, { type Categoria } from "$lib/stato/categorie";
 	import Trasferimenti from "$lib/stato/trasferimenti";
 
-    let conCategoria: Array<BustaT[]> = [];
-    let senzaCategoria: BustaT[] = [];
+    let conCategoria: Array<Array<BustaT>> = [];
+    let senzaCategoria: Array<BustaT> = [];
     $: {
         $Categorie.forEach((categoria) => {
             conCategoria.push($Buste.filter((busta) => busta.categoria == categoria.id));
@@ -28,7 +28,12 @@
         const busta = event.detail.busta;
         bustaSelez.targetAbilitato = busta.targetAbilitato;
         bustaSelez.target = busta.target;
-        bustaSelez.ripeti = busta.ripeti;
+        if ('ripeti' in bustaSelez.target && 'ripeti' in busta.target) {
+            bustaSelez.target.ripeti = busta.target.ripeti;
+        } else if ('deadline' in bustaSelez.target && 'deadline' in busta.target) {
+            bustaSelez.target.deadlineAbil = busta.target.deadlineAbil;
+            bustaSelez.target.deadline = busta.target.deadline;
+        }
 
         salvaWritable(bustaSelez, Buste);
     }
@@ -54,22 +59,23 @@
                 <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
             </summary>
             {#each conCategoria[i] as busta}
-                <span on:click={() => {bustaSelez = busta}}><Busta {busta} /></span>
+                <span on:click={() => {bustaSelez = busta}}>
+                    <Busta {busta} />
+                </span>
             {/each}
         </details>
         {/each}
 
-        {#if senzaCategoria.length}
+        <!-- {#if senzaCategoria.length}
         <details open>
             <summary>
             Senza categoria
-            <!---<span class="icon">👇</span>-->
             </summary>
-            {#each senzaCategoria as busta}
+            {#each senzaCategoria as busta} 
             <Busta {busta} />
             {/each}
         </details>
-        {/if}
+        {/if} -->
     </div>
     
     <div>
