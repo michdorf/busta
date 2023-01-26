@@ -9,7 +9,7 @@
     const contoId = $page.params.contoId;
     const conto = getConto(contoId);
     $: trasferimenti = ($trasferimentiStato as TrasferimentoT[]).filter(v => v.contoId == contoId);
-    $: filteredTras = trasferimenti.concat().sort((a, b) => (new Date(b.data)).getTime() - (new Date(a.data)).getTime());
+    $: filteredTras = trasferimenti.concat().sort((a, b) => (new Date(a.data)).getTime() - (new Date(b.data)).getTime()).reverse(); // Mantiene #1 prima di #2 se su stesso giorno
 
     function initialTras() {
         return nuovoTransferimento(contoId);
