@@ -13,8 +13,8 @@
     $: targetXmese = calcTargetXMese(busta, activity);
     $: available = busta.assegnato + $activity.corrente + $activity.precedente;
     $: overspent = available < 0;
-    $: suptarget = (!overspent && available > $targetXmese);
-    $: subtarget = (!overspent && available < $targetXmese);
+    $: suptarget = (available > 0 && busta.assegnato > $targetXmese);
+    $: subtarget = (!overspent && busta.assegnato < $targetXmese);
 
     function salva() {
         salvaWritable(busta, buste);
