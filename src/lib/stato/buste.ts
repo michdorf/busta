@@ -1,6 +1,7 @@
 import { get, writable } from "svelte/store";
 import Ricorrente from 'moduli/moduli/ricorrente'
 import type { SpendingTarget, SavingTarget } from "../interfacce/target";
+import { toISOstr } from "$lib/date";
 
 interface BustaBase {
     id: string;
@@ -34,6 +35,7 @@ export function nuovaBusta(): SpendingBusta {
             target: 0,
             tipo: 'spending',
             ripeti: new Ricorrente('m', 1, new Date()),
+            prossima: toISOstr(new Date())
         },
         creato: new Date()
     }

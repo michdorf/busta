@@ -30,6 +30,9 @@
     let dispatch = createEventDispatcher<{salva: {busta: BustaT}}>();
     function salva() {
         if (busta) {
+            if (busta.target.tipo == 'spending') {
+                busta.target.prossima = toISOstr(Ricorrente.prossima(busta.target.ripeti));
+            }
             dispatch("salva", {busta});
             console.log(busta);
         }

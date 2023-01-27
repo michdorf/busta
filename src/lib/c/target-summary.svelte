@@ -4,6 +4,7 @@
 	import appState from "$lib/stato/app-state";
 	import type { BustaT } from "$lib/stato/buste";
 	import Ricorrente from "moduli/moduli/ricorrente";
+	import Amonta from "./amonta.svelte";
 
     export let activity: number;
     export let available: number;
@@ -30,11 +31,7 @@
             }
         }
 
-        let deviIncrementare = 1;
-        if (busta.target.tipo == "spending") {
-            
-        }
-        return monthsDiff($appState.meseSelez, finMese) + 1;
+        return monthsDiff($appState.meseSelez, finMese)/* + 1*/; // Jeg tæller kun til og ikke med deadline-måneden
     }
 
     function calcTargetXMese(busta: BustaT) {
@@ -62,10 +59,15 @@
     {#if mancaAlTarget == 0}
     Hai raggiunto il target
     {:else if mancaAlTarget < 0}
-    Hai superato il target di {mancaAlTarget * -1} 
+    Hai superato il target di <Amonta amonta={mancaAlTarget * -1} />
     {:else}
-    Manchi ancora {mancaAlTarget}
+    Manchi ancora <Amonta amonta={mancaAlTarget} />
     {/if}
-    ({targetXmese} ogni mese) per <strong>{busta.target.tipo}</strong>
-    #mesi: {nnMesi} finMese: {toISOstr(finMese)}
+    (<Amonta amonta={targetXmese} /> ogni mese) per <strong>{busta.target.tipo}</strong>
+    #mesi: {nnMesi} finMese: 
+    {#if busta.target.tipo == 'spending'}
+    {busta.target.prossima}
+    {:else}
+    {toISOstr(finMese)}
+    {/if}
 </div>

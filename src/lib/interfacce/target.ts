@@ -7,7 +7,8 @@ interface TargetBase {
 
 export interface SpendingTarget extends TargetBase {
     tipo: 'spending';
-    ripeti: Ricorrente
+    ripeti: Ricorrente;
+    prossima: string;
 }
 
 export interface SavingTarget extends TargetBase {

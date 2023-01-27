@@ -1,5 +1,6 @@
 <script lang="ts">
-    import BustaDetail from "$lib/c/busta-detail.svelte";
+    import Amonta from "$lib/c/amonta.svelte";
+import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
@@ -70,7 +71,7 @@
 </script>
 
 <div>
-    <span style="font-size: 2rem;">Da assegnare {daAssegnare}</span><br/>
+    <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /></span><br/>
     {balance} balance - {assegnato} assegnato. {mesePrec} il mese precedente.
 </div>
 
