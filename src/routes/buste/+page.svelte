@@ -86,7 +86,7 @@
                 <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
             </summary>
             {#each conCategoria[i] as busta}
-                <span on:click={() => {bustaSelez = busta}}>
+                <span on:click={() => {bustaSelez = busta}} on:keypress={() => {bustaSelez = busta}}>
                     <Busta {busta} />
                 </span>
             {/each}
@@ -117,6 +117,10 @@ details[open] summary span.icon {
 
 summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
+}
+
+details summary {
+    font-size: 1.2rem;
 }
 
 .grid-cont {
