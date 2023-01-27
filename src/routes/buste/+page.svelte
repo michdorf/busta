@@ -1,6 +1,6 @@
 <script lang="ts">
     import Amonta from "$lib/c/amonta.svelte";
-import BustaDetail from "$lib/c/busta-detail.svelte";
+    import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";

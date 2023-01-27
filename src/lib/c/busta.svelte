@@ -8,9 +8,9 @@
 	import TargetSummary from "./target-summary.svelte";
 
     export let busta: BustaT;
-
+    
     $: activity = calcActivity(busta);
-    $: available = busta.assegnato + activity + busta.precAmonta;
+    $: available = busta.assegnato + $activity.corrente + $activity.precedente;
 
     function salva() {
         salvaWritable(busta, buste);
@@ -24,11 +24,11 @@
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div><AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /></div>
         <div>{activity}</div>
-        <div><b>{available}</b> ({busta.assegnato + activity}[balance] - {busta.precAmonta}[prec])</div>
+        <div><b>{available}</b> ({busta.assegnato + $activity.corrente}[balance] - {$activity.precedente}[prec])</div>
         <div><button type="submit">Salva</button></div>
     </div>
 </form><br>
-<TargetSummary busta={busta} activity={activity} available={available}  />
+<TargetSummary busta={busta} activity={$activity.corrente} attivitaPrec={$activity.precedente} available={available}  />
 </div>
 
 <style>

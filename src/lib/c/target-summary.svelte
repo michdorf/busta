@@ -9,6 +9,7 @@
     export let activity: number;
     export let available: number;
     export let busta: BustaT;
+    export let attivitaPrec: number;
 
     $: nnMesi = numMesi(busta);
     let finMese = new Date();
@@ -42,10 +43,10 @@
         let result = 0;
         let nMesi = numMesi(busta);
 
-        if (true || busta.target.tipo == 'spending') {
+        if (busta.target.tipo == 'spending') {
             result = busta.target.target / nMesi;
         } else {
-            result = (busta.target.target / nMesi) + activity;
+            result = (busta.target.target - attivitaPrec) / nMesi;
         }
 
         return roundAmount(result);
@@ -64,6 +65,7 @@
     Manchi ancora <Amonta amonta={mancaAlTarget} />
     {/if}
     (<Amonta amonta={targetXmese} /> ogni mese) per <strong>{busta.target.tipo}</strong>
+    Attivita prec.: {attivitaPrec} &bull;
     #mesi: {nnMesi} finMese: 
     {#if busta.target.tipo == 'spending'}
     {busta.target.prossima}
