@@ -2,6 +2,7 @@
     import Amonta from "$lib/c/amonta.svelte";
     import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
+	import { calcActivity } from "$lib/calc/activity";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app-state";
@@ -60,7 +61,8 @@
     }
 
     // TODO: daAssegnare skal være balancen fra forrige måned + alle INDKOMSTER 
-    $: mesePrec = saldoPrec();     
+    $: activity = calcActivity();
+    $: mesePrec = $activity.precedente;     
     $: daAssegnare = mesePrec - assegnato + $Trasferimenti.reduce((prev, cur) => {
         if (stessoMese(new Date(cur.data), $appState.meseSelez) && (cur.amount > 0)) {
             return prev + cur.amount; 

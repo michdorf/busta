@@ -4,7 +4,7 @@ import type { BustaT } from "$lib/stato/buste";
 import trasferimenti from "$lib/stato/trasferimenti";
 import { derived, get } from "svelte/store";
 
-export function calcActivity(busta: BustaT) {
+export function calcActivity(busta?: BustaT) {
     const mese = get(appState).meseSelez;
     const precedenteD = primoDelMese(mese).getTime();
     const prossimaD = new Date(mese.getFullYear(), mese.getMonth()+1, 1).getTime();
@@ -14,6 +14,9 @@ export function calcActivity(busta: BustaT) {
     let futurAmonta = 0;
     return derived(trasferimenti, ($trasferimenti) => {
         $trasferimenti.map(($trasf) => {
+            if (typeof busta !== "undefined" && busta.id !== $trasf.busta) {
+                return;
+            } 
             const corD = new Date($trasf.data).getTime();
             if (corD < precedenteD) {
                 precAmonta += $trasf.amount;

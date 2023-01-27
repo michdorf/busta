@@ -1,4 +1,4 @@
-import { calcActivity } from "$lib/calc/buste";
+import { calcActivity } from "$lib/calc/activity";
 import { monthsDiff, toISOstr } from "$lib/date";
 import appState from "$lib/stato/app-state";
 import Buste, { type BustaT } from "$lib/stato/buste";
@@ -8,10 +8,11 @@ const aggiornato = get(appState).aggiornato;
 if (monthsDiff(new Date(aggiornato), new Date())) {
     console.info("Aggiorna bilanci");
     
-    // Aggiorna precAmonta per ogni busta
+    // Aggiorna precAmonta per ogni busta - ikke relevant, da det kan kalkoleres til en hver tid
     Buste.update(($buste) => {
         $buste = $buste.map(($busta) => {
-            $busta.precAmonta = calcActivity($busta) + $busta.assegnato;
+            let activity = calcActivity($busta);
+            $busta.precAmonta = get(activity).corrente + $busta.assegnato;
             $busta.assegnato = 0;
             return $busta;
         });

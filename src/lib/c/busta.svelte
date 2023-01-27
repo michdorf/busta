@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { calcActivity } from "$lib/calc/buste";
+	import { calcActivity } from "$lib/calc/activity";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
 	import buste from "$lib/stato/buste";
@@ -23,8 +23,8 @@
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div><AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /></div>
-        <div>{activity}</div>
-        <div><b>{available}</b> ({busta.assegnato + $activity.corrente}[balance] - {$activity.precedente}[prec])</div>
+        <div>{$activity.corrente}</div>
+        <div><b>{available}</b> ({busta.assegnato + $activity.corrente}[balance] + {$activity.precedente}[prec])</div>
         <div><button type="submit">Salva</button></div>
     </div>
 </form><br>

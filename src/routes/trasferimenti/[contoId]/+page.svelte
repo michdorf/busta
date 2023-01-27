@@ -2,6 +2,7 @@
     import {page} from '$app/stores'
 	import Amonta from '$lib/c/amonta.svelte';
 	import Trasferimento from '$lib/c/trasferimento.svelte';
+	import { calcActivity } from '$lib/calc/activity';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {nuovoTransferimento, type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
@@ -15,7 +16,8 @@
         return nuovoTransferimento(contoId);
     }
     let trasInEdita = initialTras();
-    $: saldo = trasferimenti.reduce((prev, cur) => prev + cur.amount, 0);
+    let activity = calcActivity();
+    $: saldoCorrente = $activity.precedente + $activity.corrente;
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
         salvaWritable(event.detail.trasferimento, trasferimentiStato);
@@ -34,7 +36,10 @@
     }
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
-<h3><Amonta amonta={saldo} /></h3>
+<h3><Amonta amonta={saldoCorrente} /></h3>
+<h4>
+    <Amonta amonta={$activity.precedente} /> precedente. <Amonta amonta={$activity.futuro} /> in futuro. 
+</h4>
 {#key trasInEdita.id}
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {/key}
