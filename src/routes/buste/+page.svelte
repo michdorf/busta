@@ -72,7 +72,7 @@ import BustaDetail from "$lib/c/busta-detail.svelte";
 
 <div>
     <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /></span><br/>
-    {balance} balance - {assegnato} assegnato. {mesePrec} il mese precedente.
+    <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente.
 </div>
 
 <div class="grid-cont">

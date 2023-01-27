@@ -1,7 +1,7 @@
 <script lang="ts">
     import {page} from '$app/stores'
+	import Amonta from '$lib/c/amonta.svelte';
 	import Trasferimento from '$lib/c/trasferimento.svelte';
-	import { toISOstr } from '$lib/date';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {nuovoTransferimento, type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
@@ -34,7 +34,7 @@
     }
 </script>
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
-<h3>{saldo}</h3>
+<h3><Amonta amonta={saldo} /></h3>
 {#key trasInEdita.id}
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {/key}
