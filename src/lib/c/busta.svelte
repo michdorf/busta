@@ -48,17 +48,17 @@
 
     .available {
         font-weight: bold;
-        background-color: silver;
+        background-color: rgb(219, 219, 219);
         border-radius: 0.6em;
     }
     .available.suptarget {
-        background-color: green;
+        background-color: #66cc5e;
     }
     .available.overspent {
-        background-color: red;
+        background-color: rgb(255, 122, 122);
     }
     .available.subtarget {
-        background-color: orange;
+        background-color: #feae43;
     }
 
     input {
