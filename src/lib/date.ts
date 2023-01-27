@@ -19,6 +19,8 @@ export function ultimoDelMese(d: Date) {
 export function monthsDiff(d1: Date, d2: Date) {
     d1 = typeof d1 == "string" ? new Date(d1) : d1;
     d2 = typeof d2 == "string" ? new Date(d2) : d2;
+    d1 = primoDelMese(d1);
+    d2 = primoDelMese(d2);
 
     let months = (d2.getFullYear() - d1.getFullYear()) * 12;
     months += d2.getMonth() - d1.getMonth();

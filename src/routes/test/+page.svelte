@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { primoDelMese, primoProssMese, ultimoDelMese } from "$lib/date";
+	import { primoDelMese } from "$lib/date";
     import Ricorrente from "$lib/ricorrente";
 
     let value = "2022-11-02";
