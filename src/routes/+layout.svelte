@@ -4,6 +4,7 @@
     import Stato, { reset } from '$lib/stato/main'; // Ensure load
     import {} from '$lib/workers/aggiorna-bilanci';
 	import { BASEPATH } from '$lib/base-path';
+    import conti from "$lib/stato/conti";
 
     function login() {
         oauthclient.authorizationCode("");
@@ -19,6 +20,10 @@
 <nav style="margin-bottom: 2rem;">
     <a href={`${BASEPATH}/conti`}>Agg. conto</a>
     <a href={`${BASEPATH}/buste`}>Buste/bilanci</a>
+    &bull;
+    {#each $conti as conto}
+    <a href={`${BASEPATH}/trasferimenti/${conto.id}`}><b>{conto.nome}</b></a>
+    {/each}
 </nav>
 
 {#if $appState.authState != "authorized"}
