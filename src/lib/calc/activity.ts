@@ -10,11 +10,11 @@ export function calcActivity(filter: (trasferimento: Trasferimento) => boolean =
     const mese = get(appState).meseSelez;
     const precedenteD = primoDelMese(mese).getTime();
     const prossimaD = new Date(mese.getFullYear(), mese.getMonth()+1, 1).getTime();
-
-    let precAmonta = 0;
-    let corrAmonta = 0;
-    let futurAmonta = 0;
+    
     return derived(trasferimenti, ($trasferimenti) => {
+        let precAmonta = 0;
+        let corrAmonta = 0;
+        let futurAmonta = 0;
         $trasferimenti.map(($trasf) => {
             if (!filter($trasf)) {
                 return;

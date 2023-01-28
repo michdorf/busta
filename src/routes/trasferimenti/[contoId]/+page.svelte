@@ -16,7 +16,7 @@
         return nuovoTransferimento(contoId);
     }
     let trasInEdita = initialTras();
-    let activity = calcActivity(($trasf) => $trasf.contoId == contoId);
+    $: activity = calcActivity(($trasf) => $trasf.contoId == contoId);
     $: saldoCorrente = $activity.precedente + $activity.corrente;
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
