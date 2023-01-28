@@ -1,4 +1,5 @@
 import type Ricorrente from "moduli/moduli/ricorrente";
+import type { ISOstr } from "./ISOstr";
 
 interface TargetBase {
     target: number;
@@ -14,5 +15,5 @@ export interface SpendingTarget extends TargetBase {
 export interface SavingTarget extends TargetBase {
     tipo: 'saving';
     deadlineAbil: boolean;
-    deadline: string; /* ISO string */
+    deadline: ISOstr; /* ISO string */
 }

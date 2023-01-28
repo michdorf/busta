@@ -2,11 +2,12 @@
  * Questo stato non viene salvato su refresh
  */
 
+import type { ISOstr } from "$lib/interfacce/ISOstr";
 import { autoLogin, useOauth, type LoginState } from "$lib/oauth-client";
 import { writable } from "svelte/store";
 
 const appState = writable<{
-    aggiornato: /* ISO date */string;
+    aggiornato: /* ISO date */ISOstr;
     authState: LoginState;
     meseSelez: Date;
 }>({
