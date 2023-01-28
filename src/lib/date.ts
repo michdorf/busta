@@ -24,5 +24,5 @@ export function monthsDiff(d1: Date, d2: Date) {
 
     let months = (d2.getFullYear() - d1.getFullYear()) * 12;
     months += d2.getMonth() - d1.getMonth();
-    return months > 0 ? months : 0;
+    return Math.abs(months);
 }
