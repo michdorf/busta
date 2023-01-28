@@ -3,10 +3,10 @@ import { roundAmount } from "$lib/numeri";
 import Ricorrente from "moduli/moduli/ricorrente";
 import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
-import trasferimenti from "$lib/stato/trasferimenti";
+import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
 import { derived, get, type Readable } from "svelte/store";
 
-export function calcActivity(busta?: BustaT) {
+export function calcActivity(filter: (trasferimento: Trasferimento) => boolean = () => true) {
     const mese = get(appState).meseSelez;
     const precedenteD = primoDelMese(mese).getTime();
     const prossimaD = new Date(mese.getFullYear(), mese.getMonth()+1, 1).getTime();
@@ -16,7 +16,7 @@ export function calcActivity(busta?: BustaT) {
     let futurAmonta = 0;
     return derived(trasferimenti, ($trasferimenti) => {
         $trasferimenti.map(($trasf) => {
-            if (typeof busta !== "undefined" && busta.id !== $trasf.busta) {
+            if (!filter($trasf)) {
                 return;
             } 
             const corD = new Date($trasf.data).getTime();

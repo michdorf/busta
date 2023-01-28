@@ -7,16 +7,16 @@
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {nuovoTransferimento, type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
 
-    const contoId = $page.params.contoId;
-    const conto = getConto(contoId);
+    $: contoId = $page.params.contoId;
+    $: conto = getConto(contoId);
     $: trasferimenti = ($trasferimentiStato as TrasferimentoT[]).filter(v => v.contoId == contoId);
-    $: filteredTras = trasferimenti.concat().sort((a, b) => (new Date(a.data)).getTime() - (new Date(b.data)).getTime()).reverse(); // Mantiene #1 prima di #2 se su stesso giorno
+    $: filteredTras = trasferimenti.concat().filter(($trasf) => $trasf.contoId == contoId).sort((a, b) => (new Date(a.data)).getTime() - (new Date(b.data)).getTime()).reverse(); // Mantiene #1 prima di #2 se su stesso giorno
 
     function initialTras() {
         return nuovoTransferimento(contoId);
     }
     let trasInEdita = initialTras();
-    let activity = calcActivity();
+    let activity = calcActivity(($trasf) => $trasf.contoId == contoId);
     $: saldoCorrente = $activity.precedente + $activity.corrente;
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {

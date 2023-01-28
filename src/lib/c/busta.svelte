@@ -9,7 +9,7 @@
 
     export let busta: BustaT;
     
-    $: activity = calcActivity(busta);
+    $: activity = calcActivity(($trasf) => busta.id == $trasf.busta);
     $: targetXmese = calcTargetXMese(busta, activity);
     $: available = busta.assegnato + $activity.corrente + $activity.precedente;
     $: overspent = available < 0;
