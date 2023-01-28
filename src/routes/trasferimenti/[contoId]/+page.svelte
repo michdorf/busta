@@ -1,6 +1,7 @@
 <script lang="ts">
     import {page} from '$app/stores'
 	import Amonta from '$lib/c/amonta.svelte';
+	import CambiaMese from '$lib/c/cambia-mese.svelte';
 	import Trasferimento from '$lib/c/trasferimento.svelte';
 	import { calcActivity } from '$lib/calc/activity';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
@@ -35,6 +36,7 @@
         eliminaWritable(event.detail.trasferimento, trasferimentiStato);
     }
 </script>
+<CambiaMese />
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
 <h3><Amonta amonta={saldoCorrente} /></h3>
 <h4>

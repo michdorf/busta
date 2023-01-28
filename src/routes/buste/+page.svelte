@@ -2,6 +2,7 @@
     import Amonta from "$lib/c/amonta.svelte";
     import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
+	import CambiaMese from "$lib/c/cambia-mese.svelte";
 	import { calcActivity } from "$lib/calc/activity";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
@@ -68,6 +69,7 @@
     },0);
 </script>
 
+<CambiaMese />
 <div>
     <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /></span><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente.
