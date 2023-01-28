@@ -2,13 +2,14 @@ import { get, writable } from "svelte/store";
 import Ricorrente from 'moduli/moduli/ricorrente'
 import type { SpendingTarget, SavingTarget } from "../interfacce/target";
 import { toISOstr } from "$lib/date";
+import type { ISOstr } from "$lib/interfacce/ISOstr";
 
 interface BustaBase {
     id: string;
     nome: string;
     categoria: string;
-    precAmonta: number; /* ammonta dal mese precedente (balance + assegnato) */
     assegnato: number;
+    assegnamenti: Array<[ISOstr, number]>,
     targetAbilitato: boolean;
     target: SpendingTarget | SavingTarget;
     creato: Date;
@@ -27,8 +28,8 @@ export function nuovaBusta(): SpendingBusta {
     return {
         id: "-1",
         nome: "",
-        precAmonta: 0,
         assegnato: 0,
+        assegnamenti: [],
         categoria: "",
         targetAbilitato: false,
         target: {
