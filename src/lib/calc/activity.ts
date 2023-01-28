@@ -46,7 +46,7 @@ export function numMesi(busta: BustaT) {
 
             let giornoOffset = new Date($appState.meseSelez.getTime()); // Clona (forse aggiungi a ricorrente TODO)
             finMese = Ricorrente.prossima(busta.target.ripeti, giornoOffset);
-            console.table({riccorente: busta.target.ripeti, prossima: finMese})
+            // console.table({riccorente: busta.target.ripeti, prossima: finMese})
         } else if ('deadline' in busta.target) {
             if (busta.target.deadlineAbil) {
                 finMese = new Date(busta.target.deadline);

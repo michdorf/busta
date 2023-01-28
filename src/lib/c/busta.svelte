@@ -5,6 +5,7 @@
 	import buste from "$lib/stato/buste";
 	import AmmontaInput from "./ammonta-input.svelte";
 	import CategoriaSelect from "./categoria-select.svelte";
+	import TargetAzzera from "./target-azzera.svelte";
 	import TargetSummary from "./target-summary.svelte";
 
     export let busta: BustaT;
@@ -30,6 +31,7 @@
         <div>{$activity.corrente}</div>
         <div class="available" class:overspent class:subtarget class:suptarget>{available}</div>
         <div><button type="submit">Salva</button></div>
+        <TargetAzzera busta={busta} />
     </div>
 </form><br>
 <div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">({busta.assegnato + $activity.corrente}[balance] + {$activity.precedente}[prec])</div>
