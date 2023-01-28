@@ -7,18 +7,14 @@
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app-state";
     import Buste, {type BustaT} from "$lib/stato/buste";
+	import categorie from "$lib/stato/categorie";
     import Categorie, { type Categoria } from "$lib/stato/categorie";
 	import Trasferimenti from "$lib/stato/trasferimenti";
 
-    let conCategoria: Array<Array<BustaT>> = [];
-    let senzaCategoria: Array<BustaT> = [];
-    $: {
-        $Categorie.forEach((categoria) => {
-            conCategoria.push($Buste.filter((busta) => busta.categoria == categoria.id));
-        });
-
-        senzaCategoria = $Buste.filter(busta => !busta.categoria);
-    }
+    $: conCategoria = $Categorie.map(($categoria) => {
+        return $Buste.filter((busta) => busta.categoria == $categoria.id);
+    });
+    $: senzaCategoria = $Buste.filter((busta) => !busta.categoria); // Assert none
 
     function cambiaCategoriaNome(categoria: Categoria) {
         let nome = prompt("Nuovo nome", categoria.nome);
