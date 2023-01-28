@@ -34,6 +34,7 @@
 </form><br>
 <div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">({busta.assegnato + $activity.corrente}[balance] + {$activity.precedente}[prec])</div>
 <TargetSummary busta={busta} targetXmese={$targetXmese} attivitaPrec={$activity.precedente} available={available} />
+<div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
 </div>
 
 <style>
