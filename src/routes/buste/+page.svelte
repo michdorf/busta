@@ -71,7 +71,7 @@
 
 <CambiaMese />
 <div>
-    <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /></span><br/>
+    <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /> ({redditoDelMese} in reddito)</span><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente ({$totalRolloverAssegnamenti} rollover).
 </div>
 
