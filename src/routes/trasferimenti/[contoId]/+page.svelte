@@ -14,7 +14,8 @@
     $: filteredTras = trasferimenti.concat().filter(($trasf) => $trasf.contoId == contoId).sort((a, b) => (new Date(a.data)).getTime() - (new Date(b.data)).getTime()).reverse(); // Mantiene #1 prima di #2 se su stesso giorno
 
     function initialTras() {
-        return nuovoTransferimento(contoId);
+        let cId = contoId || $page.params.contoId;
+        return nuovoTransferimento(cId);
     }
     let trasInEdita = initialTras();
     $: activity = calcActivity(($trasf) => $trasf.contoId == contoId);
