@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { calcActivity, calcTargetXMese } from "$lib/calc/activity";
+	import { calcAssegnamentiPrec } from "$lib/calc/assegnamenti";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
 	import buste from "$lib/stato/buste";
 	import AmmontaInput from "./ammonta-input.svelte";
+	import Amonta from "./amonta.svelte";
 	import CategoriaSelect from "./categoria-select.svelte";
 	import TargetAzzera from "./target-azzera.svelte";
 	import TargetSummary from "./target-summary.svelte";
@@ -12,7 +14,8 @@
     
     $: activity = calcActivity(($trasf) => busta.id == $trasf.busta);
     $: targetXmese = calcTargetXMese(busta, activity);
-    $: available = busta.assegnato + $activity.delmese + $activity.precedente;
+    $: assegnamentiPrec = calcAssegnamentiPrec(busta);
+    $: available = busta.assegnato + $assegnamentiPrec + $activity.finora;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && busta.assegnato > $targetXmese);
     $: subtarget = (!overspent && busta.assegnato < $targetXmese);
@@ -27,8 +30,11 @@
     <div class="busta-cont">
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
-        <div><AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /></div>
-        <div>{$activity.delmese} questo mese</div>
+        <div>
+            <AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /><br />
+            <Amonta amonta={$assegnamentiPrec} /> prec.
+        </div>
+        <div title="Activity finora">{$activity.finora}</div>
         <div class="available" class:overspent class:subtarget class:suptarget>{available}</div>
         <div><button type="submit">Salva</button></div>
         <TargetAzzera busta={busta} />
