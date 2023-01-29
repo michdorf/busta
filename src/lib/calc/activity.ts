@@ -4,10 +4,18 @@ import Ricorrente from "moduli/moduli/ricorrente";
 import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
-import { derived, get, type Readable } from "svelte/store";
+import { derived, type Readable } from "svelte/store";
+import { calcAssegnamentiPrec } from "./assegnamenti";
+
+export interface ActivityT {
+    finora: number;
+    precedente: number;
+    delmese: number;
+    futuro: number;
+}
 
 export function calcActivity(filter: (trasferimento: Trasferimento) => boolean = () => true) {    
-    return derived([trasferimenti, appState], ([$trasferimenti, $appState]) => {
+    return derived([trasferimenti, appState], ([$trasferimenti, $appState]): ActivityT => {
         const mese = $appState.meseSelez;
         const precedenteD = primoDelMese(mese).getTime();
         const prossimaD = new Date(mese.getFullYear(), mese.getMonth()+1, 1).getTime();
@@ -30,8 +38,9 @@ export function calcActivity(filter: (trasferimento: Trasferimento) => boolean =
         });
 
         return {
+            finora: corrAmonta + precAmonta,
             precedente: precAmonta,
-            corrente: corrAmonta,
+            delmese: corrAmonta,
             futuro: futurAmonta
         }
     });
@@ -59,22 +68,20 @@ export function numMesi(busta: BustaT) {
     });
 }
 
-export function calcTargetXMese(busta: BustaT, activity: Readable<{
-    precedente: number;
-    corrente: number;
-    futuro: number;
-}>) {
-    return derived([activity, numMesi(busta)], ([$activity,$numMesi]) => {
+export function calcTargetXMese(busta: BustaT, activity: Readable<ActivityT>) {
+    return derived([activity, numMesi(busta), calcAssegnamentiPrec(busta)], ([$activity,$numMesi, $assegnamentiPrec]) => {
         if (!busta.targetAbilitato) {
             return 0;
         }
     
         let result = 0;
-    
+        if ($numMesi == 0) {
+            $numMesi = 1;
+        }
         if (busta.target.tipo == 'spending') {
-            result = busta.target.target / $numMesi;
+            result = (busta.target.target - $assegnamentiPrec - busta.assegnato) / $numMesi;
         } else {
-            result = (busta.target.target - $activity.precedente) / $numMesi;
+            result = (busta.target.target - $activity.finora) / $numMesi;
         }
     
         return roundAmount(result);

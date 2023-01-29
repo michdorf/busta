@@ -12,7 +12,7 @@
     
     $: activity = calcActivity(($trasf) => busta.id == $trasf.busta);
     $: targetXmese = calcTargetXMese(busta, activity);
-    $: available = busta.assegnato + $activity.corrente + $activity.precedente;
+    $: available = busta.assegnato + $activity.delmese + $activity.precedente;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && busta.assegnato > $targetXmese);
     $: subtarget = (!overspent && busta.assegnato < $targetXmese);
@@ -28,13 +28,13 @@
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div><AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /></div>
-        <div>{$activity.corrente}</div>
+        <div>{$activity.delmese} questo mese</div>
         <div class="available" class:overspent class:subtarget class:suptarget>{available}</div>
         <div><button type="submit">Salva</button></div>
         <TargetAzzera busta={busta} />
     </div>
 </form><br>
-<div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">({busta.assegnato + $activity.corrente}[balance] + {$activity.precedente}[prec])</div>
+<div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">({busta.assegnato + $activity.delmese}[balance] + {$activity.precedente}[prec])</div>
 <TargetSummary busta={busta} targetXmese={$targetXmese} attivitaPrec={$activity.precedente} available={available} />
 <div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
 </div>
