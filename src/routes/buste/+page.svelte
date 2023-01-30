@@ -67,7 +67,6 @@
         if (stessoMese(new Date(cur.data), $appState.meseSelez) 
             /* && (cur.amount > 0) */ /* Ogni "ready to assign" - spesa or reddito */
             && (!cur.busta)) {
-                debugger;
             return prev + cur.amount; 
         } else {
             return prev;
@@ -115,6 +114,10 @@ summary::-webkit-details-marker {
 
 details summary {
     font-size: 1.2rem;
+    background-color: rgb(235, 235, 235);
+    padding: 4px;
+    position: sticky;
+    top: 0;
 }
 
 .grid-cont {
