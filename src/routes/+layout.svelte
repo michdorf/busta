@@ -19,6 +19,10 @@
 
 <svelte:head>
     <title>Buste Budget</title>
+    <script type="text/javascript" src="https://dechiffre.dk/login/js/login.js"></script>
+    <script type="text/javascript">
+        fai_il_login(() => {});
+    </script>
 </svelte:head>
 
 <nav style="margin-bottom: 2rem;">
