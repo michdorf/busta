@@ -59,19 +59,26 @@
     // TODO: daAssegnare skal være balancen fra forrige måned + alle INDKOMSTER 
     $: mesePrec = $activity.precedente;   
     $: totalRolloverAssegnamenti = calcRolloverAssegnamenti();
-    $: redditoDelMese = $Trasferimenti.reduce((prev, cur) => {
-        if (stessoMese(new Date(cur.data), $appState.meseSelez) && (cur.amount > 0)) {
+
+    /**
+     * Reddito che NON ha una categoria = pronto ad assegnare
+     */
+    $: prontoPerAssegnamento = $Trasferimenti.reduce((prev, cur) => {
+        if (stessoMese(new Date(cur.data), $appState.meseSelez) 
+            /* && (cur.amount > 0) */ /* Ogni "ready to assign" - spesa or reddito */
+            && (!cur.busta)) {
+                debugger;
             return prev + cur.amount; 
         } else {
             return prev;
         }
     },0);
-    $: daAssegnare = $totalRolloverAssegnamenti + redditoDelMese - assegnato;
+    $: daAssegnare = $totalRolloverAssegnamenti + prontoPerAssegnamento - assegnato;
 </script>
 
 <CambiaMese />
 <div>
-    <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /> ({redditoDelMese} in reddito)</span><br/>
+    <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /> ({prontoPerAssegnamento} "Ready to assign")</span><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente ({$totalRolloverAssegnamenti} rollover).
 </div>
 
@@ -90,17 +97,6 @@
             {/each}
         </details>
         {/each}
-
-        <!-- {#if senzaCategoria.length}
-        <details open>
-            <summary>
-            Senza categoria
-            </summary>
-            {#each senzaCategoria as busta} 
-            <Busta {busta} />
-            {/each}
-        </details>
-        {/if} -->
     </div>
     
     <div>
