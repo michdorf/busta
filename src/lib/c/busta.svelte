@@ -34,8 +34,8 @@
             <AmmontaInput bind:value={busta.assegnato} placeholder="Assegnato" /><br />
             <Amonta amonta={$assegnamentiPrec} /> prec.
         </div>
-        <div title="Activity finora">{$activity.finora}</div>
-        <div class="available" class:overspent class:subtarget class:suptarget>{available}</div>
+        <div title="Activity finora"><Amonta amonta={$activity.finora} /></div>
+        <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
         <div><button type="submit">Salva</button></div>
         <TargetAzzera busta={busta} />
     </div>
