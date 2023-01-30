@@ -9,6 +9,7 @@
 	import CategoriaSelect from "./categoria-select.svelte";
 	import TargetAzzera from "./target-azzera.svelte";
 	import TargetSummary from "./target-summary.svelte";
+    import ProgressBar from '$lib/c/progress-bar.svelte';
 
     export let busta: BustaT;
     
@@ -40,6 +41,7 @@
         <TargetAzzera busta={busta} />
     </div>
 </form><br>
+<div><ProgressBar bilancio={available} max={busta.target.target} subtarget={subtarget} /></div>
 <div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">({busta.assegnato + $activity.delmese}[balance] + {$activity.precedente}[prec])</div>
 <TargetSummary busta={busta} targetXmese={$targetXmese} attivitaPrec={$activity.precedente} available={available} />
 <div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
@@ -57,17 +59,17 @@
 
     .available {
         font-weight: bold;
-        background-color: rgb(219, 219, 219);
+        background-color: rgb(var(--silver));
         border-radius: 0.6em;
     }
     .available.suptarget {
-        background-color: #66cc5e;
+        background-color: rgb(var(--green));
     }
     .available.overspent {
-        background-color: rgb(255, 122, 122);
+        background-color: rgb(var(--red));
     }
     .available.subtarget {
-        background-color: #feae43;
+        background-color: rgb(var(--orange));
     }
 
     input {
