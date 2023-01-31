@@ -39,6 +39,7 @@
 </script>
 <CambiaMese />
 <h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
+{JSON.stringify(trasInEdita)} trans in edita.
 <h3><Amonta amonta={saldoCorrente} /></h3>
 <h4>
     <Amonta amonta={$activity.precedente} /> precedente. <Amonta amonta={$activity.futuro} /> in futuro. 
