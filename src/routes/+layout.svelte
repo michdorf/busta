@@ -21,7 +21,13 @@
     <title>Buste Budget</title>
     <script type="text/javascript" src="https://dechiffre.dk/login/js/login.js"></script>
     <script type="text/javascript">
-        fai_il_login(() => {});
+        window.addEventListener('DOMContentLoaded', (event) => {
+            entri_sul_server(function entrato(entrato) {
+                if (!entrato) {
+                    window.location = "https://dechiffre.dk/login.php?redir=" + location.pathname;
+                }
+            });
+        }); 
     </script>
 </svelte:head>
 
