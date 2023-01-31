@@ -20,14 +20,9 @@
     $: overspent = available < 0;
     $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
     $: subtarget = (!overspent && $assegnamenti.delmese < $targetXmese);
-    
-    $: assegnatoValue = 0;
-    calcAssegnamenti(busta).subscribe((assegnamenti) => {
-        assegnatoValue = assegnamenti.delmese;
-    });
 
     function salva() {
-        busta = setAssegnatoDelMese(assegnatoValue, busta);
+        busta = setAssegnatoDelMese($assegnamenti.delmese, busta);
         salvaWritable(busta, buste);
     }
 </script>
@@ -38,7 +33,7 @@
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div>
-            <AmmontaInput bind:value={assegnatoValue} placeholder="Assegnato" /><br />
+            <AmmontaInput bind:value={$assegnamenti.delmese} placeholder="Assegnato" /><br />
             <Amonta amonta={$assegnamenti.precedente} /> prec.
         </div>
         <div title="Activity finora"><Amonta amonta={$activity.finora} /></div>
@@ -48,7 +43,7 @@
     </div>
 </form><br>
 <div><ProgressBar bilancio={busta.target.tipo === "saving" ? available : ($assegnamenti.finora)} max={busta.target.target} subtarget={subtarget} /></div>
-<div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">({$assegnamenti.delmese + $activity.delmese}[balance] + {$activity.precedente}[prec])</div>
+<div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div>
 <TargetSummary busta={busta} targetXmese={$targetXmese} attivitaPrec={$activity.precedente} available={available} />
 <div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
 </div>
