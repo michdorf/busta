@@ -4,7 +4,7 @@
     import Busta from "$lib/c/busta.svelte";
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
 	import { calcActivity } from "$lib/calc/activity";
-	import { calcAssegnamentiPrec, calcRolloverAssegnamenti } from "$lib/calc/assegnamenti";
+	import { calcAssegnamenti, calcRolloverAssegnamenti } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app-state";
@@ -55,7 +55,9 @@
     let bustaSelez: BustaT;
     $: activity = calcActivity();
     $: balance = $activity.finora;
-    $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0);
+    // $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0);
+    $: assegnamenti = calcAssegnamenti();
+    $: assegnato = $assegnamenti.delmese;
     // TODO: daAssegnare skal være balancen fra forrige måned + alle INDKOMSTER 
     $: mesePrec = $activity.precedente;   
     $: totalRolloverAssegnamenti = calcRolloverAssegnamenti();
