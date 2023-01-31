@@ -10,6 +10,8 @@
 	import TargetAzzera from "./target-azzera.svelte";
 	import TargetSummary from "./target-summary.svelte";
     import ProgressBar from '$lib/c/progress-bar.svelte';
+	import { goto } from "$app/navigation";
+	import { BASEPATH } from "$lib/base-path";
 
     export let busta: BustaT;
     
@@ -40,17 +42,24 @@
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
         <div><button type="submit">Salva</button></div>
         <TargetAzzera busta={busta} />
+        <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Voci</button>
     </div>
 </form><br>
 <div><ProgressBar bilancio={busta.target.tipo === "saving" ? available : ($assegnamenti.finora)} max={busta.target.target} subtarget={subtarget} /></div>
 <div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div>
-<TargetSummary busta={busta} targetXmese={$targetXmese} attivitaPrec={$activity.precedente} available={available} />
+<TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
 <div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
 </div>
 
 <style>
     .busta-cont {
         display: flex;
+    }
+
+    @media only screen and (max-width: 640px) {
+        .busta-cont {
+            display: initial;
+        }
     }
 
     .busta-cont > div {

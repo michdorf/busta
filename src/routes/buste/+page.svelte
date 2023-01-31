@@ -22,16 +22,18 @@
 
     function salvaBustaDetail(event: CustomEvent<{busta: BustaT}>) {
         const busta = event.detail.busta;
-        bustaSelez.targetAbilitato = busta.targetAbilitato;
-        bustaSelez.target = busta.target;
-        if ('ripeti' in bustaSelez.target && 'ripeti' in busta.target) {
-            bustaSelez.target.ripeti = busta.target.ripeti;
-        } else if ('deadline' in bustaSelez.target && 'deadline' in busta.target) {
-            bustaSelez.target.deadlineAbil = busta.target.deadlineAbil;
-            bustaSelez.target.deadline = busta.target.deadline;
-        }
+        if (typeof bustaSelez !== "undefined") {
+            bustaSelez.targetAbilitato = busta.targetAbilitato;
+            bustaSelez.target = busta.target;
+            if ('ripeti' in bustaSelez.target && 'ripeti' in busta.target) {
+                bustaSelez.target.ripeti = busta.target.ripeti;
+            } else if ('deadline' in bustaSelez.target && 'deadline' in busta.target) {
+                bustaSelez.target.deadlineAbil = busta.target.deadlineAbil;
+                bustaSelez.target.deadline = busta.target.deadline;
+            }
 
-        salvaWritable(bustaSelez, Buste);
+            salvaWritable(bustaSelez, Buste);
+        }
     }
 
     function saldoPrec() {
@@ -52,7 +54,7 @@
         return $Buste.filter((busta) => busta.categoria == $categoria.id);
     });
 
-    let bustaSelez: BustaT;
+    let bustaSelez: BustaT | undefined;
     $: activity = calcActivity();
     $: balance = $activity.finora;
     // $: assegnato = $Buste.reduce((prev, cur) => prev + cur.assegnato, 0);
@@ -83,8 +85,8 @@
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).
 </div>
 
-<div class="grid-cont">
-    <div>
+<div class="grid-cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
+    <div class="categorie">
         {#each $Categorie as categoria, i}
         <details open>
             <summary>
@@ -100,8 +102,8 @@
         {/each}
     </div>
     
-    <div>
-       <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail}/>
+    <div class="busta-detail">
+       <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail} on:close={() => {bustaSelez = undefined}} />
     </div>
 </div>
 
@@ -145,6 +147,10 @@ details summary {
 
     .grid-cont > div {
         margin-top: 2rem;
+    }
+
+    .grid-cont.targetInEdita .categorie {
+        display: none;
     }
 }
 </style>

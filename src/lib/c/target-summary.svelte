@@ -9,12 +9,13 @@
     export let busta: BustaT;
     export let attivitaPrec: number;
     export let targetXmese: number;
+    export let assegnato: number;
 
     $: nnMesi = numMesi(busta);
     let finMese = new Date();
 
     // $: targetXmese = calcTargetXMese(busta, attivitaPrec)
-    $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - busta.assegnato : targetXmese - available);
+    $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - assegnato : targetXmese - available);
 </script>
 
 <div>

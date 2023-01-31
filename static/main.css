@@ -4,3 +4,10 @@
     --orange: 254, 174, 67;
     --silver: 243, 243, 243; /* 233, 233, 233; */
 }
+
+body {
+    margin: 0;
+}
+
+@media only screen and (max-width: 640px) {
+}

@@ -27,7 +27,7 @@
         }
     }
 
-    let dispatch = createEventDispatcher<{salva: {busta: BustaT}}>();
+    let dispatch = createEventDispatcher<{salva: {busta: BustaT}, close: void}>();
     function salva() {
         if (busta) {
             if (busta.target.tipo == 'spending') {
@@ -37,11 +37,17 @@
             console.log(busta);
         }
     }
+
+    function close() {
+        dispatch('close');
+    }
 </script>
 
 <div style="padding: 1rem; background-color: bisque; position: sticky; top: 1rem;">
 {#if busta}
+<div style="float: right;"><button on:click={close}>X</button></div>
 
+<h3>{busta.nome}</h3>
 <form on:submit|preventDefault={salva}>
     <label for="abilita">Abilita target</label>
     <input id="abilita" type="checkbox" bind:checked={busta.targetAbilitato} /><br />

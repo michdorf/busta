@@ -52,10 +52,36 @@
     <AmmontaInput name="outflow" bind:value={outflow} placeholder="Outflow" on:blur={() => preventInOutFlow('out')}/>
     <AmmontaInput name="inflow" bind:value={inflow} placeholder="Inflow" on:blur={() => preventInOutFlow('in')} />
 
-    <input type="checkbox" bind:checked={trasferimento.cleared} />
+    <label for="cleared" class="cleared-label">Cleared: </label><input id="cleared" type="checkbox" bind:checked={trasferimento.cleared} />
 
     <button type="submit">Salva</button>
     {#if trasferimento.id}
     <button type="button" on:click={elimina}>Elimina</button>
     {/if}
 </form>
+
+<style>
+    .cleared-label {
+        display: none;
+    }
+    
+    @media only screen and (max-width: 640px) {
+        form {
+            margin-bottom: 2rem;
+        }
+
+        form > input, form > :global(input), form > :global(select), form > button {
+            display: block;
+            width: 100%;
+            padding: 0.4rem;
+        }
+        form > input[type="checkbox"] {
+            display: initial;
+            width: auto;
+        }
+
+        .cleared-label {
+            display: initial;
+        }
+    }
+</style>
