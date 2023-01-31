@@ -5,7 +5,7 @@ import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
 import { derived, type Readable } from "svelte/store";
-import { calcAssegnamentiPrec } from "./assegnamenti";
+import { calcAssegnamenti } from "./assegnamenti";
 
 export interface ActivityT {
     finora: number;
@@ -69,7 +69,7 @@ export function numMesi(busta: BustaT) {
 }
 
 export function calcTargetXMese(busta: BustaT, activity: Readable<ActivityT>) {
-    return derived([activity, numMesi(busta), calcAssegnamentiPrec(busta)], ([$activity,$numMesi, $assegnamentiPrec]) => {
+    return derived([activity, numMesi(busta), calcAssegnamenti(busta)], ([$activity,$numMesi, $assegnamenti]) => {
         if (!busta.targetAbilitato) {
             return 0;
         }
@@ -79,7 +79,7 @@ export function calcTargetXMese(busta: BustaT, activity: Readable<ActivityT>) {
             $numMesi = 1;
         }
         if (busta.target.tipo == 'spending') {
-            result = (busta.target.target - $assegnamentiPrec - busta.assegnato) / $numMesi;
+            result = (busta.target.target - $assegnamenti.finora) / $numMesi;
         } else {
             result = (busta.target.target - $activity.finora) / $numMesi;
         }
