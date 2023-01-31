@@ -79,8 +79,8 @@
 
 <CambiaMese />
 <div>
-    <span style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /> ({prontoPerAssegnamento} "Ready to assign")</span><br/>
-    <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente ({$totalRolloverAssegnamenti} rollover).
+    <div class="daAssegnare" class:overspent={daAssegnare < 0} style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /> ({prontoPerAssegnamento} "Ready to assign")</div><br/>
+    <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).
 </div>
 
 <div class="grid-cont">
@@ -112,6 +112,13 @@ details[open] summary span.icon {
 
 summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
+}
+
+.daAssegnare.overspent {
+    background-color: rgb(var(--red));
+    border-radius: 0.3rem;
+    border: 1px solid rgb(255, 50, 50);
+    padding: 0.2rem;
 }
 
 details summary {
