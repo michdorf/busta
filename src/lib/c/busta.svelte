@@ -12,19 +12,25 @@
     import ProgressBar from '$lib/c/progress-bar.svelte';
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
+	import { get } from "svelte/store";
 
     export let busta: BustaT;
+    let assegnamenti = calcAssegnamenti(busta);
     
     $: activity = calcActivity(($trasf) => busta.id == $trasf.busta);
     $: targetXmese = calcTargetXMese(busta, activity);
-    $: assegnamenti = calcAssegnamenti(busta);
     $: available = $assegnamenti.finora + $activity.finora;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
     $: subtarget = (!overspent && $assegnamenti.delmese < $targetXmese);
 
+    let assegnamentoValue = 0;
+    assegnamenti.subscribe((ass) => {
+        assegnamentoValue = ass.delmese;
+    });
+
     function salva() {
-        busta = setAssegnatoDelMese($assegnamenti.delmese, busta);
+        busta = setAssegnatoDelMese(assegnamentoValue, busta);
         salvaWritable(busta, buste);
     }
 </script>
@@ -35,7 +41,7 @@
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div>
-            <AmmontaInput bind:value={$assegnamenti.delmese} placeholder="Assegnato" /><br />
+            <AmmontaInput bind:value={assegnamentoValue} placeholder="Assegnato" /><br />
             <Amonta amonta={$assegnamenti.precedente} /> prec.
         </div>
         <div title="Activity finora"><Amonta amonta={$activity.finora} /></div>
