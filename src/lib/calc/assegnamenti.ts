@@ -1,7 +1,7 @@
 import type { BustaT } from "$lib/stato/buste";
 import { derived, get } from "svelte/store";
 import buste from "$lib/stato/buste";
-import { calcActivity } from "./activity";
+import { calcActivity, calcReddito } from "./activity";
 import appState from "$lib/stato/app-state";
 import { primoDelMese, toISOstr } from "$lib/date";
 
@@ -70,9 +70,9 @@ export function setAssegnatoDelMese(assegnato: number, busta: BustaT) {
     return busta;
 }
 
-export function calcRolloverAssegnamenti(busta?: BustaT) {
-    let activity = calcActivity(typeof busta != "undefined" ? ($trasferimento) => $trasferimento.busta === busta.id : () => true);
-    return derived([calcAssegnamenti(busta), activity], ([$assegnamenti, $activity]) => {
-        return $assegnamenti.precedente - $activity.precedente;
+export function calcRolloverAssegnamenti() {
+    let prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
+    return derived([calcAssegnamenti(), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
+        return $prontoPerAssegnamento.precedente - $assegnamenti.precedente;
     });
 }

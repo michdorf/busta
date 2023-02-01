@@ -46,6 +46,10 @@ export function calcActivity(filter: (trasferimento: Trasferimento) => boolean =
     });
 }
 
+export function calcReddito() {
+    return calcActivity(($trasf) => $trasf.amount > 0);
+}
+
 export function numMesi(busta: BustaT) {
     return derived(appState, ($appState) => {
         let finMese: Date = new Date();

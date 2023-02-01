@@ -22,7 +22,7 @@ if (monthsDiff(new Date(aggiornato), new Date())) {
     });*/
 
     // Aggiorna assegnamenti precedenti (se non pronto)
-    Buste.update(($buste) => {
+    /* Buste.update(($buste) => {
         return  $buste.map(($busta) => {
             // let ultimAssegnamento = $busta.assegnamenti[$busta.assegnamenti.length - 1];
             if (typeof $busta.assegnamenti === "undefined") {
@@ -32,7 +32,7 @@ if (monthsDiff(new Date(aggiornato), new Date())) {
             $busta.assegnato = 0;
             return $busta;
         });
-    });
+    }); */
 
     // Salva 
     appState.update(($appState) => {

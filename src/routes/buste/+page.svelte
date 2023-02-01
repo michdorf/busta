@@ -3,7 +3,7 @@
     import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
-	import { calcActivity } from "$lib/calc/activity";
+	import { calcActivity, calcReddito } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcRolloverAssegnamenti } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
