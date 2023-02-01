@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { calcActivity, calcTargetXMese } from "$lib/calc/activity";
+	import { calcActivity, calcReddito, calcTargetXMese } from "$lib/calc/activity";
 	import { calcAssegnamenti, setAssegnatoDelMese } from "$lib/calc/assegnamenti";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
@@ -17,6 +17,7 @@
     let assegnamenti = calcAssegnamenti(busta);
     
     $: activity = calcActivity(($trasf) => busta.id == $trasf.busta);
+    $: reddito = calcReddito(busta);
     $: targetXmese = calcTargetXMese(busta, activity);
     $: available = $assegnamenti.finora + $activity.finora;
     $: overspent = available < 0;
@@ -50,7 +51,7 @@
         <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Voci</button>
     </div>
 </form><br>
-<div><ProgressBar bilancio={busta.target.tipo === "saving" ? available : ($assegnamenti.finora)} max={busta.target.target} subtarget={subtarget} /></div>
+<div><ProgressBar bilancio={busta.target.tipo === "saving" ? available : ($assegnamenti.finora)} speso={busta.target.tipo === "spending" ? $activity.finora : 0} max={busta.target.target || $reddito.finora} subtarget={subtarget} /></div>
 <div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div>
 <TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
 <div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>

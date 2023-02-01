@@ -1,28 +1,88 @@
 <script lang="ts">
 export let bilancio: number;
+export let speso: number = 0;
 export let max = 100;
 export let subtarget = false;
 
+$: numeratore = Math.min(bilancio, max);
 $: divisore = max === 0 ? 1 : max;
-$: verdeOarancione = subtarget ? 'rgb(var(--orange))' : 'rgb(var(--green))';
-$: primoColore = bilancio > 0 ? verdeOarancione : 'rgb(var(--silver))';
-$: secondoColore = bilancio < 0 ? 'rgb(var(--red))' : 'rgb(var(--silver))';
-$: percentuale = Math.round(Math.abs(bilancio)/divisore * 100);
-$: background = `linear-gradient(to right, ${primoColore} ${percentuale}%, ${secondoColore} ${percentuale}%)`;
+$: percentuale = Math.round((Math.abs(numeratore) + speso)/divisore * 100);
+$: percSpeso = Math.min(Math.round(Math.abs(speso)/divisore * 100), 100);
+$: percPrimo = bilancio >= 0 ? percentuale : 100 - percentuale - percSpeso;
+$: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
 </script>
 
-<div class="progress" style={`background:${background}`}>{bilancio} / {divisore}</div>
+
+{numeratore} / {divisore}; {speso}
+<div class="cont" class:subtarget={subtarget} class:negativo={bilancio < 0}>
+   {#if percPrimo > 0}<div class="disponibile" style={`width: ${percPrimo}%`}></div>{/if}{#if percSpeso > 0}<div class="speso" style={`width: ${percSpeso}%`}></div>{/if}{#if percSeconda > 0}<div class="overspent" style={`width: ${percSeconda}%`}></div>{/if}
+</div>
 
 <style>
- div.progress,
- progress,
- progress::-moz-progress-bar,
- progress::-webkit-progress-value
- {
-    border: 1px solid silver;
-    border-radius: 0.4rem;
-    height: 0.5rem;
-    width: 100%;
-    background:linear-gradient(to right, red 20%, blue 20%, blue 50%,yellow 50%,yellow 60% ,green 0);
+ .cont {
+   --border-radius: 0.3rem;
+   height: 0.8rem;
  }
+
+ .cont > * {
+   border-style: solid;
+   border-width: 1px 0 1px 0;
+   box-sizing: border-box;
+ }
+
+ .cont > *:first-child {
+   border-left-width: 1px;
+   border-top-left-radius: var(--border-radius);
+   border-bottom-left-radius: var(--border-radius);
+ }
+ .cont > *:last-child {
+   border-right-width: 1px;
+   border-top-right-radius: var(--border-radius);
+   border-bottom-right-radius: var(--border-radius);
+ }
+
+ .cont > div {
+   height: 100%;
+   display: inline-block;
+ }
+
+ .cont .disponibile {
+   background: rgb(var(--green));
+   border-color: #59af52;
+ }
+ .cont.subtarget .disponibile {
+   background: rgb(var(--orange));
+   border-color: #e98b0d;
+ }
+
+ .cont.negativo .disponibile, .cont .overspent {
+   border-color: silver;
+   background: rgb(var(--silver));
+ }
+
+ .cont .speso {
+   background: repeating-linear-gradient(
+      135deg,
+      #66cc5e,
+      #66cc5e 8px,
+      #59af52 8px,
+      #59af52 16px
+      );
+ }
+ .cont.subtarget .speso {
+   border-color: #e98b0d;
+   background: repeating-linear-gradient(
+      135deg,
+      #feae42,
+      #feae42 8px,
+      #e98b0d 8px,
+      #e98b0d 16px
+      );
+ }
+
+ .cont.negativo .overspent {
+   background: rgb(var(--red));
+   border-color: #ff4d4e;
+ }
+
 </style>

@@ -46,8 +46,8 @@ export function calcActivity(filter: (trasferimento: Trasferimento) => boolean =
     });
 }
 
-export function calcReddito() {
-    return calcActivity(($trasf) => $trasf.amount > 0);
+export function calcReddito(busta?: BustaT) {
+    return calcActivity(typeof busta === "undefined" ? ($trasf) => $trasf.amount > 0 : ($trasf) => $trasf.amount > 0 && $trasf.busta == busta.id);
 }
 
 export function numMesi(busta: BustaT) {
