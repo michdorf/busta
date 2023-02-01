@@ -36,6 +36,12 @@
         }
     }
 
+    function selezBusta(ev: MouseEvent, busta: BustaT) {
+        if ((ev.target as HTMLElement).tagName === 'DIV') {
+            bustaSelez = busta;
+        }
+    }
+
     function saldoPrec() {
         let mese = primoDelMese(new Date());
         return $Trasferimenti.reduce((prev, cur) => {
@@ -94,7 +100,7 @@
                 <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
             </summary>
             {#each conCategoria[i] as busta}
-                <span on:click={() => {bustaSelez = busta}} on:keypress={() => {bustaSelez = busta}}>
+                <span on:click={(ev) => selezBusta(ev, busta)} on:keypress={() => {bustaSelez = busta}}>
                     <Busta {busta} />
                 </span>
             {/each}
