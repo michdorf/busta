@@ -12,7 +12,6 @@
     import ProgressBar from '$lib/c/progress-bar.svelte';
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
-	import { get } from "svelte/store";
 
     export let busta: BustaT;
     let assegnamenti = calcAssegnamenti(busta);
