@@ -6,7 +6,7 @@ export let subtarget = false;
 
 $: numeratore = Math.min(bilancio, max);
 $: divisore = max === 0 ? 1 : max;
-$: percentuale = Math.round((Math.abs(numeratore) + speso)/divisore * 100);
+$: percentuale = Math.round((Math.abs(numeratore)/* + speso */)/divisore * 100);
 $: percSpeso = Math.min(Math.round(Math.abs(speso)/divisore * 100), 100);
 $: percPrimo = bilancio >= 0 ? percentuale : 100 - percentuale - percSpeso;
 $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
