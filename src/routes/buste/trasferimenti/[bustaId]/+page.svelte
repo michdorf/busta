@@ -32,7 +32,7 @@
         padding: 0 4px;
     }
 
-    .linea > *:nth-child(odd) {
+    .linea:nth-child(odd) {
         background-color: rgb(var(--silver));
     }
 </style>
