@@ -49,17 +49,17 @@
 
 <h3>{busta.nome}</h3>
 <form on:submit|preventDefault={salva}>
-    <label for="abilita">Abilita target</label>
+    <label for="abilita">Enable target</label>
     <input id="abilita" type="checkbox" bind:checked={busta.targetAbilitato} /><br />
 
     {#if busta.targetAbilitato}
-    <label for="tipo">Tipo</label>
+    <label for="tipo">Type</label>
     <select bind:value={busta.target.tipo}>
         <option value="saving">Saving</option>
         <option value="spending">Spending</option>
     </select>
     <br>
-    <label for="target">Quanto</label>
+    <label for="target">Amount</label>
     <AmmontaInput id="target" bind:value={busta.target.target} /><br>
     {#if busta.target.tipo == 'spending'}
     {#key busta.id} <!-- Ensure rerender on new props -->
@@ -75,10 +75,10 @@
     {/if}
     <br />
     {/if}
-    <button type="submit">Salva</button>
+    <button type="submit">Save</button>
 </form>
 
 {:else}
-Nessuna busta selezionato
+No envelope selected.
 {/if}
 </div>
