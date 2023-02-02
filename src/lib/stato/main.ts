@@ -21,7 +21,9 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     let storKey = "busta-stato";
     
     function init() {
-        let stato = JSON.parse(localStorage.getItem(storKey) || "{}");
+        let statostr = localStorage.getItem(storKey) || "{}";
+        const jsonstr = statostr.substring(statostr.indexOf("{"));
+        let stato = JSON.parse(jsonstr);
         Trasferimenti.set(stato.trasferimenti || []);
         Conti.set(stato.conti || []);
         Buste.set(stato.buste || []);
@@ -34,9 +36,10 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */
         Stato.subscribe((valore) => {
-            localStorage.setItem(storKey, JSON.stringify(valore));
+            let valorestr = Date.now() + JSON.stringify(valore);
+            localStorage.setItem(storKey, valorestr);
             if (!primoSinc) {
-                sync(valore);
+                sync(valorestr);
             }
             primoSinc = false;
         });
@@ -46,8 +49,13 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     appState.subscribe((v) => {
         if (primoAuth && v.authState == 'authorized') {
             sync().then((responseTxt) => {
-                if (responseTxt[0] == "{") {
-                    localStorage.setItem(storKey, responseTxt);
+                if (responseTxt.substring(0,6) != "ERRORE") {
+                    const localState = localStorage.getItem(storKey) || "";
+                    const servertime = responseTxt.substring(0, responseTxt.indexOf("{"));
+                    const localtime = localState.substring(0, localState.indexOf("{"));
+                    if (servertime > localtime) {                        
+                        localStorage.setItem(storKey, responseTxt);
+                    }
                 } else {
                     console.log("Sembra un errore da dechiffre.dk", responseTxt);
                 }

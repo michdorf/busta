@@ -27,7 +27,7 @@ export function sync(payload?: any) {
         }
 
         if (payload) {
-            options.body = JSON.stringify(payload);
+            options.body = typeof payload == "string" ? payload : JSON.stringify(payload);
         }
 
         fetch("https://dechiffre.dk/busta/api/", options).then(async (response) => {

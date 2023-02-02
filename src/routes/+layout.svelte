@@ -1,3 +1,6 @@
+<script context="module" lang="ts">
+    declare function entri_sul_server(entrato: (entrato: boolean) => void): void;
+</script>
 <script lang="ts">
 	import appState from '$lib/stato/app-state';
 	import oauthclient from '$lib/oauth-client';
@@ -15,19 +18,28 @@
             reset();
         }
     }
+
+    function loginScriptLoaded() {
+        console.log("Script loaded");
+        entri_sul_server((entrato) => {
+            console.log("ENtrato? " + entrato);
+            appState.update(($appState) => {
+                $appState.authState = entrato ? "authorized" : "no token";
+                return $appState;
+            })
+            if (!entrato) {
+                let url = "https://dechiffre.dk/login.php?redir=" + location.pathname;
+                window.location = url as unknown as Location;
+            }
+        });
+    }
 </script>
 
 <svelte:head>
     <title>Buste Budget</title>
-    <script type="text/javascript" src="https://dechiffre.dk/login/js/login.js"></script>
+    <script type="text/javascript" src="https://dechiffre.dk/login/js/login.js" on:load={loginScriptLoaded}></script>
     <script type="text/javascript">
-        window.addEventListener('DOMContentLoaded', (event) => {
-            entri_sul_server(function entrato(entrato) {
-                if (!entrato) {
-                    window.location = "https://dechiffre.dk/login.php?redir=" + location.pathname;
-                }
-            });
-        }); 
+        
     </script>
 </svelte:head>
 
