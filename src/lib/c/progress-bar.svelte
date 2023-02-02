@@ -2,19 +2,18 @@
 export let bilancio: number;
 export let speso: number = 0;
 export let max = 100;
-export let overspent = false;
+export let subtarget = false;
 
 $: numeratore = Math.min(bilancio, max);
 $: divisore = max === 0 ? 1 : max;
 $: percentuale = Math.round((Math.abs(numeratore)/* + speso */)/divisore * 100);
-$: percSpeso = overspent ? 0 : Math.min(Math.round(Math.abs(speso)/divisore * 100), 100);
+$: percSpeso = bilancio < 0 ? 0 : Math.min(Math.round(Math.abs(speso)/divisore * 100), 100);
 $: percPrimo = bilancio >= 0 ? percentuale : 100 - percentuale - percSpeso;
 $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
 </script>
 
-
-{numeratore} / {divisore}; {speso}; overspent?: {overspent}
-<div class="cont" class:overspent={overspent} class:negativo={bilancio < 0}>
+{numeratore} / {divisore}; {speso}
+<div class="cont" class:subtarget={subtarget} class:overspent={bilancio < 0}>
    {#if percPrimo > 0}<div class="disponibile" style={`width: ${percPrimo}%`}></div>{/if}{#if percSpeso > 0}<div class="speso" style={`width: ${percSpeso}%`}></div>{/if}{#if percSeconda > 0}<div class="overspent" style={`width: ${percSeconda}%`}></div>{/if}
 </div>
 
@@ -50,12 +49,12 @@ $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
    background: rgb(var(--green));
    border-color: #59af52;
  }
- .cont.overspent .disponibile {
+ .cont.subtarget .disponibile {
    background: rgb(var(--orange));
    border-color: #e98b0d;
  }
 
- .cont.negativo .disponibile, .cont .overspent {
+ .cont.overspent .disponibile, .cont .overspent {
    border-color: silver;
    background: rgb(var(--silver));
  }
@@ -70,7 +69,7 @@ $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
       #59af52 16px
       );
  }
- .cont.overspent .speso {
+ .cont.subtarget .speso {
    border-color: #e98b0d;
    background: repeating-linear-gradient(
       135deg,
@@ -81,7 +80,7 @@ $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
       );
  }
 
- .cont.negativo .overspent {
+ .cont.overspent .overspent {
    background: rgb(var(--red));
    border-color: #ff4d4e;
  }
