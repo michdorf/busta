@@ -88,7 +88,7 @@
 
 <CambiaMese />
 <div style="margin-bottom: 1rem">
-    <div class="daAssegnare" class:overspent={daAssegnare < 0} style="font-size: 2rem;">Ready to assign <Debug><Amonta amonta={daAssegnare} /> ({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
+    <div class="daAssegnare" class:positivo={daAssegnare > 0} class:overspent={daAssegnare < 0} style="font-size: 2rem;">Ready to assign <span><Amonta amonta={daAssegnare} /></span> <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assigned. 
     <Debug><Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).</Debug>
 </div>
@@ -122,6 +122,13 @@ details[open] summary span.icon {
 
 summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
+}
+
+.daAssegnare.positivo span {
+    font-weight: bold;
+    background: #06d0b5;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
 }
 
 .daAssegnare.overspent {
