@@ -51,7 +51,10 @@
         <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Voci</button>
     </div>
 </form><br>
-<div><ProgressBar bilancio={busta.target.tipo === "saving" ? available : available} speso={busta.target.tipo === "spending" ? $activity.finora + available : 0} max={busta.target.target || $reddito.finora} subtarget={subtarget} /></div>
+<div><ProgressBar 
+        bilancio={busta.target.tipo === "saving" ? available : available } 
+        speso={busta.target.tipo === "spending" ? Math.min($activity.finora + available /*, available */) : 0} 
+        max={busta.target.target || Math.abs($activity.finora)} overspent={overspent} /></div>
 <div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div>
 <TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
 <div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
