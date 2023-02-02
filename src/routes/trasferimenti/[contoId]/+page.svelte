@@ -17,7 +17,7 @@
         let cId = contoId || $page.params.contoId;
         return nuovoTransferimento(cId);
     }
-    $: trasInEdita = initialTras();
+    $: trasInEdita = nuovoTransferimento(contoId);
     $: activity = calcActivity(($trasf) => $trasf.contoId == contoId);
     $: saldoCorrente = $activity.finora; // + $activity.delmese;
 
