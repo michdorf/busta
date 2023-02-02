@@ -1,5 +1,6 @@
 # Budget system to help you assign your money
 This app is a project inspired by the envelope budget system (same as GoodBudget and You Need A Budget).
+A live version of the app can be found at [https://dechiffre.dk/busta](https://dechiffre.dk/busta). You'll need to create an account to sync the changes.
 
 # create-svelte
 
