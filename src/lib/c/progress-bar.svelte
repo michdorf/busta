@@ -61,6 +61,7 @@ $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
  }
 
  .cont .speso {
+   border-color: #59af52;
    background: repeating-linear-gradient(
       135deg,
       #66cc5e,
