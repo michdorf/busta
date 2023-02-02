@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Debug from "./debug.svelte";
+
+
 export let bilancio: number;
 export let speso: number = 0;
 export let max = 100;
@@ -12,7 +15,7 @@ $: percPrimo = bilancio >= 0 ? percentuale : 100 - percentuale - percSpeso;
 $: percSeconda = bilancio < 0 ? percentuale : 100 - percentuale - percSpeso;
 </script>
 
-{numeratore} / {divisore}; {speso}
+<Debug>{numeratore} / {divisore}; {speso}</Debug>
 <div class="cont" class:subtarget={subtarget} class:overspent={bilancio < 0}>
    {#if percPrimo > 0}<div class="disponibile" style={`width: ${percPrimo}%`}></div>{/if}{#if percSpeso > 0}<div class="speso" style={`width: ${percSpeso}%`}></div>{/if}{#if percSeconda > 0}<div class="overspent" style={`width: ${percSeconda}%`}></div>{/if}
 </div>

@@ -5,7 +5,7 @@
 	import trasferimenti from "$lib/stato/trasferimenti";
 
     function rinomina(conto: Conto) {
-        let nome = prompt("Nome del conto", conto.nome);
+        let nome = prompt("Account name", conto.nome);
         if (nome) {
             conto.nome = nome;
             salvaWritable(conto, conti);
@@ -13,7 +13,7 @@
     }
 
     function elimina(conto: Conto) {        
-        if (confirm("Sei sicuro?")) {
+        if (confirm("Are you sure?")) {
             trasferimenti.update((v) => {
                 return v.filter((_el) => {
                     return _el.contoId !== conto.id;
@@ -25,10 +25,10 @@
     }
 </script>
 
-<h2>Lista di conti</h2>
+<h2>Lista of accounts</h2>
 {#each $conti as conto}
     <a href={`${BASEPATH}/trasferimenti/${conto.id}`}><b>{conto.nome}</b></a>
-    <button on:click={() => {rinomina(conto)}}>Rinomina</button>
-    <button on:click={() => {elimina(conto)}}>Elimina</button>
+    <button on:click={() => {rinomina(conto)}}>Rename</button>
+    <button on:click={() => {elimina(conto)}}>Delete</button>
     <br/>
 {/each}

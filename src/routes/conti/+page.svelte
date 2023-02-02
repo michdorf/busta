@@ -23,26 +23,25 @@
     }
 </script>
 
-<h1>{contoId ? "Modifica " : "Aggiungi un"} conto</h1>
-
-<div style="background-color: aliceblue; padding: 1rem">
-<ContiLista></ContiLista>
-</div>
-<br>
+<h1>{contoId ? "Edit " : "Create an"} account</h1>
 
 <form>
     {#if typeof conto == "undefined"}
-    <h1 style="color: red">Error. No conto with id {$page.params.contoId}</h1>
+    <h1 style="color: red">Error. No account with id {$page.params.contoId}</h1>
     {:else}
-    <label for="nome">Nome del conto</label>
+    <label for="nome">Account name</label>
     <input id="nome" bind:value={conto.nome} /><br/>
 
-    <label for="note">Note sul conto</label>
+    <label for="note">Note</label>
     <input id="note"  bind:value={conto.note}/><br/>
 
-    <label for="balance">Bilancio attuale</label>
+    <label for="balance">Initial balance</label>
     <AmmontaInput bind:value={balance} /><br/>
 
-    <button on:click={salva}>Salva</button>
+    <button on:click={salva}>Save</button>
     {/if}
-</form>
+</form><br>
+
+<div style="background-color: aliceblue; padding: 1rem">
+    <ContiLista></ContiLista>
+</div>

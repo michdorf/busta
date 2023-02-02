@@ -3,6 +3,7 @@
     import BustaDetail from "$lib/c/busta-detail.svelte";
     import Busta from "$lib/c/busta.svelte";
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
+	import Debug from "$lib/c/debug.svelte";
 	import { calcActivity, calcReddito } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcRolloverAssegnamenti } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
@@ -86,9 +87,10 @@
 </script>
 
 <CambiaMese />
-<div>
-    <div class="daAssegnare" class:overspent={daAssegnare < 0} style="font-size: 2rem;">Da assegnare <Amonta amonta={daAssegnare} /> ({prontoPerAssegnamento} "Ready to assign")</div><br/>
-    <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assegnato. <Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).
+<div style="margin-bottom: 1rem">
+    <div class="daAssegnare" class:overspent={daAssegnare < 0} style="font-size: 2rem;">Ready to assign <Debug><Amonta amonta={daAssegnare} /> ({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
+    <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assigned. 
+    <Debug><Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).</Debug>
 </div>
 
 <div class="grid-cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
@@ -97,7 +99,7 @@
         <details open>
             <summary>
                 {categoria.nome}
-                <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
+                <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
             </summary>
             {#each conCategoria[i] as busta}
                 <span on:click={(ev) => selezBusta(ev, busta)} on:keypress={() => {bustaSelez = busta}}>

@@ -2,6 +2,7 @@
     import {page} from '$app/stores'
 	import Amonta from '$lib/c/amonta.svelte';
 	import CambiaMese from '$lib/c/cambia-mese.svelte';
+	import Debug from '$lib/c/debug.svelte';
 	import Trasferimento from '$lib/c/trasferimento.svelte';
 	import { calcActivity } from '$lib/calc/activity';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
@@ -38,12 +39,12 @@
     }
 </script>
 <CambiaMese />
-<h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
-{JSON.stringify(trasInEdita)} trans in edita.
+<h1>Transactions of {conto ? conto.nome : ''}</h1>
+<Debug>{JSON.stringify(trasInEdita)} trans in edita.</Debug>
 <h3><Amonta amonta={saldoCorrente} /></h3>
-<h4>
+<Debug><h4>
     <Amonta amonta={$activity.precedente} /> precedente. <Amonta amonta={$activity.futuro} /> in futuro. 
-</h4>
+</h4></Debug>
 {#key trasInEdita.id}
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {/key}

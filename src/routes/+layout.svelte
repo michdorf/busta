@@ -8,6 +8,7 @@
     import {} from '$lib/workers/aggiorna-bilanci';
 	import { BASEPATH } from '$lib/base-path';
     import conti from "$lib/stato/conti";
+	import Debug from '$lib/c/debug.svelte';
 
     function login() {
         oauthclient.authorizationCode("");
@@ -44,20 +45,22 @@
 </svelte:head>
 
 <nav style="margin-bottom: 2rem;">
-    <a href={`${BASEPATH}/conti`}>Agg. conto</a>
-    <a href={`${BASEPATH}/buste`}>Buste/bilanci</a>
-    &bull;
+    <a href={`${BASEPATH}/conti`}>Add account</a>
+    <a href={`${BASEPATH}/buste`}>Envelopes/Budget</a>
+    &bull; Transactions: 
     {#each $conti as conto}
     <a href={`${BASEPATH}/trasferimenti/${conto.id}`}><b>{conto.nome}</b></a>
     {/each}
 </nav>
 
 {#if $appState.authState != "authorized"}
-<button on:click={login}>Login</button>
+<button on:click={login}>Login</button><br>
 {/if}
 
 <slot></slot>
 
-<div style="margin-top: 100px;">
-    <button on:click={resetApp}>Reset</button>
-</div>
+<Debug>
+    <div style="margin-top: 100px;">
+        <button on:click={resetApp}>Reset</button>
+    </div>
+</Debug>

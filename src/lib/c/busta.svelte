@@ -12,6 +12,7 @@
     import ProgressBar from '$lib/c/progress-bar.svelte';
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
+	import Debug from "./debug.svelte";
 
     export let busta: BustaT;
     let assegnamenti = calcAssegnamenti(busta);
@@ -41,23 +42,23 @@
         <div style="flex: 1;"><input bind:value={busta.nome} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} /></div>
         <div>
-            <AmmontaInput bind:value={assegnamentoValue} placeholder="Assegnato" /><br />
-            <Amonta amonta={$assegnamenti.precedente} /> prec.
+            <AmmontaInput bind:value={assegnamentoValue} placeholder="Assign" /><br />
+            <Amonta amonta={$assegnamenti.precedente} /> prev.
         </div>
-        <div title="Activity finora"><Amonta amonta={$activity.finora} /></div>
+        <div title="Activity until now"><Amonta amonta={$activity.finora} /></div>
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
-        <div><button type="submit">Salva</button></div>
+        <div><button type="submit">Save</button></div>
         <TargetAzzera busta={busta} />
-        <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Voci</button>
+        <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Trasactions</button>
     </div>
 </form><br>
 <div><ProgressBar 
         bilancio={busta.target.tipo === "saving" ? available : available } 
         speso={busta.target.tipo === "spending" ? Math.min($activity.finora + available /*, available */) : 0} 
         max={busta.target.target || Math.abs($activity.finora)} subtarget={subtarget} /></div>
-<div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div>
+<Debug><div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div></Debug>
 <TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
-<div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div>
+<Debug><div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div></Debug>
 </div>
 
 <style>

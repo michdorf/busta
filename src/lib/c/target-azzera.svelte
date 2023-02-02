@@ -4,6 +4,7 @@
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
 	import Buste from "$lib/stato/buste";
+	import Debug from "./debug.svelte";
 
     export let busta: BustaT;
     $: deadline = (busta.target.tipo === "saving") ? (busta.target.deadlineAbil ? busta.target.deadline : "") : busta.target.prossima;
@@ -34,5 +35,5 @@
             <option value="continua">viderefør assegnamenti</option>
         </select>
     {/if}
-    Deadline/prossima: {deadline};
+    <Debug>Deadline/prossima: {deadline};</Debug>
 </div>

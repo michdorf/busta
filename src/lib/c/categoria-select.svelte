@@ -3,7 +3,7 @@ import { salvaWritable } from "$lib/salvabile";
 import categorie, { nuovaCategoria as genCategoria, type Categoria } from "$lib/stato/categorie";
 
 export let value: string | null;
-export let placeholder = "";
+export let placeholder = "Select category";
 
 let aggiungi = false;
 let nuovaCategoria: Categoria = genCategoria();
@@ -26,12 +26,12 @@ function salvaCategoria() {
 
 {#if aggiungi}
 <div class="modal">
-    <h3 style="margin:0;padding:0">Aggiungi categoria</h3>
+    <h3 style="margin:0;padding:0">Add category</h3>
     <button style="float: right" on:click={() => {aggiungi = false}}>X</button>
     <form on:submit|preventDefault={salvaCategoria}>
-        <label for="nome">Nome</label>
-        <input bind:value={nuovaCategoria.nome} placeholder="Nome della busta" /><br>
-        <button type="submit">Salva</button>
+        <label for="nome">Name</label>
+        <input bind:value={nuovaCategoria.nome} placeholder="Name of envelope" /><br>
+        <button type="submit">Save</button>
     </form>
 </div>
 {/if}
@@ -41,7 +41,7 @@ function salvaCategoria() {
     {#each $categorie as categoria}
         <option value={categoria.id}>{categoria.nome}</option>
     {/each}
-    <option value="agg">Aggiungi</option>
+    <option value="agg">Add</option>
 </select>
 
 <style>

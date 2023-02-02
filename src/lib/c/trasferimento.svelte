@@ -3,6 +3,7 @@
 	import BustaSelect from '$lib/c/busta-select.svelte';
 	import type { Trasferimento} from '$lib/stato/trasferimenti';
 	import { createEventDispatcher } from 'svelte';
+	import Debug from './debug.svelte';
 
     export let trasferimento: Trasferimento;
 
@@ -35,7 +36,7 @@
     }
 
     function elimina() {
-        if (confirm("Vuoi veramente eliminarlo?")) {
+        if (confirm("Do you really want to delete?")) {
             dispatch("elimina", {
                 trasferimento
             });
@@ -43,9 +44,9 @@
     }
 </script>
 
-#{trasferimento.id}:
+<Debug>#{trasferimento.id}:</Debug>
 <form on:submit|preventDefault={salva}>
-    <input name="date" type="date" bind:value={trasferimento.data} placeholder="Data" />
+    <input name="date" type="date" bind:value={trasferimento.data} placeholder="Date" />
     <input name="payee" bind:value={trasferimento.payee} placeholder="Payee" />
     <BustaSelect bind:value={trasferimento.busta}></BustaSelect>
     <input name="memo" bind:value={trasferimento.memo} placeholder="Memo" />
@@ -54,9 +55,9 @@
 
     <label for="cleared" class="cleared-label">Cleared: </label><input id="cleared" type="checkbox" bind:checked={trasferimento.cleared} />
 
-    <button type="submit">Salva</button>
+    <button type="submit">Save</button>
     {#if trasferimento.id}
-    <button type="button" on:click={elimina}>Elimina</button>
+    <button type="button" on:click={elimina}>Delete</button>
     {/if}
 </form>
 
