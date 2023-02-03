@@ -22,6 +22,7 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     
     function init() {
         let statostr = localStorage.getItem(storKey) || "{}";
+        const localtime = statostr.substring(0, statostr.indexOf("{"));
         const jsonstr = statostr.substring(statostr.indexOf("{"));
         let stato = JSON.parse(jsonstr);
         Trasferimenti.set(stato.trasferimenti || []);
@@ -36,7 +37,7 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */
         Stato.subscribe((valore) => {
-            let valorestr = Date.now() + JSON.stringify(valore);
+            let valorestr = (primoSinc ? localtime : Date.now()) + JSON.stringify(valore);
             localStorage.setItem(storKey, valorestr);
             if (!primoSinc) {
                 sync(valorestr).then(responseTxt => {
@@ -57,8 +58,11 @@ if (typeof window != "undefined" && 'localStorage' in window) {
                     const localState = localStorage.getItem(storKey) || "";
                     const servertime = responseTxt.substring(0, responseTxt.indexOf("{"));
                     const localtime = localState.substring(0, localState.indexOf("{"));
-                    if (servertime > localtime) {                        
+                    
+                    if (true || (servertime > localtime && confirm(`Should the server version be loaded?\nTimestamp from server: ${servertime} and local: ${localtime}`))) {              
                         localStorage.setItem(storKey, responseTxt);
+                    } else {
+                        alert(`Won't load the server version. (${servertime}[server] ${localtime}[localtime])`)
                     }
                 } else {
                     setLoginError("API responded with an error: " + responseTxt);
