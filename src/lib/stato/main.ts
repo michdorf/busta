@@ -3,7 +3,7 @@ import Buste from './buste';
 import Conti from './conti'
 import Trasferimenti from './trasferimenti'
 import {sync} from '$lib/api';
-import appState from './app-state';
+import appState, { setLoginError } from './app-state';
 import Categorie from './categorie';
 import { toISOstr } from '$lib/date';
 
@@ -39,7 +39,11 @@ if (typeof window != "undefined" && 'localStorage' in window) {
             let valorestr = Date.now() + JSON.stringify(valore);
             localStorage.setItem(storKey, valorestr);
             if (!primoSinc) {
-                sync(valorestr);
+                sync(valorestr).then(responseTxt => {
+                    if (responseTxt.substring(0,6) === "ERRORE") {
+                        setLoginError("API responds with an error: " + responseTxt);
+                    }
+                });
             }
             primoSinc = false;
         });
@@ -57,6 +61,7 @@ if (typeof window != "undefined" && 'localStorage' in window) {
                         localStorage.setItem(storKey, responseTxt);
                     }
                 } else {
+                    setLoginError("API responded with an error: " + responseTxt);
                     console.log("Sembra un errore da dechiffre.dk", responseTxt);
                 }
                 init();

@@ -10,17 +10,26 @@ const appState = writable<{
     aggiornato: /* ISO date */ISOstr;
     authState: LoginState;
     meseSelez: Date;
+    loginError: string;
 }>({
     aggiornato: "",
     authState: "no token",
-    meseSelez: new Date()
+    meseSelez: new Date(),
+    loginError: ""
 });
 
 export function updateAuthState(state: LoginState) {
     appState.update((s) => { s.authState = state; return s });
 }
 
-async function initLogin() {
+export function setLoginError(error: string) {
+    appState.update((state) => {
+        state.loginError = error;
+        return state;
+    })
+}
+
+export async function initLogin() {
     if (!useOauth) {
         updateAuthState("authorized");
         return;
@@ -35,7 +44,5 @@ async function initLogin() {
         return;
     }
 }
-
-initLogin();
 
 export default appState;

@@ -29,6 +29,7 @@
                 return $appState;
             })
             if (!entrato) {
+                setLoginError("Could not log automatically in.");
                 let url = "https://dechiffre.dk/login.php?redir=" + location.pathname;
                 window.location = url as unknown as Location;
             }
@@ -44,6 +45,12 @@
     </script>
 </svelte:head>
 
+{#if $appState.loginError}
+    <div class="error" transition:fly>
+        {$appState.loginError}<br/>
+        <a href={"https://dechiffre.dk/login.php?redir=" + location.pathname}>Go to login</a>
+    </div>
+{/if}
 <nav style="margin-bottom: 2rem;">
     <a href={`${BASEPATH}/conti`}>Add account</a>
     <a href={`${BASEPATH}/buste`}>Envelopes/Budget</a>
@@ -64,3 +71,15 @@
         <button on:click={resetApp}>Reset</button>
     </div>
 </Debug>
+
+<style>
+    .error {
+        width: 680px;
+        max-width: 100%;
+        background-color: rgb(var(--red));
+        border-color: red;
+        padding: 0.4rem;
+        border-radius: 0.6rem;
+        margin: auto;
+    }
+</style>
