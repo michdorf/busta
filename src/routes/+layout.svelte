@@ -2,13 +2,16 @@
     declare function entri_sul_server(entrato: (entrato: boolean) => void): void;
 </script>
 <script lang="ts">
-	import appState from '$lib/stato/app-state';
+    import { fly } from "svelte/transition";
+	import appState, { initLogin, setLoginError } from '$lib/stato/app-state';
 	import oauthclient from '$lib/oauth-client';
     import Stato, { reset } from '$lib/stato/main'; // Ensure load
     import {} from '$lib/workers/aggiorna-bilanci';
 	import { BASEPATH } from '$lib/base-path';
     import conti from "$lib/stato/conti";
 	import Debug from '$lib/c/debug.svelte';
+
+    initLogin();
 
     function login() {
         oauthclient.authorizationCode("");
@@ -39,10 +42,10 @@
 
 <svelte:head>
     <title>Buste Budget</title>
-    <script type="text/javascript" src="https://dechiffre.dk/login/js/login.js" on:load={loginScriptLoaded}></script>
+    <!-- <script type="text/javascript" src="https://dechiffre.dk/login/js/login.js" on:load={loginScriptLoaded}></script>
     <script type="text/javascript">
         
-    </script>
+    </script> -->
 </svelte:head>
 
 {#if $appState.loginError}
