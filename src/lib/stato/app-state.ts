@@ -10,23 +10,22 @@ const appState = writable<{
     aggiornato: /* ISO date */ISOstr;
     authState: LoginState;
     meseSelez: Date;
-    loginError: string;
 }>({
     aggiornato: "",
     authState: "no token",
     meseSelez: new Date(),
-    loginError: ""
 });
+
+export const loginError = writable("");
 
 export function updateAuthState(state: LoginState) {
     appState.update((s) => { s.authState = state; return s });
 }
 
 export function setLoginError(error: string) {
-    appState.update((state) => {
-        state.loginError = error;
-        return state;
-    })
+    loginError.update((state) => {
+        return error;
+    });
 }
 
 export async function initLogin() {

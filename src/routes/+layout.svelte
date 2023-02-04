@@ -3,7 +3,7 @@
 </script>
 <script lang="ts">
     import { fly } from "svelte/transition";
-	import appState, { initLogin, setLoginError } from '$lib/stato/app-state';
+	import appState, { initLogin, setLoginError, loginError } from '$lib/stato/app-state';
 	import oauthclient from '$lib/oauth-client';
     import Stato, { reset } from '$lib/stato/main'; // Ensure load
     import {} from '$lib/workers/aggiorna-bilanci';
@@ -48,9 +48,9 @@
     </script> -->
 </svelte:head>
 
-{#if $appState.loginError}
+{#if $loginError}
     <div class="error" transition:fly>
-        {$appState.loginError}<br/>
+        {$loginError}<br/>
         <a href={"https://dechiffre.dk/login.php?redir=" + location.pathname}>Go to login</a>
     </div>
 {/if}
