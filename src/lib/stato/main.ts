@@ -6,6 +6,7 @@ import {sync} from '$lib/api';
 import appState, { setLoginError } from './app-state';
 import Categorie from './categorie';
 import { toISOstr } from '$lib/date';
+import { nuovaModifica, setNuovaModifica } from '$lib/salvabile';
 
 let Stato = derived([Conti, Trasferimenti, Buste, Categorie, appState], ([$conti, $trasferimenti, $buste, $categorie, $appState]) => {
     return {
@@ -39,7 +40,10 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         Stato.subscribe((valore) => {
             let valorestr = (primoSinc ? localtime : Date.now()) + JSON.stringify(valore);
             localStorage.setItem(storKey, valorestr);
-            if (!primoSinc) {
+            if (!primoSinc && nuovaModifica) { // Sembra che viene eseguita 2x su ogni cambiamento
+                console.log("Salva perche ce nuova modifica.");
+                setNuovaModifica(false);
+
                 sync(valorestr).then(responseTxt => {
                     if (responseTxt.substring(0,6) === "ERRORE") {
                         setLoginError("API responds with an error: " + responseTxt);
