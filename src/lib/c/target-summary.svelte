@@ -23,11 +23,11 @@
     {#if mancaAlTarget == 0}
     You have reached your target
     {:else if mancaAlTarget < 0}
-    You have surpassed your target of <Amonta amonta={mancaAlTarget * -1} />
+    You have surpassed your target with <Amonta amonta={mancaAlTarget * -1} />
     {:else}
     You still need to assign <Amonta amonta={mancaAlTarget} />
     {/if}
-    (<Amonta amonta={targetXmese} /> each month)<Debug> for <strong>{busta.target.tipo}</strong>
+    (<Amonta amonta={targetXmese} /> each month for {$nnMesi} months)<Debug> for <strong>{busta.target.tipo}</strong>
     Attivita prec.: {attivitaPrec} &bull;
     #mesi: {$nnMesi} finMese: 
     {#if busta.target.tipo == 'spending'}

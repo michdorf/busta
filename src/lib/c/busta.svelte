@@ -55,7 +55,7 @@
 <div><ProgressBar 
         bilancio={busta.target.tipo === "saving" ? available : available } 
         speso={busta.target.tipo === "spending" ? Math.min($activity.finora /*, available */) : 0} 
-        max={busta.target.target || Math.abs($assegnamenti.finora)} subtarget={subtarget} /></div>
+        max={Math.max(busta.target.target, Math.abs($assegnamenti.finora))} subtarget={subtarget} /></div>
 <Debug><div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div></Debug>
 <TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
 <Debug><div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div></Debug>

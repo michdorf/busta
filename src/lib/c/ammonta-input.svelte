@@ -5,7 +5,7 @@ export let name = "";
 export let placeholder = "Estimat"
 
 function comma2dot() {
-    let str = `${value}`.replace(/,/g, ".").replace(/[^0-9\.\+\-\/\*]/g,"");
+    let str = `${value}`.replace(/,/g, ".").replace(/[^0-9\.\+\-\/\*\(\)]/g,"");
     let num = eval(str)
     if (isNaN(num)) {
         num = 0;
