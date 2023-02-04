@@ -80,12 +80,12 @@ export function calcTargetXMese(busta: BustaT, activity: Readable<ActivityT>) {
     
         let result = 0;
         if ($numMesi == 0) {
-            $numMesi = 1;
+            $numMesi = 1; // Overvej at regne/dele ud over antal dage
         }
         if (busta.target.tipo == 'spending') {
-            result = (busta.target.target - $assegnamenti.finora) / $numMesi;
+            result = (busta.target.target - $assegnamenti.precedente) / $numMesi;
         } else {
-            result = (busta.target.target - $activity.finora) / $numMesi;
+            result = (busta.target.target - $activity.precedente) / $numMesi;
         }
     
         return roundAmount(result);
