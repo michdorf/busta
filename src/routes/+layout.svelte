@@ -55,19 +55,23 @@
     </div>
 {/if}
 <nav style="margin-bottom: 2rem;">
+    <a href={`${BASEPATH}/`}>Welcome Guide</a>
     <a href={`${BASEPATH}/conti`}>Add account</a>
     <a href={`${BASEPATH}/buste`}>Envelopes/Budget</a>
     &bull; Transactions: 
     {#each $conti as conto}
-    <a href={`${BASEPATH}/trasferimenti/${conto.id}`}><b>{conto.nome}</b></a>
+    <a href={`${BASEPATH}/trasferimenti/${conto.id}`}><b>{conto.nome}</b></a>&nbsp;
     {/each}
 </nav>
 
-{#if $appState.authState != "authorized"}
-<button on:click={login}>Login</button><br>
-{/if}
-
 <slot></slot>
+
+{#if $appState.authState != "authorized"}
+<div style="text-align: center">
+    <button class="login" on:click={login}>Login</button><br/>
+    <span style="font-style: italic; font-size: 1.2rem;">&mldr; to syncronize across devices.</span><br>
+</div>
+{/if}
 
 <Debug>
     <div style="margin-top: 100px;">
@@ -76,6 +80,20 @@
 </Debug>
 
 <style>
+    button.login {
+        font-size: 32px;
+        padding: 0.5rem;
+        color: white;
+        background-color: rgb(44, 106, 251);
+        border: 2px solid rgb(24, 81, 213); 
+        border-radius: 0.3rem;
+        box-shadow: 0 2px 2px black;
+    }
+    button.login:hover {
+        background-color: rgb(30, 96, 249);
+        box-shadow: 0 3px 3px black;
+    }
+
     .error {
         width: 680px;
         max-width: 100%;

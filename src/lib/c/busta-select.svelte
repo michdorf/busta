@@ -3,7 +3,7 @@ import buste, { nuovaBusta as genBusta, type BustaT } from "$lib/stato/buste";
 import { salvaWritable } from "$lib/salvabile";
 import CategoriaSelect from "$lib/c/categoria-select.svelte";
 
-export let value: string | null;
+export let value: string | null = "--hdr-placeholder";
 
 let aggiungi = false;
 let nuovaBusta: BustaT = genBusta();
@@ -42,7 +42,7 @@ function salvaBusta() {
 {/if}
 
 <select bind:value={value} on:change={onChange}>
-    <option value="--hdr-placeholder" disabled>Buste</option>
+    <option value="--hdr-placeholder" disabled>Select an envelope</option>
     {#each $buste as busta}
         <option value={busta.id}>{busta.nome}</option>
     {/each}

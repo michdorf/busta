@@ -45,6 +45,15 @@
 <Debug><h4>
     <Amonta amonta={$activity.precedente} /> precedente. <Amonta amonta={$activity.futuro} /> in futuro. 
 </h4></Debug>
+<div class="grid-head">
+    <p>Date</p>
+    <p>Payee</p>
+    <p>Envelope category</p>
+    <p>Memo</p>
+    <p>Expense</p>
+    <p>Income</p>
+    <p title="Whether it is registered on you bank account." on:click={() => alert("Whether it is registered on you bank account.")}>Cleared [?]</p>
+</div>
 {#key trasInEdita.id}
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {/key}
@@ -55,3 +64,19 @@
         <span title={JSON.stringify(trasferimento)}><Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento></span>
     {/each}
 {/if}
+
+<style>
+    .grid-head {
+        display: grid; 
+        grid-template-columns: repeat(7, 1fr); 
+        gap: 0px 3px;
+        position: sticky;
+        top: 0;
+    }
+
+    .grid-head p {
+        background-color: rgb(var(--silver));
+        margin: 0;
+        padding: 0.3rem;
+    }
+</style>
