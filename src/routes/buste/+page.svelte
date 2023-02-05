@@ -82,7 +82,7 @@
                 <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rinomina</button>
             </summary>
             {#each conCategoria[i] as busta}
-                <span on:click={() => {bustaSelez = busta}} on:keypress={() => {bustaSelez = busta}}>
+                <span on:click={() => {bustaSelez = busta}}>
                     <Busta {busta} />
                 </span>
             {/each}
