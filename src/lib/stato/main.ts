@@ -3,7 +3,7 @@ import Buste from './buste';
 import Conti from './conti'
 import Trasferimenti from './trasferimenti'
 import {sync} from '$lib/api';
-import appState from './app-state';
+import appState, { setLoginError } from './app-state';
 import Categorie from './categorie';
 import { toISOstr } from '$lib/date';
 
@@ -21,7 +21,10 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     let storKey = "busta-stato";
     
     function init() {
-        let stato = JSON.parse(localStorage.getItem(storKey) || "{}");
+        let statostr = localStorage.getItem(storKey) || "{}";
+        const localtime = statostr.substring(0, statostr.indexOf("{"));
+        const jsonstr = statostr.substring(statostr.indexOf("{"));
+        let stato = JSON.parse(jsonstr);
         Trasferimenti.set(stato.trasferimenti || []);
         Conti.set(stato.conti || []);
         Buste.set(stato.buste || []);
@@ -34,9 +37,14 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */
         Stato.subscribe((valore) => {
-            localStorage.setItem(storKey, JSON.stringify(valore));
+            let valorestr = (primoSinc ? localtime : Date.now()) + JSON.stringify(valore);
+            localStorage.setItem(storKey, valorestr);
             if (!primoSinc) {
-                sync(valore);
+                sync(valorestr).then(responseTxt => {
+                    if (responseTxt.substring(0,6) === "ERRORE") {
+                        setLoginError("API responds with an error: " + responseTxt);
+                    }
+                });
             }
             primoSinc = false;
         });
@@ -46,9 +54,18 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     appState.subscribe((v) => {
         if (primoAuth && v.authState == 'authorized') {
             sync().then((responseTxt) => {
-                if (responseTxt[0] == "{") {
-                    localStorage.setItem(storKey, responseTxt);
+                if (responseTxt.substring(0,6) != "ERRORE") {
+                    const localState = localStorage.getItem(storKey) || "";
+                    const servertime = responseTxt.substring(0, responseTxt.indexOf("{"));
+                    const localtime = localState.substring(0, localState.indexOf("{"));
+                    
+                    if (true || (servertime > localtime && confirm(`Should the server version be loaded?\nTimestamp from server: ${servertime} and local: ${localtime}`))) {              
+                        localStorage.setItem(storKey, responseTxt);
+                    } else {
+                        alert(`Won't load the server version. (${servertime}[server] ${localtime}[localtime])`)
+                    }
                 } else {
+                    setLoginError("API responded with an error: " + responseTxt);
                     console.log("Sembra un errore da dechiffre.dk", responseTxt);
                 }
                 init();

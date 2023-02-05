@@ -44,7 +44,7 @@ function salvaBusta() {
 <select bind:value={value} on:change={onChange}>
     <option value="--hdr-placeholder" disabled>Buste</option>
     {#each $buste as busta}
-        <option value={busta.id}>{busta.nome} {(busta.target.target - busta.assegnato)}</option>
+        <option value={busta.id}>{busta.nome}</option>
     {/each}
     <option value="">Da asegnare</option>
     <option value="agg">Aggiungi</option>

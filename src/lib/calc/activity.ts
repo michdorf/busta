@@ -3,20 +3,28 @@ import { roundAmount } from "$lib/numeri";
 import Ricorrente from "moduli/moduli/ricorrente";
 import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
-import trasferimenti from "$lib/stato/trasferimenti";
-import { derived, get, type Readable } from "svelte/store";
+import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
+import { derived, type Readable } from "svelte/store";
+import { calcAssegnamenti } from "./assegnamenti";
 
-export function calcActivity(busta?: BustaT) {
-    const mese = get(appState).meseSelez;
-    const precedenteD = primoDelMese(mese).getTime();
-    const prossimaD = new Date(mese.getFullYear(), mese.getMonth()+1, 1).getTime();
+export interface ActivityT {
+    finora: number;
+    precedente: number;
+    delmese: number;
+    futuro: number;
+}
 
-    let precAmonta = 0;
-    let corrAmonta = 0;
-    let futurAmonta = 0;
-    return derived(trasferimenti, ($trasferimenti) => {
+export function calcActivity(filter: (trasferimento: Trasferimento) => boolean = () => true) {    
+    return derived([trasferimenti, appState], ([$trasferimenti, $appState]): ActivityT => {
+        const mese = $appState.meseSelez;
+        const precedenteD = primoDelMese(mese).getTime();
+        const prossimaD = new Date(mese.getFullYear(), mese.getMonth()+1, 1).getTime();
+    
+        let precAmonta = 0;
+        let corrAmonta = 0;
+        let futurAmonta = 0;
         $trasferimenti.map(($trasf) => {
-            if (typeof busta !== "undefined" && busta.id !== $trasf.busta) {
+            if (!filter($trasf)) {
                 return;
             } 
             const corD = new Date($trasf.data).getTime();
@@ -30,11 +38,16 @@ export function calcActivity(busta?: BustaT) {
         });
 
         return {
+            finora: corrAmonta + precAmonta,
             precedente: precAmonta,
-            corrente: corrAmonta,
+            delmese: corrAmonta,
             futuro: futurAmonta
         }
     });
+}
+
+export function calcReddito(busta?: BustaT) {
+    return calcActivity(typeof busta === "undefined" ? ($trasf) => $trasf.amount > 0 : ($trasf) => $trasf.amount > 0 && $trasf.busta == busta.id);
 }
 
 export function numMesi(busta: BustaT) {
@@ -46,7 +59,7 @@ export function numMesi(busta: BustaT) {
 
             let giornoOffset = new Date($appState.meseSelez.getTime()); // Clona (forse aggiungi a ricorrente TODO)
             finMese = Ricorrente.prossima(busta.target.ripeti, giornoOffset);
-            console.table({riccorente: busta.target.ripeti, prossima: finMese})
+            // console.table({riccorente: busta.target.ripeti, prossima: finMese})
         } else if ('deadline' in busta.target) {
             if (busta.target.deadlineAbil) {
                 finMese = new Date(busta.target.deadline);
@@ -59,20 +72,18 @@ export function numMesi(busta: BustaT) {
     });
 }
 
-export function calcTargetXMese(busta: BustaT, activity: Readable<{
-    precedente: number;
-    corrente: number;
-    futuro: number;
-}>) {
-    return derived([activity, numMesi(busta)], ([$activity,$numMesi]) => {
+export function calcTargetXMese(busta: BustaT, activity: Readable<ActivityT>) {
+    return derived([activity, numMesi(busta), calcAssegnamenti(busta)], ([$activity,$numMesi, $assegnamenti]) => {
         if (!busta.targetAbilitato) {
             return 0;
         }
     
         let result = 0;
-    
+        if ($numMesi == 0) {
+            $numMesi = 1; // Overvej at regne/dele ud over antal dage
+        }
         if (busta.target.tipo == 'spending') {
-            result = busta.target.target / $numMesi;
+            result = (busta.target.target - $assegnamenti.precedente) / $numMesi;
         } else {
             result = (busta.target.target - $activity.precedente) / $numMesi;
         }

@@ -1,23 +1,26 @@
 <script lang="ts">
     import {page} from '$app/stores'
 	import Amonta from '$lib/c/amonta.svelte';
+	import CambiaMese from '$lib/c/cambia-mese.svelte';
+	import Debug from '$lib/c/debug.svelte';
 	import Trasferimento from '$lib/c/trasferimento.svelte';
 	import { calcActivity } from '$lib/calc/activity';
 	import { eliminaWritable, salvaWritable } from '$lib/salvabile';
 	import { getConto } from '$lib/stato/conti';
 	import trasferimentiStato, {nuovoTransferimento, type Trasferimento as TrasferimentoT} from '$lib/stato/trasferimenti';
 
-    const contoId = $page.params.contoId;
-    const conto = getConto(contoId);
+    $: contoId = $page.params.contoId;
+    $: conto = getConto(contoId);
     $: trasferimenti = ($trasferimentiStato as TrasferimentoT[]).filter(v => v.contoId == contoId);
-    $: filteredTras = trasferimenti.concat().sort((a, b) => (new Date(a.data)).getTime() - (new Date(b.data)).getTime()).reverse(); // Mantiene #1 prima di #2 se su stesso giorno
+    $: filteredTras = trasferimenti.concat().filter(($trasf) => $trasf.contoId == contoId).sort((a, b) => (new Date(a.data)).getTime() - (new Date(b.data)).getTime()).reverse(); // Mantiene #1 prima di #2 se su stesso giorno
 
     function initialTras() {
-        return nuovoTransferimento(contoId);
+        let cId = contoId || $page.params.contoId;
+        return nuovoTransferimento(cId);
     }
-    let trasInEdita = initialTras();
-    let activity = calcActivity();
-    $: saldoCorrente = $activity.precedente + $activity.corrente;
+    $: trasInEdita = nuovoTransferimento(contoId);
+    $: activity = calcActivity(($trasf) => $trasf.contoId == contoId);
+    $: saldoCorrente = $activity.finora; // + $activity.delmese;
 
     function salva(event: CustomEvent<{trasferimento:TrasferimentoT}>) {
         salvaWritable(event.detail.trasferimento, trasferimentiStato);
@@ -35,11 +38,13 @@
         eliminaWritable(event.detail.trasferimento, trasferimentiStato);
     }
 </script>
-<h1>Trasferimenti di {conto ? conto.nome : ''}</h1>
+<CambiaMese />
+<h1>Transactions of {conto ? conto.nome : ''}</h1>
+<Debug>{JSON.stringify(trasInEdita)} trans in edita.</Debug>
 <h3><Amonta amonta={saldoCorrente} /></h3>
-<h4>
+<Debug><h4>
     <Amonta amonta={$activity.precedente} /> precedente. <Amonta amonta={$activity.futuro} /> in futuro. 
-</h4>
+</h4></Debug>
 {#key trasInEdita.id}
 <Trasferimento trasferimento={trasInEdita} on:salva={salva}></Trasferimento>
 {/key}

@@ -8,7 +8,7 @@ interface BustaBase {
     id: string;
     nome: string;
     categoria: string;
-    assegnato: number;
+    // assegnato: number;
     assegnamenti: Array<[ISOstr, number]>,
     targetAbilitato: boolean;
     target: SpendingTarget | SavingTarget;
@@ -28,8 +28,7 @@ export function nuovaBusta(): SpendingBusta {
     return {
         id: "-1",
         nome: "",
-        assegnato: 0,
-        assegnamenti: [],
+        assegnamenti: [[toISOstr(new Date()), 0]],
         categoria: "",
         targetAbilitato: false,
         target: {

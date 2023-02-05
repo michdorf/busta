@@ -1,9 +1,6 @@
-# Mine tanker/ideer
-
-Jeg er meget glad for You Need a Budget. 
-Min ide er at gå i samme retning.
-**Mht.** buste/envelopes, så mener jeg at man bør kunne lave dem og assigne penge til dem, som så "går" videre hvis man bruger for meget/for lidt (men målet bliver "nulstillet").
-Ift. "Ready to assign" så bør det være en beregnet værdi, som opdateres ift. hvor der ligger penge henne (hvor de er assignet).
+# Budget system to help you assign your money
+This app is a project inspired by the envelope budget system (same as GoodBudget and You Need A Budget).
+A live version of the app can be found at [https://dechiffre.dk/busta](https://dechiffre.dk/busta). You'll need to create an account to sync the changes.
 
 # create-svelte
 

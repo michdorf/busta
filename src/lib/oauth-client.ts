@@ -1,8 +1,8 @@
-import { PUBLIC_CLIENT_ID, PUBLIC_CLIENT_SECRET } from '$env/static/public';
+import { PUBLIC_CLIENT_ID, PUBLIC_CLIENT_SECRET, PUBLIC_REDIRECT_URI } from '$env/static/public';
 import OAuthClient from 'oauth-client/src/oauthclient'
 import appState, { updateAuthState } from './stato/app-state';
 
-export const useOauth = process.env.NODE_ENV === 'development';
+export const useOauth = true; // process.env.NODE_ENV === 'development';
 
 // TODO: update oauth-client to work when window and localStorage are undefined
 
@@ -11,7 +11,7 @@ let oauthclient = new OAuthClient({
     token_url: "https://dechiffre.dk/oauth-server/v1/token.php",
     client_id: PUBLIC_CLIENT_ID,
     client_secret: PUBLIC_CLIENT_SECRET,
-    redirect_uri: "http://localhost:5173/oauth-callback/"
+    redirect_uri: PUBLIC_REDIRECT_URI
 });
 
 export function autoLogin() {

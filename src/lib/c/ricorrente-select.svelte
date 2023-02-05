@@ -1,6 +1,7 @@
 <script lang="ts">
     import { toISOstr } from "$lib/date";
     import type Ricorrente from "moduli/moduli/ricorrente";
+	import Debug from "./debug.svelte";
 
     
     export let value: Ricorrente;
@@ -10,12 +11,12 @@
     $: value.primoGiorno = new Date(primoGiornoISO);
 </script>
 
-<label for="intervallo">Ogni </label>
+<label for="intervallo">Each </label>
 <input bind:value={value.intervalloN} type="number" size="5" step="1" />
 <select id="intervallo" bind:value={value.intervallo}>
-    <option value="m">Mese</option>
-    <option value="a">Anno</option>
+    <option value="m">Month</option>
+    <option value="a">Year</option>
 </select><br />
-<label for="data">Iniziando il </label>
+<label for="data">Beginning the </label>
 <input id="data" type="date" bind:value={primoGiornoISO} /><br>
-{JSON.stringify(value)}
+<Debug>{JSON.stringify(value)}</Debug>

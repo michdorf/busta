@@ -4,33 +4,35 @@
 	import { roundAmount } from "$lib/numeri";
 	import type { BustaT } from "$lib/stato/buste";
 	import Amonta from "./amonta.svelte";
+	import Debug from "./debug.svelte";
 
     export let available: number;
     export let busta: BustaT;
     export let attivitaPrec: number;
     export let targetXmese: number;
+    export let assegnato: number;
 
     $: nnMesi = numMesi(busta);
     let finMese = new Date();
 
     // $: targetXmese = calcTargetXMese(busta, attivitaPrec)
-    $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - busta.assegnato : targetXmese - available);
+    $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - assegnato : targetXmese - available);
 </script>
 
 <div>
     {#if mancaAlTarget == 0}
-    Hai raggiunto il target
+    You have reached your target
     {:else if mancaAlTarget < 0}
-    Hai superato il target di <Amonta amonta={mancaAlTarget * -1} />
+    You have surpassed your target of <Amonta amonta={mancaAlTarget * -1} />
     {:else}
-    Manchi ancora <Amonta amonta={mancaAlTarget} />
+    You still need to assign <Amonta amonta={mancaAlTarget} />
     {/if}
-    (<Amonta amonta={targetXmese} /> ogni mese) per <strong>{busta.target.tipo}</strong>
+    (<Amonta amonta={targetXmese} /> each month)<Debug> for <strong>{busta.target.tipo}</strong>
     Attivita prec.: {attivitaPrec} &bull;
     #mesi: {$nnMesi} finMese: 
     {#if busta.target.tipo == 'spending'}
     {busta.target.prossima}
     {:else}
     {toISOstr(finMese)}
-    {/if}
+    {/if}</Debug>
 </div>

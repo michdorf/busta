@@ -27,10 +27,11 @@ export function sync(payload?: any) {
         }
 
         if (payload) {
-            options.body = JSON.stringify(payload);
+            options.body = typeof payload == "string" ? payload : JSON.stringify(payload);
         }
 
-        fetch("https://dechiffre.dk/busta/api/", options).then(async (response) => {
+        let url = /* location.protocol + */ "https://dechiffre.dk/busta/api/";
+        fetch(url, options).then(async (response) => {
             resolve(await response.text());
         }).catch(reject)
     });

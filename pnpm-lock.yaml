@@ -18,7 +18,7 @@ specifiers:
 
 dependencies:
   '@sveltejs/adapter-static': 1.0.5_@sveltejs+kit@1.2.6
-  moduli: github.com/michdorf/moduli/990b9bd815929f076c59b65a20aa73ef0480fb18
+  moduli: github.com/michdorf/moduli/70ab63c00cbda3788e89717314eee67733818d84
   oauth-client: github.com/michdorf/oauth-client/9b8da0ad4a18242fdc398a4b01d047c78847eabc
 
 devDependencies:
@@ -1173,8 +1173,8 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
-  github.com/michdorf/moduli/990b9bd815929f076c59b65a20aa73ef0480fb18:
-    resolution: {commit: 990b9bd815929f076c59b65a20aa73ef0480fb18, repo: git+ssh://git@github.com/michdorf/moduli.git, type: git}
+  github.com/michdorf/moduli/70ab63c00cbda3788e89717314eee67733818d84:
+    resolution: {commit: 70ab63c00cbda3788e89717314eee67733818d84, repo: git+ssh://git@github.com/michdorf/moduli.git, type: git}
     name: moduli
     version: 1.0.0
     dependencies:
@@ -1187,5 +1187,5 @@ packages:
     version: 1.1.0
     dependencies:
       base64-arraybuffer: 1.0.2
-      moduli: github.com/michdorf/moduli/990b9bd815929f076c59b65a20aa73ef0480fb18
+      moduli: github.com/michdorf/moduli/70ab63c00cbda3788e89717314eee67733818d84
     dev: false
