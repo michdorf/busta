@@ -14,4 +14,4 @@ function comma2dot() {
 }
 </script>
 
-<input bind:value={value} on:change={comma2dot} step="0.01" {placeholder} {name} {id} on:blur /> 
+<input bind:value={value} on:change={comma2dot} step="0.01" on:click|stopPropagation {placeholder} {name} {id} on:blur /> 
