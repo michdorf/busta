@@ -51,8 +51,11 @@ export default class Ricorrente {
             case "s":
                 oggi.setDate(oggi.getDate() + (ricorrente.primoGiorno.getDay() + 7 - oggi.getDay()) % 7);
                 return oggi;
-            case "m": {
-                debugger;
+            case "a":
+            case "m":
+                if (oggi.getDate() > ricorrente.primoGiorno.getDate()) {
+                    oggi.setMonth(oggi.getMonth() + (ricorrente.intervallo === "a" ? 12 : 1));
+                }
                 let mesiDiff = (oggi.getMonth() - ricorrente.primoGiorno.getMonth());
                 let diffAnni = oggi.getFullYear() - ricorrente.primoGiorno.getFullYear();
                 if (mesiDiff < 0) {
@@ -60,27 +63,11 @@ export default class Ricorrente {
                     mesiDiff += 12;
                 }
                 mesiDiff += diffAnni * 12;
-                let mesiOffset = ricorrente.intervalloN - (mesiDiff % ricorrente.intervalloN);
-                /* if (mesiOffset === ricorrente.intervalloN) {
-                    mesiOffset = 0
-                } */
-                oggi.setMonth(mesiOffset, ricorrente.primoGiorno.getDate());
+                let intervalloN = ricorrente.intervallo === "a" ? ricorrente.intervalloN * 12 : ricorrente.intervalloN;
+                let mesiOffset = intervalloN - (mesiDiff % intervalloN);
+                // NB. mesiOffset er 0 hvis offset måned er en valid prossima dato
+                oggi.setMonth(oggi.getMonth() + mesiOffset, ricorrente.primoGiorno.getDate());
                 return oggi;
-            }
-            case "a": { // Non so come trattare skudår
-                let oggiAnno = oggi.getFullYear();
-                let diff = Math.abs(oggiAnno - ricorrente.primoGiorno.getFullYear());
-                diff = diff % ricorrente.intervalloN;
-                let anno = oggi.getFullYear() + diff;
-                if (diff === 0) { // Check hvis det er senere på året dato og måned => skyd til næste gang i rækken
-                    const oggiStamp = parseInt(oggi.getMonth()+""+oggi.getDate());
-                    const primoGiornoStamp = parseInt(ricorrente.primoGiorno.getMonth()+""+ricorrente.primoGiorno.getDate())
-                    if (oggiStamp > primoGiornoStamp) {
-                        anno += ricorrente.intervalloN;
-                    }
-                }
-                return new Date(anno, ricorrente.primoGiorno.getMonth(), ricorrente.primoGiorno.getDate());
-            }
         }
     }
 }
