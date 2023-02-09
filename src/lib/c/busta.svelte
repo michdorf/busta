@@ -15,7 +15,6 @@
 	import Debug from "./debug.svelte";
 	import Ricorrente from "moduli/moduli/ricorrente";
 	import appState from "$lib/stato/app-state";
-	import { toISOstr } from "$lib/date";
 
     export let busta: BustaT;
     $: ricorrente = busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
@@ -64,7 +63,7 @@
             <Amonta amonta={$activity.finora} />
         </div>
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
-        <div><button type="submit">Save</button></div>
+        <div><button type="submit" on:click|stopPropagation>Save</button></div>
         <TargetAzzera busta={busta} />
         <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Trasactions</button>
     </div>
