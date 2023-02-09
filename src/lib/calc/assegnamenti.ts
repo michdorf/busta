@@ -33,14 +33,15 @@ export function calcAssegnamenti(busta?: BustaT, periodo?: {da: Date | null, a: 
         let corrAmonta = 0;
         let futurAmonta = 0;
         bs.map(($busta) => {
+            let assegnFiltrati = [...$busta.assegnamenti]/* clone */;
             if (periodo?.da && periodo?.a) {
                 let da = periodo.da;
                 let a = periodo.a;
-                $busta.assegnamenti = $busta.assegnamenti.filter(($assegnamento) => {
+                assegnFiltrati = $busta.assegnamenti.filter(($assegnamento) => {
                    return inPeriodo($assegnamento[0], da, a)
                 });
             } 
-            $busta.assegnamenti.map(($assegnamento) => {
+            assegnFiltrati.map(($assegnamento) => {
                 const corD = new Date($assegnamento[0]).getTime();
                 if (corD < precedenteD) {
                     precAmonta += $assegnamento[1];
@@ -82,9 +83,14 @@ export function setAssegnatoDelMese(assegnato: number, busta: BustaT) {
     return busta;
 }
 
-export function calcRolloverAssegnamenti() {
-    let prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
-    return derived([calcAssegnamenti(), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
+export function calcRolloverAssegnamenti(busta?: BustaT) {
+    let prontoPerAssegnamento;
+    if (busta) {
+        prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta && $trasf.busta === busta.id);
+    } else {
+        prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
+    }
+    return derived([calcAssegnamenti(busta), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
         return $prontoPerAssegnamento.precedente - $assegnamenti.precedente;
     });
 }
