@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { monthsDiff } from "$lib/date";
     import appState from "$lib/stato/app-state";
+	import Debug from "./debug.svelte";
 
     function scorsa() {
         prossima(-1);
@@ -34,6 +35,7 @@
     $: nomeMese = ["Jan","Feb","Mar","Apr","Mag","Giu","Lug","Aug","Set","Ott","Nov","Dic"][mese];
 </script>
 
+<Debug>{$appState.meseSelez}<br></Debug>
 <button on:click={scorsa}>&lt;</button>
 {nomeMese}
 <button on:click={() => {prossima()}}>&gt;</button>

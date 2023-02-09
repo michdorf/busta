@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { calcActivity, calcReddito, calcTargetXMese } from "$lib/calc/activity";
-	import { calcAssegnamenti, setAssegnatoDelMese } from "$lib/calc/assegnamenti";
+	import { calcActivityPeriodo, calcReddito, calcTargetXMese } from "$lib/calc/activity";
+	import { calcAssegnamenti, calcAssegnamentiPeriodo, setAssegnatoDelMese } from "$lib/calc/assegnamenti";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
 	import buste from "$lib/stato/buste";
@@ -13,13 +13,27 @@
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
 	import Debug from "./debug.svelte";
+	import Ricorrente from "moduli/moduli/ricorrente";
+	import appState from "$lib/stato/app-state";
+	import { toISOstr } from "$lib/date";
 
     export let busta: BustaT;
-    let assegnamenti = calcAssegnamenti(busta);
+    $: ricorrente = busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
+    $: periodo = ricorrente ? {
+            da: Ricorrente.scorsa(ricorrente, $appState.meseSelez), 
+            a: Ricorrente.prossima(ricorrente, $appState.meseSelez)
+        } 
+        : {da: null, a: null}
+    let assegnamenti = ricorrente ? calcAssegnamentiPeriodo(periodo, busta) : calcAssegnamenti(busta);
+    $: {
+        if (ricorrente) {
+            assegnamenti = calcAssegnamentiPeriodo(periodo, busta);
+        }
+    }
     
-    $: activity = calcActivity(($trasf) => busta.id == $trasf.busta);
+    $: activity = calcActivityPeriodo(($trasf) => busta.id == $trasf.busta, periodo.da, periodo.a);
     $: reddito = calcReddito(busta);
-    $: targetXmese = calcTargetXMese(busta, activity);
+    $: targetXmese = calcTargetXMese(busta, assegnamenti, activity);
     $: available = $assegnamenti.finora + $activity.finora;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
@@ -45,7 +59,10 @@
             <AmmontaInput bind:value={assegnamentoValue} placeholder="Assign" /><br />
             <Amonta amonta={$assegnamenti.precedente} /> prev.
         </div>
-        <div title="Activity until now"><Amonta amonta={$activity.finora} /></div>
+        <div title="Activity until now">
+            <Debug>{#if periodo.da}Periodo: {periodo.da} - {periodo.a}{/if}</Debug>
+            <Amonta amonta={$activity.finora} />
+        </div>
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
         <div><button type="submit">Save</button></div>
         <TargetAzzera busta={busta} />

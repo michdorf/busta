@@ -1,4 +1,4 @@
-import type Ricorrente from "moduli/moduli/ricorrente";
+import type RicorrenteT from "moduli/moduli/ricorrente";
 import type { ISOstr } from "./ISOstr";
 
 interface TargetBase {
@@ -8,7 +8,7 @@ interface TargetBase {
 
 export interface SpendingTarget extends TargetBase {
     tipo: 'spending';
-    ripeti: Ricorrente;
+    ripeti: RicorrenteT;
     prossima: string;
 }
 

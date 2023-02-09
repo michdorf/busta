@@ -3,14 +3,15 @@ import { derived, get } from "svelte/store";
 import buste from "$lib/stato/buste";
 import { calcActivity, calcReddito } from "./activity";
 import appState from "$lib/stato/app-state";
-import { primoDelMese, toISOstr } from "$lib/date";
+import { inPeriodo, primoDelMese, toISOstr } from "$lib/date";
+import type {ISOstr} from "../interfacce/ISOstr";
 
 /**
  * Nota bene: assegnamenti sono precedenti solo
  * @param busta 
  * @returns 
  */
-export function calcAssegnamenti(busta?: BustaT) {
+export function calcAssegnamenti(busta?: BustaT, periodo?: {da: Date | null, a: Date | null}) {
     return derived([appState, buste], ([$appState, $buste]) => {
         let bs: BustaT[];
         if (typeof busta !== "undefined") {
@@ -32,6 +33,13 @@ export function calcAssegnamenti(busta?: BustaT) {
         let corrAmonta = 0;
         let futurAmonta = 0;
         bs.map(($busta) => {
+            if (periodo?.da && periodo?.a) {
+                let da = periodo.da;
+                let a = periodo.a;
+                $busta.assegnamenti = $busta.assegnamenti.filter(($assegnamento) => {
+                   return inPeriodo($assegnamento[0], da, a)
+                });
+            } 
             $busta.assegnamenti.map(($assegnamento) => {
                 const corD = new Date($assegnamento[0]).getTime();
                 if (corD < precedenteD) {
@@ -51,6 +59,10 @@ export function calcAssegnamenti(busta?: BustaT) {
             futuro: futurAmonta
         }
     });
+}
+
+export function calcAssegnamentiPeriodo(periodo: {da: Date | null, a: Date | null}, busta?: BustaT) {
+    return calcAssegnamenti(busta, periodo);
 }
 
 export function setAssegnatoDelMese(assegnato: number, busta: BustaT) {

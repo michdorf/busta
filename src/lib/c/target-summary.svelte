@@ -5,6 +5,7 @@
 	import type { BustaT } from "$lib/stato/buste";
 	import Amonta from "./amonta.svelte";
 	import Debug from "./debug.svelte";
+    import Ricorrente from "moduli/moduli/ricorrente";
 
     export let available: number;
     export let busta: BustaT;
@@ -13,7 +14,6 @@
     export let assegnato: number;
 
     $: nnMesi = numMesi(busta);
-    let finMese = new Date();
 
     // $: targetXmese = calcTargetXMese(busta, attivitaPrec)
     $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - assegnato : targetXmese - available);
@@ -30,9 +30,10 @@
     (<Amonta amonta={targetXmese} /> each month for {$nnMesi} months)<Debug> for <strong>{busta.target.tipo}</strong>
     Attivita prec.: {attivitaPrec} &bull;
     #mesi: {$nnMesi} finMese: 
-    {#if busta.target.tipo == 'spending'}
-    {busta.target.prossima}
+    {#if busta.target.tipo === 'spending'}
+    {busta.target.prossima}&nbsp;
     {:else}
-    {toISOstr(finMese)}
-    {/if}</Debug>
+    {toISOstr(new Date())}&nbsp;
+    {/if}
+</Debug>
 </div>

@@ -1,4 +1,4 @@
-import { monthsDiff, primoDelMese } from "$lib/date";
+import { inPeriodo, monthsDiff, primoDelMese } from "$lib/date";
 import { roundAmount } from "$lib/numeri";
 import Ricorrente from "moduli/moduli/ricorrente";
 import appState from "$lib/stato/app-state";
@@ -6,6 +6,7 @@ import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
 import { derived, type Readable } from "svelte/store";
 import { calcAssegnamenti } from "./assegnamenti";
+import type {ISOstr} from "../interfacce/ISOstr";
 
 export interface ActivityT {
     finora: number;
@@ -14,7 +15,7 @@ export interface ActivityT {
     futuro: number;
 }
 
-export function calcActivity(filter: (trasferimento: Trasferimento) => boolean = () => true) {    
+export function calcActivity(filter: (trasferimento: Trasferimento) => boolean = () => true) {
     return derived([trasferimenti, appState], ([$trasferimenti, $appState]): ActivityT => {
         const mese = $appState.meseSelez;
         const precedenteD = primoDelMese(mese).getTime();
@@ -46,6 +47,10 @@ export function calcActivity(filter: (trasferimento: Trasferimento) => boolean =
     });
 }
 
+export function calcActivityPeriodo(filter: (trasferimento: Trasferimento) => boolean, daDStr: Date | null, finoaDStr: Date | null) {
+    return calcActivity(($trasf) => filter($trasf) && (daDStr && finoaDStr ? inPeriodo($trasf.data, daDStr, finoaDStr) : true));
+}
+
 export function calcReddito(busta?: BustaT) {
     return calcActivity(typeof busta === "undefined" ? ($trasf) => $trasf.amount > 0 : ($trasf) => $trasf.amount > 0 && $trasf.busta == busta.id);
 }
@@ -72,8 +77,8 @@ export function numMesi(busta: BustaT) {
     });
 }
 
-export function calcTargetXMese(busta: BustaT, activity: Readable<ActivityT>) {
-    return derived([activity, numMesi(busta), calcAssegnamenti(busta)], ([$activity,$numMesi, $assegnamenti]) => {
+export function calcTargetXMese(busta: BustaT, assegnamenti: Readable<ActivityT>, activity: Readable<ActivityT>) {
+    return derived([activity, numMesi(busta), assegnamenti], ([$activity,$numMesi, $assegnamenti]) => {
         if (!busta.targetAbilitato) {
             return 0;
         }

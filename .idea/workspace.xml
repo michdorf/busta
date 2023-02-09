@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e9351377-6db3-44fc-90e9-e4aea52bdef2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/ricorrente.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/c/target-summary.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/c/target-summary.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/calc/activity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/calc/activity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/calc/assegnamenti.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/calc/assegnamenti.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/ricorrente.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/ricorrente.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2LMSlBVCIAXP8ZRQ8C716RxksIO" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/michele/Progetti/busta&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/michele/Progetti/busta/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/michele/Progetti/busta/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="NodeJSConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Vitest.ricorrente.test.ts">
+    <configuration name="ricorrente.test.ts" type="JavaScriptTestRunnerVitest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <vitest-package value="$PROJECT_DIR$/node_modules/vitest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST_FILE" />
+      <test-file value="$PROJECT_DIR$/src/ricorrente.test.ts" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test Ricorrente in anni" type="JavaScriptTestRunnerVitest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <vitest-package value="$PROJECT_DIR$/node_modules/vitest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/ricorrente.test.ts" />
+      <test-names>
+        <test-name value="test Ricorrente in anni" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="test Ricorrente in anni.can repeat 3rd year - previous date" type="JavaScriptTestRunnerVitest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <vitest-package value="$PROJECT_DIR$/node_modules/vitest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/ricorrente.test.ts" />
+      <test-names>
+        <test-name value="test Ricorrente in anni" />
+        <test-name value="can repeat 3rd year - previous date" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="test Ricorrente in mesi" type="JavaScriptTestRunnerVitest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <vitest-package value="$PROJECT_DIR$/node_modules/vitest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/ricorrente.test.ts" />
+      <test-names>
+        <test-name value="test Ricorrente in mesi" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="test Ricorrente in mesi.can repeat each month" type="JavaScriptTestRunnerVitest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <vitest-package value="$PROJECT_DIR$/node_modules/vitest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/ricorrente.test.ts" />
+      <test-names>
+        <test-name value="test Ricorrente in mesi" />
+        <test-name value="can repeat each month" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Vitest.ricorrente.test.ts" />
+        <item itemvalue="Vitest.test Ricorrente in anni.can repeat 3rd year - previous date" />
+        <item itemvalue="Vitest.test Ricorrente in anni" />
+        <item itemvalue="Vitest.test Ricorrente in mesi" />
+        <item itemvalue="Vitest.test Ricorrente in mesi.can repeat each month" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e9351377-6db3-44fc-90e9-e4aea52bdef2" name="Changes" comment="" />
+      <created>1675679607149</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1675679607149</updated>
+      <workItem from="1675679608440" duration="469000" />
+      <workItem from="1675844845450" duration="1308000" />
+      <workItem from="1675850714497" duration="1955000" />
+      <workItem from="1675863183446" duration="2364000" />
+      <workItem from="1675875806875" duration="2592000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

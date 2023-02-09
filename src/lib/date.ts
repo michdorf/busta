@@ -1,3 +1,5 @@
+import type { ISOstr } from "./interfacce/ISOstr";
+
 export function toISOstr(d: Date | string) {
     if (typeof d == "string") {
         return d.split('T')[0]
@@ -14,6 +16,13 @@ export function primoProssMese(d: Date) {
 }
 export function ultimoDelMese(d: Date) {
     return new Date(d.getFullYear(), d.getMonth() + 1, 0);
+}
+
+export function inPeriodo(data: Date | ISOstr, da: Date | ISOstr, a: Date | ISOstr) {
+    data = typeof data == "string" ? new Date(data) : data;
+    da = typeof da == "string" ? new Date(da) : da;
+    a = typeof a == "string" ? new Date(a) : a;
+    return data.getTime() >= da.getTime() && data.getTime() <= a.getTime();
 }
 
 export function monthsDiff(d1: Date, d2: Date) {

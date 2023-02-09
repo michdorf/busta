@@ -6,6 +6,11 @@ interface RicorrenteT {
     intervalloN: number, 
     primoGiorno: Date
 }
+export interface RicorrenteJSONT {
+    intervallo: Intervallo,
+    intervalloN: number,
+    primoGiorno: string
+}
 
 export default class Ricorrente implements RicorrenteT {
     primoGiorno: Date = new Date();
@@ -78,7 +83,8 @@ export default class Ricorrente implements RicorrenteT {
         }
     }
 
-    static daJSON(ricorrente: {intervallo: Intervallo, intervalloN: number, primoGiorno: string}): RicorrenteT {
+
+    static daJSON(ricorrente: RicorrenteJSONT): RicorrenteT {
         return {
             intervallo: ricorrente.intervallo,
             intervalloN: ricorrente.intervalloN,
