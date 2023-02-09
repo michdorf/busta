@@ -1,7 +1,13 @@
 // TODO: måske vil du kunne gentage "anden mandag i måneden"
 type Intervallo = "g" | "s" | "m" | "a"; // Giorni, settimane, mese, anno
 
-export default class Ricorrente {
+interface RicorrenteT {
+    intervallo: Intervallo, 
+    intervalloN: number, 
+    primoGiorno: Date
+}
+
+export default class Ricorrente implements RicorrenteT {
     primoGiorno: Date = new Date();
     intervallo: Intervallo;
     intervalloN = 1;
@@ -53,9 +59,6 @@ export default class Ricorrente {
                 return oggi;
             case "a":
             case "m":
-                if (oggi.getDate() > ricorrente.primoGiorno.getDate()) {
-                    oggi.setMonth(oggi.getMonth() + (ricorrente.intervallo === "a" ? 12 : 1));
-                }
                 let mesiDiff = (oggi.getMonth() - ricorrente.primoGiorno.getMonth());
                 let diffAnni = oggi.getFullYear() - ricorrente.primoGiorno.getFullYear();
                 if (mesiDiff < 0) {
@@ -65,9 +68,21 @@ export default class Ricorrente {
                 mesiDiff += diffAnni * 12;
                 let intervalloN = ricorrente.intervallo === "a" ? ricorrente.intervalloN * 12 : ricorrente.intervalloN;
                 let mesiOffset = intervalloN - (mesiDiff % intervalloN);
+                let isPreviousDate =  oggi.getDate() < ricorrente.primoGiorno.getDate() && (ricorrente.intervallo === "m" || oggi.getMonth() <= ricorrente.primoGiorno.getMonth())
+                if (isPreviousDate) {
+                    mesiOffset -= intervalloN;
+                }
                 // NB. mesiOffset er 0 hvis offset måned er en valid prossima dato
                 oggi.setMonth(oggi.getMonth() + mesiOffset, ricorrente.primoGiorno.getDate());
                 return oggi;
+        }
+    }
+
+    static daJSON(ricorrente: {intervallo: Intervallo, intervalloN: number, primoGiorno: string}): RicorrenteT {
+        return {
+            intervallo: ricorrente.intervallo,
+            intervalloN: ricorrente.intervalloN,
+            primoGiorno: new Date(ricorrente.primoGiorno)
         }
     }
 }
