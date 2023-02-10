@@ -11,7 +11,7 @@ import type {ISOstr} from "../interfacce/ISOstr";
  * @param busta 
  * @returns 
  */
-export function calcAssegnamenti(busta?: BustaT, periodo?: {da: Date | null, a: Date | null}) {
+export function calcAssegnamenti(busta?: BustaT, periodo?: {da?: Date | null, a: Date | null}) {
     return derived([appState, buste], ([$appState, $buste]) => {
         let bs: BustaT[];
         if (typeof busta !== "undefined") {
@@ -38,7 +38,7 @@ export function calcAssegnamenti(busta?: BustaT, periodo?: {da: Date | null, a: 
                 let da = periodo.da;
                 let a = periodo.a;
                 assegnFiltrati = $busta.assegnamenti.filter(($assegnamento) => {
-                   return inPeriodo($assegnamento[0], da, a)
+                   return inPeriodo($assegnamento[0], a, da)
                 });
             } 
             assegnFiltrati.map(($assegnamento) => {
@@ -90,9 +90,10 @@ export function calcRolloverAssegnabile() {
     });
 }
 
-export function calcRolloverAssegnamenti(busta: BustaT) {
+/* OBS. TODO: bør kun regne de tidligere periodi */
+export function calcRolloverAssegnamenti(busta: BustaT, periodoA: Date) {
     let attivitaBusta = calcActivity(($trasf) => $trasf.busta === busta.id);
-    return derived([calcAssegnamenti(busta), attivitaBusta], ([$assegnamenti, $attivitaBusta]) => {
-        return $assegnamenti.precedente - $attivitaBusta.precedente;
+    return derived([calcAssegnamenti(busta, {a: periodoA}), attivitaBusta], ([$assegnamenti, $attivitaBusta]) => {
+        return $assegnamenti.precedente + $attivitaBusta.precedente;
     });
 }

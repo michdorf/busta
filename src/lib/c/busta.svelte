@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { calcActivityPeriodo, calcReddito, calcTargetXMese } from "$lib/calc/activity";
+	import { calcActivity, calcActivityPeriodo, calcReddito, calcTargetXMese } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcAssegnamentiPeriodo, calcRolloverAssegnamenti, setAssegnatoDelMese } from "$lib/calc/assegnamenti";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
@@ -15,6 +15,7 @@
 	import Debug from "./debug.svelte";
 	import Ricorrente from "moduli/moduli/ricorrente";
 	import appState from "$lib/stato/app-state";
+	import { readable } from "svelte/store";
 
     export let busta: BustaT;
     $: ricorrente = busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
@@ -30,10 +31,10 @@
         }
     }
     
-    $: activity = calcActivityPeriodo(($trasf) => busta.id == $trasf.busta, periodo.da, periodo.a);
-    $: rolloverAssegn = calcRolloverAssegnamenti(busta);
+    $: activity = calcActivity/*Periodo*/(($trasf) => busta.id == $trasf.busta/*, periodo.da, periodo.a*/);
+    $: rolloverAssegn = periodo && periodo.da ? calcRolloverAssegnamenti(busta, periodo.da) : readable(0);
     $: targetXmese = calcTargetXMese(busta, assegnamenti, activity);
-    $: available = $assegnamenti.finora + $activity.finora;
+    $: available = $assegnamenti.finora + $rolloverAssegn + $activity.finora;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
     $: subtarget = (!overspent && $assegnamenti.delmese < $targetXmese);
