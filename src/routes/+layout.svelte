@@ -66,7 +66,7 @@
 
 <slot></slot>
 
-{#if $appState.authState != "authorized"}
+{#if $appState.authState != "authorized" || $loginError}
 <div style="text-align: center">
     <button class="login" on:click={login}>Login</button><br/>
     <span style="font-style: italic; font-size: 1.2rem;">&mldr; to syncronize across devices.</span><br>
