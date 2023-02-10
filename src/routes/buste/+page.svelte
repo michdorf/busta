@@ -5,7 +5,7 @@
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
 	import Debug from "$lib/c/debug.svelte";
 	import { calcActivity, calcReddito } from "$lib/calc/activity";
-	import { calcAssegnamenti, calcRolloverAssegnamenti } from "$lib/calc/assegnamenti";
+	import { calcAssegnamenti, calcRolloverAssegnabile } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app-state";
@@ -69,7 +69,7 @@
     $: assegnato = $assegnamenti.delmese;
     // TODO: daAssegnare skal være balancen fra forrige måned + alle INDKOMSTER 
     $: mesePrec = $activity.precedente;   
-    $: totalRolloverAssegnamenti = calcRolloverAssegnamenti();
+    $: totalRolloverAssegnamenti = calcRolloverAssegnabile();
 
     /**
      * Reddito che NON ha una categoria = pronto ad assegnare

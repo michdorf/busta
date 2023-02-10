@@ -83,14 +83,16 @@ export function setAssegnatoDelMese(assegnato: number, busta: BustaT) {
     return busta;
 }
 
-export function calcRolloverAssegnamenti(busta?: BustaT) {
-    let prontoPerAssegnamento;
-    if (busta) {
-        prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta && $trasf.busta === busta.id);
-    } else {
-        prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
-    }
-    return derived([calcAssegnamenti(busta), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
+export function calcRolloverAssegnabile() {
+    let prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
+    return derived([calcAssegnamenti(), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
         return $prontoPerAssegnamento.precedente - $assegnamenti.precedente;
+    });
+}
+
+export function calcRolloverAssegnamenti(busta: BustaT) {
+    let attivitaBusta = calcActivity(($trasf) => $trasf.busta === busta.id);
+    return derived([calcAssegnamenti(busta), attivitaBusta], ([$assegnamenti, $attivitaBusta]) => {
+        return $assegnamenti.precedente - $attivitaBusta.precedente;
     });
 }
