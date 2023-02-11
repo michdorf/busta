@@ -34,7 +34,7 @@
     $: activity = calcActivity/*Periodo*/(($trasf) => busta.id == $trasf.busta/*, periodo.da, periodo.a*/);
     $: rolloverAssegn = periodo && periodo.da ? calcRolloverAssegnamenti(busta, periodo.da) : readable(0);
     $: targetXmese = calcTargetXMese(busta, assegnamenti, activity);
-    $: available = $assegnamenti.finora + $rolloverAssegn + $activity.finora;
+    $: available = $assegnamenti.finora + $activity.finora;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
     $: subtarget = (!overspent && $assegnamenti.delmese < $targetXmese);
