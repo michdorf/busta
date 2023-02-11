@@ -12,6 +12,7 @@
     import Buste, {type BustaT} from "$lib/stato/buste";
     import Categorie, { type Categoria } from "$lib/stato/categorie";
 	import Trasferimenti from "$lib/stato/trasferimenti";
+	import { onMount } from "svelte";
 
     function cambiaCategoriaNome(categoria: Categoria) {
         let nome = prompt("Nuovo nome", categoria.nome);
@@ -71,6 +72,15 @@
     $: mesePrec = $activity.precedente;   
     $: totalRolloverAssegnamenti = calcRolloverAssegnabile();
 
+    let assegnamentoContOffset: number;
+    function resizeStickyHeader() {
+        assegnamentoContOffset = document.getElementById("daAssegnareCont")?.offsetHeight || 0;
+    }
+    onMount(() => {
+        resizeStickyHeader();
+        window.addEventListener("resize", resizeStickyHeader);
+	});
+
     /**
      * Reddito che NON ha una categoria = pronto ad assegnare
      */
@@ -87,7 +97,7 @@
 </script>
 
 <CambiaMese />
-<div style="margin-bottom: 1rem">
+<div id="daAssegnareCont" style="padding-bottom: 1rem">
     <div class="daAssegnare" class:positivo={daAssegnare > 0} class:overspent={daAssegnare < 0} style="font-size: 2rem;">Ready to assign <span><Amonta amonta={daAssegnare} /></span> <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assigned. 
     <Debug><Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).</Debug>
@@ -97,7 +107,7 @@
     <div class="categorie">
         {#each $Categorie as categoria, i}
         <details open>
-            <summary>
+            <summary style:top={assegnamentoContOffset + "px"}>
                 {categoria.nome}
                 <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
             </summary>
@@ -122,6 +132,13 @@ details[open] summary span.icon {
 
 summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
+}
+
+#daAssegnareCont {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
 }
 
 .daAssegnare.positivo span {
