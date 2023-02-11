@@ -11,7 +11,7 @@ import type {ISOstr} from "../interfacce/ISOstr";
  * @param busta 
  * @returns 
  */
-export function calcAssegnamenti(busta?: BustaT, periodo?: {da: Date | null, a: Date | null}) {
+export function calcAssegnamenti(busta?: BustaT, periodo?: {da?: Date | null, a: Date | null}) {
     return derived([appState, buste], ([$appState, $buste]) => {
         let bs: BustaT[];
         if (typeof busta !== "undefined") {
@@ -33,14 +33,15 @@ export function calcAssegnamenti(busta?: BustaT, periodo?: {da: Date | null, a: 
         let corrAmonta = 0;
         let futurAmonta = 0;
         bs.map(($busta) => {
+            let assegnFiltrati = [...$busta.assegnamenti]/* clone */;
             if (periodo?.da && periodo?.a) {
                 let da = periodo.da;
                 let a = periodo.a;
-                $busta.assegnamenti = $busta.assegnamenti.filter(($assegnamento) => {
-                   return inPeriodo($assegnamento[0], da, a)
+                assegnFiltrati = $busta.assegnamenti.filter(($assegnamento) => {
+                   return inPeriodo($assegnamento[0], a, da)
                 });
             } 
-            $busta.assegnamenti.map(($assegnamento) => {
+            assegnFiltrati.map(($assegnamento) => {
                 const corD = new Date($assegnamento[0]).getTime();
                 if (corD < precedenteD) {
                     precAmonta += $assegnamento[1];
@@ -82,9 +83,17 @@ export function setAssegnatoDelMese(assegnato: number, busta: BustaT) {
     return busta;
 }
 
-export function calcRolloverAssegnamenti() {
+export function calcRolloverAssegnabile() {
     let prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
     return derived([calcAssegnamenti(), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
         return $prontoPerAssegnamento.precedente - $assegnamenti.precedente;
+    });
+}
+
+/* OBS. TODO: bør kun regne de tidligere periodi */
+export function calcRolloverAssegnamenti(busta: BustaT, periodoA: Date) {
+    let attivitaBusta = calcActivity(($trasf) => $trasf.busta === busta.id);
+    return derived([calcAssegnamenti(busta, {a: periodoA}), attivitaBusta], ([$assegnamenti, $attivitaBusta]) => {
+        return $assegnamenti.precedente + $attivitaBusta.precedente;
     });
 }

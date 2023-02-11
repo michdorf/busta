@@ -18,11 +18,11 @@ export function ultimoDelMese(d: Date) {
     return new Date(d.getFullYear(), d.getMonth() + 1, 0);
 }
 
-export function inPeriodo(data: Date | ISOstr, da: Date | ISOstr, a: Date | ISOstr) {
+export function inPeriodo(data: Date | ISOstr, a: Date | ISOstr, da?: Date | ISOstr) {
     data = typeof data == "string" ? new Date(data) : data;
     da = typeof da == "string" ? new Date(da) : da;
     a = typeof a == "string" ? new Date(a) : a;
-    return data.getTime() >= da.getTime() && data.getTime() <= a.getTime();
+    return (typeof da === "undefined" || data.getTime() >= da.getTime()) && data.getTime() <= a.getTime();
 }
 
 export function monthsDiff(d1: Date, d2: Date) {

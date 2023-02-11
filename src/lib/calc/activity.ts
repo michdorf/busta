@@ -46,7 +46,7 @@ export function calcActivity(filter: (trasferimento: Trasferimento) => boolean =
 }
 
 export function calcActivityPeriodo(filter: (trasferimento: Trasferimento) => boolean, daDStr: Date | null, finoaDStr: Date | null) {
-    return calcActivity(($trasf) => filter($trasf) && (daDStr && finoaDStr ? inPeriodo($trasf.data, daDStr, finoaDStr) : true));
+    return calcActivity(($trasf) => filter($trasf) && (daDStr && finoaDStr ? inPeriodo($trasf.data, finoaDStr, daDStr) : true));
 }
 
 export function calcReddito(busta?: BustaT) {

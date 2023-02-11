@@ -45,7 +45,9 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */
         Stato.subscribe((valore) => {
-            let valorestr = (primoSinc ? localtime : Date.now()) + JSON.stringify(valore);
+            let statostr = localStorage.getItem(storKey) || "{}";
+            let localtime = statostr.substring(0, statostr.indexOf("{"));
+            let valorestr = (nuovaModifica ? Date.now() : localtime) + JSON.stringify(valore);
             localStorage.setItem(storKey, valorestr);
             if (!primoSinc && nuovaModifica) { // Sembra che viene eseguita 2x su ogni cambiamento
                 console.log("Salva perche ce nuova modifica.");
@@ -70,10 +72,9 @@ if (typeof window != "undefined" && 'localStorage' in window) {
                     const servertime = responseTxt.substring(0, responseTxt.indexOf("{"));
                     const localtime = localState.substring(0, localState.indexOf("{"));
                     
-                    if (true || (servertime > localtime && confirm(`Should the server version be loaded?\nTimestamp from server: ${servertime} and local: ${localtime}`))) {              
+                    if (servertime > localtime) {   
+                        console.log("Loaded from server because it was "+servertime+"[server] vs. "+localtime+"[local]");          
                         localStorage.setItem(storKey, responseTxt);
-                    } else {
-                        alert(`Won't load the server version. (${servertime}[server] ${localtime}[localtime])`)
                     }
                 } else {
                     setLoginError("API responded with an error: " + responseTxt);
