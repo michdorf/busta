@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { calcActivityPeriodo, calcReddito, calcTargetXMese } from "$lib/calc/activity";
-	import { calcAssegnamenti, calcAssegnamentiPeriodo, setAssegnatoDelMese } from "$lib/calc/assegnamenti";
+	import { calcActivity, calcReddito, calcTargetXMese } from "$lib/calc/activity";
+	import { calcAssegnamenti, setAssegnatoDelMese } from "$lib/calc/assegnamenti";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
 	import buste from "$lib/stato/buste";
@@ -23,14 +23,14 @@
             a: Ricorrente.prossima(ricorrente, $appState.meseSelez)
         } 
         : {da: null, a: null}
-    let assegnamenti = ricorrente ? calcAssegnamentiPeriodo(periodo, busta) : calcAssegnamenti(busta);
+    let assegnamenti = ricorrente ? calcAssegnamenti/*Periodo*/(/*periodo, */busta) : calcAssegnamenti(busta);
     $: {
         if (ricorrente) {
-            assegnamenti = calcAssegnamentiPeriodo(periodo, busta);
+            assegnamenti = calcAssegnamenti/*Periodo*/(/*periodo,*/ busta);
         }
     }
     
-    $: activity = calcActivityPeriodo(($trasf) => busta.id == $trasf.busta, periodo.da, periodo.a);
+    $: activity = calcActivity/*Periodo*/(($trasf) => busta.id == $trasf.busta/*, periodo.da, periodo.a*/);
     $: reddito = calcReddito(busta);
     $: targetXmese = calcTargetXMese(busta, assegnamenti, activity);
     $: available = $assegnamenti.finora + $activity.finora;

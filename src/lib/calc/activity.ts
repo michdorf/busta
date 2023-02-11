@@ -5,8 +5,6 @@ import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
 import { derived, type Readable } from "svelte/store";
-import { calcAssegnamenti } from "./assegnamenti";
-import type {ISOstr} from "../interfacce/ISOstr";
 
 export interface ActivityT {
     finora: number;
