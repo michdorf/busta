@@ -29,6 +29,7 @@
 <!-- Fa parte di un flex container -->
 <div>
     {#if scaduto}
+        <Debug><i>Elimina questo comp.</i></Debug>
         <select on:change={change}>
             <option value="">Sciegli cosa fare</option>
             <option value="azzera">nulstil (= []) assegnamenti</option>
