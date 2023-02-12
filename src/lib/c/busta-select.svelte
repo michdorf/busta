@@ -2,8 +2,17 @@
 import buste, { nuovaBusta as genBusta, type BustaT } from "$lib/stato/buste";
 import { salvaWritable } from "$lib/salvabile";
 import CategoriaSelect from "$lib/c/categoria-select.svelte";
+	import { derived } from "svelte/store";
+	import categorie from "$lib/stato/categorie";
 
 export let value: string | null = "--hdr-placeholder";
+
+$: derivedBuste = derived([buste, categorie], ([$buste, $categorie]) => {
+    return $buste.map($busta => {
+        let nome = $categorie.filter(($categoria) => $categoria.id === $busta.categoria)[0].nome;
+        return Object.assign({categoriaNome: nome}, $busta);
+    })
+})
 
 let aggiungi = false;
 let nuovaBusta: BustaT = genBusta();
@@ -43,8 +52,8 @@ function salvaBusta() {
 
 <select bind:value={value} on:change={onChange}>
     <option value="--hdr-placeholder" disabled>Select an envelope</option>
-    {#each $buste as busta}
-        <option value={busta.id}>{busta.nome}</option>
+    {#each $derivedBuste as busta}
+        <option value={busta.id}>{busta.categoriaNome} - {busta.nome}</option>
     {/each}
     <option value="">Da asegnare</option>
     <option value="agg">Aggiungi</option>
