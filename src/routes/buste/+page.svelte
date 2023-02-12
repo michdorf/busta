@@ -4,12 +4,13 @@
     import Busta from "$lib/c/busta.svelte";
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
 	import Debug from "$lib/c/debug.svelte";
-	import { calcActivity, calcReddito } from "$lib/calc/activity";
+	import { calcActivity } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcRolloverAssegnabile } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app-state";
     import Buste, {type BustaT} from "$lib/stato/buste";
+	import categorie from "$lib/stato/categorie";
     import Categorie, { type Categoria } from "$lib/stato/categorie";
 	import Trasferimenti from "$lib/stato/trasferimenti";
 	import { onMount } from "svelte";
@@ -81,6 +82,15 @@
         window.addEventListener("resize", resizeStickyHeader);
 	});
 
+    function swapCategory(categoria: Categoria, direzione: -1 | 1) {
+        const i = $categorie.indexOf(categoria);
+        debugger;
+        Categorie.update($categorie => {
+            $categorie[i] = $categorie.splice(i + direzione, 1, $categorie[i])[0];
+            return $categorie;
+        });
+    }
+
     /**
      * Reddito che NON ha una categoria = pronto ad assegnare
      */
@@ -110,6 +120,10 @@
             <summary style:top={assegnamentoContOffset + "px"}>
                 {categoria.nome}
                 <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
+                <div style="float: right">
+                    <button type="button" on:click={() => swapCategory(categoria, -1)} disabled={i === 0}>Up</button>
+                    <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>
+                </div>
             </summary>
             {#each conCategoria[i] as busta}
                 <span on:click={() => {bustaSelez = busta}}>
