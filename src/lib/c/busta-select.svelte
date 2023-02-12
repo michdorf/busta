@@ -8,11 +8,16 @@ import CategoriaSelect from "$lib/c/categoria-select.svelte";
 export let value: string | null = "--hdr-placeholder";
 
 $: derivedBuste = derived([buste, categorie], ([$buste, $categorie]) => {
-    return $buste.map($busta => {
-        let nome = $categorie.filter(($categoria) => $categoria.id === $busta.categoria)[0].nome;
-        return Object.assign({categoriaNome: nome}, $busta);
-    })
-})
+    let r: Array<{categoriaNome: string} & BustaT> = [];
+    
+
+    $categorie.map(($categoria) => {
+        return $buste.filter($busta => $busta.categoria === $categoria.id).map($busta => {
+            r.push(Object.assign({categoriaNome: $categoria.nome}, $busta));
+        });
+    });
+    return r;
+});
 
 let aggiungi = false;
 let nuovaBusta: BustaT = genBusta();
