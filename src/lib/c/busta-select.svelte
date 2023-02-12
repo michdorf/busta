@@ -18,7 +18,7 @@ function onChange() {
 
 function salvaBusta() {
     if (!nuovaBusta.categoria) {
-        alert("Deve avere una categoria");
+        alert("It needs to be assigned a category");
         return;
     }
     salvaWritable(nuovaBusta, buste);
