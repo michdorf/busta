@@ -62,7 +62,7 @@ export function calcAssegnamenti(busta?: BustaT, periodo?: {da?: Date | null, a:
     });
 }
 
-export function calcAssegnamentiPeriodo(periodo: {da: Date | null, a: Date | null}, busta?: BustaT) {
+export function calcAssegnamentiPeriodo(periodo: {da: Date, a: Date} | undefined, busta?: BustaT) {
     return calcAssegnamenti(busta, periodo);
 }
 

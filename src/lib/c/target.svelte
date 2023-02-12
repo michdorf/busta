@@ -7,6 +7,8 @@
 	import Amonta from "./amonta.svelte";
 	import TargetSummary from "./target-summary.svelte";
 	import { toISOstr } from "$lib/date";
+    import {calcActivityPeriodo} from "../calc/activity";
+    import {calcAssegnamentiPeriodo} from "../calc/assegnamenti";
 
     export let busta: BustaT;
     export let periodo: {da: Date, a: Date} | undefined;
@@ -18,15 +20,20 @@
     export let assegnamenti: Readable<ActivityT>;
     export let targetXmese: Readable<number>;
 
-    $: bilancio = busta.target.tipo === "saving" ? available : available;
-    $: speso = busta.target.tipo === "spending" ? Math.min($activity.finora /*, available */) : 0;
-    $: max = Math.max(busta.target.target, Math.abs($assegnamenti.finora), Math.abs($activity.finora));
+    $: attivitaPeriodo = calcActivityPeriodo($trasf => $trasf.busta === busta.id, periodo ? periodo.da : null, periodo ? periodo.a : null);
+    $: assegnamentiPeriodo = calcAssegnamentiPeriodo(periodo, busta);
+
+    $: availablePeriodo = $assegnamentiPeriodo.finora + $attivitaPeriodo.finora;
+    $: profitto = availablePeriodo;
+    $: speso = busta.target.tipo === "spending" ? ($attivitaPeriodo.finora < 0 ? $attivitaPeriodo.finora : 0) : 0; 
+    $: max = Math.max(busta.target.target, availablePeriodo);
 </script>
 
 <Debug>{#if periodo}Periodo: {toISOstr(periodo.da)} - {toISOstr(periodo.a)}{/if}</Debug>
-<div> 
+<div>
+    {profitto}
     <ProgressBar 
-        bilancio={bilancio} 
+        profitto={profitto}
         speso={speso} 
         max={max} subtarget={subtarget} /> 
 </div>

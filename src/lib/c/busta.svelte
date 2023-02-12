@@ -17,7 +17,7 @@
 	import { readable } from "svelte/store";
 
     export let busta: BustaT;
-    $: ricorrente = busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
+    $: ricorrente = busta.targetAbilitato && busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
     $: periodo = ricorrente ? {
             da: Ricorrente.scorsa(ricorrente, $appState.meseSelez), 
             a: Ricorrente.prossima(ricorrente, $appState.meseSelez)
