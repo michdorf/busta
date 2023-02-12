@@ -5,10 +5,11 @@
 	import Trasferimenti from "$lib/stato/trasferimenti";
 
     $: bustaId = $page.params.bustaId;
+    $: busta = $Buste.filter((busta) => busta.id === bustaId)[0];
     $: trasferimenti = $Trasferimenti.filter(($trasf) => $trasf.busta == bustaId);
 </script>
 
-<h1>{bustaId}</h1>
+<h1>{busta.nome}</h1>
 
 {#each trasferimenti as trasf}
 <div class="linea">
