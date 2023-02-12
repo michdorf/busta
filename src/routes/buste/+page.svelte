@@ -134,7 +134,7 @@
         {/each}
     </div>
     
-    <div class="busta-detail">
+    <div class="busta-detail" style:top={assegnamentoContOffset + "px"}>
        <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail} on:close={() => {bustaSelez = undefined}} />
     </div>
 </div>

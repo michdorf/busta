@@ -25,7 +25,7 @@
     }
 </script>
 
-<h2>Lista of accounts</h2>
+<h2>List of accounts</h2>
 {#each $conti as conto}
     <a href={`${BASEPATH}/trasferimenti/${conto.id}`}><b>{conto.nome}</b></a>
     <button on:click={() => {rinomina(conto)}}>Rename</button>
