@@ -1,18 +1,21 @@
 <script lang="ts">
 import { salvaWritable } from "$lib/salvabile";
 import categorie, { nuovaCategoria as genCategoria, type Categoria } from "$lib/stato/categorie";
+	import { createEventDispatcher } from "svelte";
 
 export let value: string | null;
 export let placeholder = "Select category";
 
 let aggiungi = false;
 let nuovaCategoria: Categoria = genCategoria();
+let dispatch = createEventDispatcher<{change:boolean}>();
 function onChange() {
     if (value == "agg") {
         aggiungi = true;
         value = null;
     } else {
         aggiungi = false;
+        dispatch('change',true);
     }
 }
 

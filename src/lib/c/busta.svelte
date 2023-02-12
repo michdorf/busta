@@ -30,6 +30,7 @@
         }
     }
     
+    let daSalvare = false;
     $: activity = calcActivity/*Periodo*/(($trasf) => busta.id == $trasf.busta/*, periodo.da, periodo.a*/);
     $: rolloverAssegn = periodo && periodo.da ? calcRolloverAssegnamenti(busta, periodo.da) : readable(0);
     $: targetXmese = calcTargetXMese(busta, periodo);
@@ -46,23 +47,24 @@
     function salva() {
         busta = setAssegnatoDelMese(assegnamentoValue, busta);
         salvaWritable(busta, buste);
+        daSalvare = false;
     }
 </script>
 
 <div style="background-color: aliceblue; margin: 0.4rem; padding: 0.6rem">
 <form on:submit|preventDefault={salva}>
     <div class="busta-cont">
-        <div style="flex: 1;"><input bind:value={busta.nome} /></div>
-        <div><CategoriaSelect bind:value={busta.categoria} /></div>
+        <div style="flex: 1;"><input bind:value={busta.nome} on:change={salva} /></div>
+        <div><CategoriaSelect bind:value={busta.categoria} on:change={() => daSalvare = true} /></div>
         <div>
-            <AmmontaInput bind:value={assegnamentoValue} placeholder="Assign" /><br />
+            <AmmontaInput bind:value={assegnamentoValue} on:change={salva} placeholder="Assign" /><br />
             <Amonta amonta={$assegnamenti.precedente} /> prev. ({$rolloverAssegn} rollover)
         </div>
         <div title="Activity until now">
             <Amonta amonta={$activity.finora} />
         </div>
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
-        <div><button type="submit" on:click|stopPropagation>Save</button></div>
+        <div>{#if daSalvare}<button type="submit" on:click|stopPropagation>Save</button>{/if}</div>
         <TargetAzzera busta={busta} />
         <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Trasactions</button>
     </div>
