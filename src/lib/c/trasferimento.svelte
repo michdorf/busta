@@ -67,7 +67,7 @@
     form {
         display: grid; 
         grid-template-columns: repeat(7, 1fr); 
-        grid-template-rows: 1fr 1fr; 
+        grid-template-rows: 1fr/* 1fr*/; 
         gap: 0px 3px;
     }
 

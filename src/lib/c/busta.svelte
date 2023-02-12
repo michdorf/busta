@@ -8,8 +8,7 @@
 	import Amonta from "./amonta.svelte";
 	import CategoriaSelect from "./categoria-select.svelte";
 	import TargetAzzera from "./target-azzera.svelte";
-	import TargetSummary from "./target-summary.svelte";
-    import ProgressBar from '$lib/c/progress-bar.svelte';
+	import Target from "./target.svelte";
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
 	import Debug from "./debug.svelte";
@@ -23,7 +22,7 @@
             da: Ricorrente.scorsa(ricorrente, $appState.meseSelez), 
             a: Ricorrente.prossima(ricorrente, $appState.meseSelez)
         } 
-        : {da: null, a: null}
+        : undefined;
     let assegnamenti = ricorrente ? calcAssegnamenti/*Periodo*/(/*periodo, */busta) : calcAssegnamenti(busta);
     $: {
         if (ricorrente) {
@@ -33,7 +32,7 @@
     
     $: activity = calcActivity/*Periodo*/(($trasf) => busta.id == $trasf.busta/*, periodo.da, periodo.a*/);
     $: rolloverAssegn = periodo && periodo.da ? calcRolloverAssegnamenti(busta, periodo.da) : readable(0);
-    $: targetXmese = calcTargetXMese(busta, assegnamenti, activity);
+    $: targetXmese = calcTargetXMese(busta, periodo);
     $: available = $assegnamenti.finora + $activity.finora;
     $: overspent = available < 0;
     $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
@@ -60,7 +59,6 @@
             <Amonta amonta={$assegnamenti.precedente} /> prev. ({$rolloverAssegn} rollover)
         </div>
         <div title="Activity until now">
-            <Debug>{#if periodo.da}Periodo: {periodo.da} - {periodo.a}{/if}</Debug>
             <Amonta amonta={$activity.finora} />
         </div>
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
@@ -69,15 +67,7 @@
         <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Trasactions</button>
     </div>
 </form><br>
-<div> 
-    <ProgressBar 
-        bilancio={busta.target.tipo === "saving" ? available : available } 
-        speso={busta.target.tipo === "spending" ? Math.min($activity.finora /*, available */) : 0} 
-        max={Math.max(busta.target.target, Math.abs($assegnamenti.finora), Math.abs($activity.finora))} subtarget={subtarget} /> 
-</div>
-<Debug><div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div></Debug>
-<TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
-<Debug><div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div></Debug>
+<Target busta={busta} periodo={periodo} subtarget={subtarget} overspent={overspent} suptarget={suptarget} available={available} activity={activity} assegnamenti={assegnamenti} targetXmese={targetXmese}></Target>
 </div>
 
 <style>

@@ -5,6 +5,7 @@ import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
 import { derived, type Readable } from "svelte/store";
+import { calcAssegnamenti, calcAssegnamentiPeriodo } from "./assegnamenti";
 
 export interface ActivityT {
     finora: number;
@@ -75,7 +76,11 @@ export function numMesi(busta: BustaT) {
     });
 }
 
-export function calcTargetXMese(busta: BustaT, assegnamenti: Readable<ActivityT>, activity: Readable<ActivityT>) {
+export function calcTargetXMese(busta: BustaT, periodo?: {da: Date, a: Date}/*, assegnamenti: Readable<ActivityT>, activity: Readable<ActivityT>*/) {
+    let assegnamenti = periodo ? calcAssegnamentiPeriodo(periodo, busta) : calcAssegnamenti(busta);
+    const filter = ($trasf: Trasferimento) => $trasf.busta === busta.id;
+    let activity = periodo ? calcActivityPeriodo(filter, periodo.da, periodo.a) : calcActivity(filter);
+    
     return derived([activity, numMesi(busta), assegnamenti], ([$activity,$numMesi, $assegnamenti]) => {
         if (!busta.targetAbilitato) {
             return 0;
