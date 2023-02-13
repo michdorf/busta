@@ -33,13 +33,18 @@ export async function initLogin() {
         updateAuthState("authorized");
         return;
     }
+    if (typeof location !== "undefined" && location.pathname === "/oauth-callback") { // No auth on new token gen
+       return;
+    }
 
     try {
         let authed = await autoLogin();
+        console.error(`initLogin ${authed}`);
         if (authed == false) {
             return;
         }
     } catch (e) {
+        console.error(`initLogin auth error`);
         return;
     }
 }

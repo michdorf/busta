@@ -17,21 +17,27 @@ let oauthclient = new OAuthClient({
 export function autoLogin() {
     return new Promise<string | false>((resolve, reject) => {
         let authState = getAuthState();
+        console.error(`authState ${authState}`);
         if (authState == 'authorized') {
             updateAuthState('authorized');
             resolve(oauthclient.getAccessToken());
+            console.error(`nemt`);
             return;
         }
         if (authState == 'access-token expired') {
+            console.error(`exipred`);
             oauthclient.refreshToken().then((accesstoken) => {
+                console.error(`refreshed`);
                 updateAuthState('authorized');
                 resolve(accesstoken.access_token);
             }).catch(() => {
+                console.error(`error with refresh`);
                 updateAuthState("no token");
                 reject();
             });
             return;
         }
+        console.error(`reject no token`);
         updateAuthState("no token");
         reject(false);
     });
@@ -53,6 +59,7 @@ function getAuthState(): LoginState {
         let refreshExpire: number | Date = new Date();
         refreshExpire = new Date(refreshExpire);
         refreshExpire.setDate(refreshExpire.getDate() + refreshTokenExpireTime);
+        console.error(`refreshExpire ${refreshExpire} expire ${expire}`);
         if (refreshExpire.getTime() < Date.now()) {
             return 'refresh-token expired';
         } else {
@@ -60,6 +67,8 @@ function getAuthState(): LoginState {
         }
     }
 
+    console.error(`auth nemt`);
+    console.log(tokenObj);
     return 'authorized';
 }
 
