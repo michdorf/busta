@@ -30,6 +30,7 @@
 </script>
 
 <Debug>{#if periodo}Periodo: {toISOstr(periodo.da)} - {toISOstr(periodo.a)}{/if}</Debug>
+<Debug>profitto {profitto}, speso {speso}, max {max}</Debug>
 <div>
     <ProgressBar 
         profitto={profitto}
