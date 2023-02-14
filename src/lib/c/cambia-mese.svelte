@@ -13,7 +13,7 @@
         const meseAtt = now.getMonth();
         let anno = $appState.meseSelez.getFullYear();
 
-        if (monthsDiff(now, new Date($appState.meseSelez.getFullYear(), tmp, 1)) > 1) {
+        if (false && monthsDiff(now, new Date($appState.meseSelez.getFullYear(), tmp, 1)) > 1) {
             tmp -= direzione; // block move
         }
 
@@ -32,10 +32,15 @@
     }
 
     $: mese = new Date($appState.meseSelez).getMonth();
+    $: anno = new Date($appState.meseSelez).getFullYear();
     $: nomeMese = ["Jan","Feb","Mar","Apr","Mag","Giu","Lug","Aug","Set","Ott","Nov","Dic"][mese];
+    let oggi = new Date();
 </script>
 
 <Debug>{$appState.meseSelez}<br></Debug>
+<div style="width: 148px; text-align: center; font-size: 1.5rem">
 <button on:click={scorsa}>&lt;</button>
 {nomeMese}
 <button on:click={() => {prossima()}}>&gt;</button>
+{#if anno !== oggi.getFullYear()}<div style="font-size: 0.6em">{anno}</div>{/if}
+</div>
