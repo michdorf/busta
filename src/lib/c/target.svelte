@@ -31,12 +31,12 @@
 
 <Debug>{#if periodo}Periodo: {toISOstr(periodo.da)} - {toISOstr(periodo.a)}{/if}</Debug>
 <Debug>profitto {profitto}, speso {speso}, max {max}</Debug>
-<div>
+<!-- <div>
     <ProgressBar 
         profitto={profitto}
         speso={speso} 
         max={max} subtarget={subtarget} /> 
-</div>
+</div> -->
 <Debug><div style="text-align: right; background-color: color(srgb 0.8762 0.9402 0.99)">(<Amonta amonta={$assegnamenti.delmese + $activity.delmese} />[balance] + <Amonta amonta={$activity.precedente} />[prec])</div></Debug>
 <TargetSummary busta={busta} targetXmese={$targetXmese} assegnato={$assegnamenti.delmese} attivitaPrec={$activity.precedente} available={available} />
 <Debug><div style="text-align: center;">Assegnamenti: {JSON.stringify(busta.assegnamenti)}</div></Debug>
