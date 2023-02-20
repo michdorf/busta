@@ -39,12 +39,12 @@ export async function initLogin() {
 
     try {
         let authed = await autoLogin();
-        console.error(`initLogin ${authed}`);
+        console.log(`initLogin ${authed}`);
         if (authed == false) {
             return;
         }
     } catch (e) {
-        console.error(`initLogin auth error`);
+        console.error(`initLogin auth error`, e);
         return;
     }
 }

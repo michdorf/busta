@@ -16,8 +16,40 @@ let oauthclient = new OAuthClient({
 
 export function autoLogin() {
     return new Promise<string | false>((resolve, reject) => {
+        const token = oauthclient.getAccessToken();
+        if (token) {
+            fetch(`https://dechiffre.dk/oauth-server/v1/resource.php`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + token
+                })
+            }).then(async (response) => {
+                let resp = await response.json();
+                console.log("autoLogin resource resp: " + resp);
+                if ('error' in resp) {
+                    oauthclient.refreshToken().then((accesstoken) => {
+                        console.info(`refreshed`);
+                        updateAuthState('authorized');
+                        resolve(accesstoken.access_token);
+                    }).catch(() => {
+                        console.error(`error with refresh in autoLogin()`);
+                        updateAuthState("no token");
+                        reject();
+                    });
+                } else {
+                    updateAuthState('authorized');
+                    resolve(token);
+                }
+            }).catch((e) => {
+                updateAuthState('no token');
+                console.error("Error in autologin()");
+            });
+        }
+
+        return;
+
         let authState = getAuthState();
-        console.error(`authState ${authState}`);
         if (authState == 'authorized') {
             updateAuthState('authorized');
             resolve(oauthclient.getAccessToken());
