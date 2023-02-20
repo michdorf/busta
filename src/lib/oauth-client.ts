@@ -26,7 +26,7 @@ export function autoLogin() {
                 })
             }).then(async (response) => {
                 let resp = await response.json();
-                console.log("autoLogin resource resp: " + resp);
+                console.log("autoLogin resource resp: " + typeof resp !== "string" ? JSON.stringify(resp) : resp);
                 if ('error' in resp) {
                     oauthclient.refreshToken().then((accesstoken) => {
                         console.info(`refreshed`);
@@ -45,6 +45,9 @@ export function autoLogin() {
                 updateAuthState('no token');
                 console.error("Error in autologin()");
             });
+        } else {
+            updateAuthState("no token");
+            reject("no token");
         }
 
         return;
