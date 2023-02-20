@@ -7,6 +7,7 @@
 	import { calcActivity } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcRolloverAssegnabile } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
+	import { roundAmount } from "$lib/numeri";
 	import { salvaWritable } from "$lib/salvabile";
 	import appState from "$lib/stato/app-state";
     import Buste, {type BustaT} from "$lib/stato/buste";
@@ -120,7 +121,7 @@
 
 <CambiaMese />
 <div id="daAssegnareCont" style="padding-bottom: 1rem">
-    <div class="daAssegnare" class:positivo={daAssegnare > 0} class:overspent={daAssegnare < 0} style="font-size: 2rem;">Ready to assign <span><Amonta amonta={daAssegnare} /></span> <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
+    <div class="daAssegnare" class:positivo={roundAmount(daAssegnare) > 0} class:overspent={daAssegnare < 0} style="font-size: 2rem;">Ready to assign <span><Amonta amonta={daAssegnare} /></span> <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assigned. 
     <Debug><Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).</Debug>
 </div>
