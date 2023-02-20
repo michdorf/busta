@@ -11,6 +11,8 @@
     import conti from "$lib/stato/conti";
 	import Debug from '$lib/c/debug.svelte';
 
+    let hideLoginBtn = false;
+
     initLogin();
 
     function login() {
@@ -64,8 +66,9 @@
     {/each}
 </nav>
 
-{#if $appState.authState != "authorized" || $loginError}
+{#if ($appState.authState != "authorized" || $loginError) && (!hideLoginBtn)}
 <div style="text-align: center; position: sticky; top: 10px; z-index: 100">
+    <div style="padding-left: 14em;"><button on:click={() => hideLoginBtn = true}>X</button></div>
     <button class="login" on:click={login}>Login</button><br/>
     <span style="font-style: italic; font-size: 1.2rem;">&mldr; to syncronize across devices.</span><br>
 </div>
