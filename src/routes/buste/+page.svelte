@@ -91,6 +91,18 @@
         });
     }
 
+    function swapBusta(conCategoriaInx: number, binx: number, direzione: -1 | 1) {
+        const i = $Buste.indexOf(conCategoria[conCategoriaInx][binx]);
+        const altroI = $Buste.indexOf(conCategoria[conCategoriaInx][binx + direzione]);
+        debugger;
+        Buste.update($buste => {
+            let tmp = $buste[i];
+            $buste[i] = $buste[altroI];
+            $buste[altroI] = tmp;
+            return $buste;
+        });
+    }
+
     /**
      * Reddito che NON ha una categoria = pronto ad assegnare
      */
@@ -125,8 +137,13 @@
                     <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>
                 </div>
             </summary>
-            {#each conCategoria[i] as busta}
-                <span on:click={() => {bustaSelez = busta}}>
+            {#each conCategoria[i] as busta, binx}
+                <span on:click={() => {bustaSelez = busta}} on:keydown>
+                    <div style="text-align: center;">
+                        Move {busta.nome}: 
+                        <button type="button" on:click={() => swapBusta(i, binx, -1)} disabled={binx === 0}>Up</button>
+                        <button type="button" on:click={() => swapBusta(i, binx, 1)} disabled={binx === conCategoria[i].length - 1}>Down</button>
+                    </div>
                     <Busta {busta} />
                 </span>
             {/each}
