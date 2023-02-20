@@ -16,6 +16,7 @@ export function sync(payload?: any) {
         
         if (useOauth) {
             let token = oauthclient.getAccessToken();
+            console.log(`sync[api.ts] has token ${token}`);
             if (!token) {
                 reject("no token")
                 return;

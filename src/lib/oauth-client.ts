@@ -16,22 +16,60 @@ let oauthclient = new OAuthClient({
 
 export function autoLogin() {
     return new Promise<string | false>((resolve, reject) => {
+        const token = oauthclient.getAccessToken();
+        if (token) {
+            fetch(`https://dechiffre.dk/oauth-server/v1/resource.php`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + token
+                })
+            }).then(async (response) => {
+                let resp = await response.json();
+                console.log("autoLogin resource resp: " + resp);
+                if ('error' in resp) {
+                    oauthclient.refreshToken().then((accesstoken) => {
+                        console.info(`refreshed`);
+                        updateAuthState('authorized');
+                        resolve(accesstoken.access_token);
+                    }).catch(() => {
+                        console.error(`error with refresh in autoLogin()`);
+                        updateAuthState("no token");
+                        reject();
+                    });
+                } else {
+                    updateAuthState('authorized');
+                    resolve(token);
+                }
+            }).catch((e) => {
+                updateAuthState('no token');
+                console.error("Error in autologin()");
+            });
+        }
+
+        return;
+
         let authState = getAuthState();
         if (authState == 'authorized') {
             updateAuthState('authorized');
             resolve(oauthclient.getAccessToken());
+            console.error(`nemt`);
             return;
         }
         if (authState == 'access-token expired') {
+            console.error(`exipred`);
             oauthclient.refreshToken().then((accesstoken) => {
+                console.error(`refreshed`);
                 updateAuthState('authorized');
                 resolve(accesstoken.access_token);
             }).catch(() => {
+                console.error(`error with refresh`);
                 updateAuthState("no token");
                 reject();
             });
             return;
         }
+        console.error(`reject no token`);
         updateAuthState("no token");
         reject(false);
     });
@@ -53,6 +91,7 @@ function getAuthState(): LoginState {
         let refreshExpire: number | Date = new Date();
         refreshExpire = new Date(refreshExpire);
         refreshExpire.setDate(refreshExpire.getDate() + refreshTokenExpireTime);
+        console.error(`refreshExpire ${refreshExpire} expire ${expire}`);
         if (refreshExpire.getTime() < Date.now()) {
             return 'refresh-token expired';
         } else {
@@ -60,6 +99,8 @@ function getAuthState(): LoginState {
         }
     }
 
+    console.error(`auth nemt`);
+    console.log(tokenObj);
     return 'authorized';
 }
 
