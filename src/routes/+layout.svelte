@@ -64,14 +64,14 @@
     {/each}
 </nav>
 
-<slot></slot>
-
 {#if $appState.authState != "authorized" || $loginError}
-<div style="text-align: center">
+<div style="text-align: center; position: sticky; top: 10px; z-index: 100">
     <button class="login" on:click={login}>Login</button><br/>
     <span style="font-style: italic; font-size: 1.2rem;">&mldr; to syncronize across devices.</span><br>
 </div>
 {/if}
+
+<slot></slot>
 
 <Debug>
     <div style="margin-top: 100px;">
