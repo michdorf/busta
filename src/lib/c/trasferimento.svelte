@@ -45,6 +45,7 @@
 </script>
 
 <Debug>#{trasferimento.id}:</Debug>
+<div class="cont">
 <form on:submit|preventDefault={salva}>
     <input name="date" type="date" bind:value={trasferimento.data} placeholder="Date" />
     <input name="payee" bind:value={trasferimento.payee} placeholder="Payee" />
@@ -62,6 +63,7 @@
         {/if}
     </div>
 </form>
+</div>
 
 <style>
     form {
@@ -76,9 +78,11 @@
     }
     
     @media only screen and (max-width: 640px) {
+        .cont {
+            margin-bottom: 4rem;
+        }
         form {
             display: initial; 
-            margin-bottom: 2rem;
         }
 
         form > input, form > :global(input), form > :global(select), form > button {
