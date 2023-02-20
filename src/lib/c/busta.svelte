@@ -12,7 +12,7 @@
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
 	import Debug from "./debug.svelte";
-	import Ricorrente from "moduli/moduli/ricorrente";
+	import Ricorrente from "../../../moduli/moduli/ricorrente";
 	import appState from "$lib/stato/app-state";
 	import { readable } from "svelte/store";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { toISOstr } from "$lib/date";
-    import type Ricorrente from "moduli/moduli/ricorrente";
+    import type Ricorrente from "../../../moduli/moduli/ricorrente";
 	import Debug from "./debug.svelte";
 
     

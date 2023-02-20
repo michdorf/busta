@@ -1,5 +1,4 @@
 import { get, writable } from "svelte/store";
-import Ricorrente from 'moduli/moduli/ricorrente'
 
 
 export interface Categoria {

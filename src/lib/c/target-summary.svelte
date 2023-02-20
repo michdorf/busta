@@ -5,7 +5,6 @@
 	import type { BustaT } from "$lib/stato/buste";
 	import Amonta from "./amonta.svelte";
 	import Debug from "./debug.svelte";
-    import Ricorrente from "moduli/moduli/ricorrente";
 
     export let available: number;
     export let busta: BustaT;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { toISOstr } from "$lib/date";
 	import  type { BustaT, SavingBusta, SpendingBusta } from "$lib/stato/buste";
-	import Ricorrente from "moduli/moduli/ricorrente";
+	import Ricorrente from "../../../moduli/moduli/ricorrente";
 	import { createEventDispatcher } from "svelte";
 	import AmmontaInput from "./ammonta-input.svelte";
 	import RicorrenteSelect from "./ricorrente-select.svelte";

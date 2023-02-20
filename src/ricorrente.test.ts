@@ -1,4 +1,4 @@
-import Ricorrente from 'moduli/moduli/ricorrente';
+import Ricorrente from '../moduli/moduli/ricorrente';
 import { describe, it, expect } from 'vitest';
 
 /* NB. puo ritornare la data corrente, se e' una data coretto */
