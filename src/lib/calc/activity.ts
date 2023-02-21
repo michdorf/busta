@@ -93,7 +93,7 @@ export function calcTargetXMese(busta: BustaT, periodo?: {da: Date, a: Date}/*, 
         if (busta.target.tipo == 'spending') {
             result = (busta.target.target - $assegnamenti.precedente) / $numMesi;
         } else {
-            result = (busta.target.target - $activity.precedente) / $numMesi;
+            result = (busta.target.target - $activity.precedente - $assegnamenti.precedente) / $numMesi;
         }
     
         return roundAmount(result);
