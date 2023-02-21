@@ -14,6 +14,7 @@ let oauthclient = new OAuthClient({
     redirect_uri: PUBLIC_REDIRECT_URI
 });
 
+export type LoginState = 'authorized' | 'access-token expired' | 'refresh-token expired' | 'no token';
 export function autoLogin() {
     return new Promise<string | false>((resolve, reject) => {
         const token = oauthclient.getAccessToken();
@@ -26,90 +27,30 @@ export function autoLogin() {
                 })
             }).then(async (response) => {
                 let resp = await response.json();
-                console.log("autoLogin resource resp: " + typeof resp !== "string" ? JSON.stringify(resp) : resp);
                 if ('error' in resp) {
-                    alert("Resource error: " + (typeof resp !== "string" ? JSON.stringify(resp) : resp));
+                    console.error("Resource error: " + (typeof resp !== "string" ? JSON.stringify(resp) : resp));
                     oauthclient.refreshToken().then((accesstoken) => {
                         console.info(`refreshed`);
                         resolve(accesstoken.access_token);
                         updateAuthState('authorized');
                     }).catch(() => {
-                        alert("Error refreshing");
                         console.error(`error with refresh in autoLogin()`);
                         updateAuthState("no token");
                         reject();
                     });
                 } else {
-                    alert("Authorized in resource");
                     updateAuthState('authorized');
                     resolve(token);
                 }
             }).catch((e) => {
-                alert("Error when fetching resource");
                 updateAuthState('no token');
                 console.error("Error in autologin()");
             });
         } else {
-            alert("No token saved");
             updateAuthState("no token");
             reject("no token");
         }
-
-        return;
-
-        let authState = getAuthState();
-        if (authState == 'authorized') {
-            updateAuthState('authorized');
-            resolve(oauthclient.getAccessToken());
-            console.error(`nemt`);
-            return;
-        }
-        if (authState == 'access-token expired') {
-            console.error(`exipred`);
-            oauthclient.refreshToken().then((accesstoken) => {
-                console.error(`refreshed`);
-                updateAuthState('authorized');
-                resolve(accesstoken.access_token);
-            }).catch(() => {
-                console.error(`error with refresh`);
-                updateAuthState("no token");
-                reject();
-            });
-            return;
-        }
-        console.error(`reject no token`);
-        updateAuthState("no token");
-        reject(false);
     });
-}
-
-export type LoginState = 'authorized' | 'access-token expired' | 'refresh-token expired' | 'no token';
-function getAuthState(): LoginState {
-    const token = oauthclient.getAccessToken();
-    if (!token) {
-        console.error("No token");
-        return 'no token';
-    }
-
-    const tokenObj = oauthclient.getAccessTokenObject();
-
-    let expire = Date.parse(tokenObj?.expires + "");
-    if (expire < Date.now()) {
-        let refreshTokenExpireTime = 14; // days
-        let refreshExpire: number | Date = new Date();
-        refreshExpire = new Date(refreshExpire);
-        refreshExpire.setDate(refreshExpire.getDate() + refreshTokenExpireTime);
-        console.error(`refreshExpire ${refreshExpire} expire ${expire}`);
-        if (refreshExpire.getTime() < Date.now()) {
-            return 'refresh-token expired';
-        } else {
-            return 'access-token expired';
-        }
-    }
-
-    console.error(`auth nemt`);
-    console.log(tokenObj);
-    return 'authorized';
 }
 
 export default oauthclient;
