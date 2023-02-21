@@ -28,24 +28,29 @@ export function autoLogin() {
                 let resp = await response.json();
                 console.log("autoLogin resource resp: " + typeof resp !== "string" ? JSON.stringify(resp) : resp);
                 if ('error' in resp) {
+                    alert("Resource error: " + (typeof resp !== "string" ? JSON.stringify(resp) : resp));
                     oauthclient.refreshToken().then((accesstoken) => {
                         console.info(`refreshed`);
-                        updateAuthState('authorized');
                         resolve(accesstoken.access_token);
+                        updateAuthState('authorized');
                     }).catch(() => {
+                        alert("Error refreshing");
                         console.error(`error with refresh in autoLogin()`);
                         updateAuthState("no token");
                         reject();
                     });
                 } else {
+                    alert("Authorized in resource");
                     updateAuthState('authorized');
                     resolve(token);
                 }
             }).catch((e) => {
+                alert("Error when fetching resource");
                 updateAuthState('no token');
                 console.error("Error in autologin()");
             });
         } else {
+            alert("No token saved");
             updateAuthState("no token");
             reject("no token");
         }
