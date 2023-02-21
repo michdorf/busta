@@ -15,6 +15,7 @@
 	import Ricorrente from "../../../moduli/moduli/ricorrente";
 	import appState from "$lib/stato/app-state";
 	import { readable } from "svelte/store";
+	import { roundAmount } from "$lib/numeri";
 
     export let busta: BustaT;
     $: ricorrente = busta.targetAbilitato && busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
@@ -35,8 +36,8 @@
     $: rolloverAssegn = periodo && periodo.da ? calcRolloverAssegnamenti(busta, periodo.da) : readable(0);
     $: targetXmese = calcTargetXMese(busta, periodo);
     $: available = $assegnamenti.finora + $activity.finora;
-    $: overspent = available < 0;
-    $: suptarget = (available > 0 && $assegnamenti.delmese > $targetXmese);
+    $: overspent = roundAmount(available) < 0;
+    $: suptarget = (roundAmount(available) > 0 && $assegnamenti.delmese > $targetXmese);
     $: subtarget = (!overspent && $assegnamenti.delmese < $targetXmese);
 
     let assegnamentoValue = 0;
