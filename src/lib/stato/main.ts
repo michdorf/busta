@@ -19,8 +19,28 @@ let Stato = derived([Conti, Trasferimenti, Buste, Categorie, appState], ([$conti
     }
 });
 
+let storKey = "busta-stato";
+
+function fetchFromServer() {
+    sync().then((responseTxt) => {
+        if (responseTxt.substring(0,6) != "ERRORE") {
+            const localState = localStorage.getItem(storKey) || "";
+            const servertime = responseTxt.substring(0, responseTxt.indexOf("{"));
+            const localtime = localState.substring(0, localState.indexOf("{"));
+            
+            if (servertime > localtime) {   
+                console.log("Loaded from server because it was "+servertime+"[server] vs. "+localtime+"[local]");          
+                localStorage.setItem(storKey, responseTxt);
+            }
+        } else {
+            setLoginError("API responded with an error: " + responseTxt);
+            console.log("Sembra un errore da dechiffre.dk", responseTxt);
+        }
+        // init();
+    });
+}
+
 if (typeof window != "undefined" && 'localStorage' in window) {
-    let storKey = "busta-stato";
     
     function init() {
         let statostr = localStorage.getItem(storKey) || "{}";
@@ -66,30 +86,25 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     let primoAuth = true;
     appState.subscribe((v) => {
         if (primoAuth && v.authState == 'authorized') {
-            sync().then((responseTxt) => {
-                if (responseTxt.substring(0,6) != "ERRORE") {
-                    const localState = localStorage.getItem(storKey) || "";
-                    const servertime = responseTxt.substring(0, responseTxt.indexOf("{"));
-                    const localtime = localState.substring(0, localState.indexOf("{"));
-                    
-                    if (servertime > localtime) {   
-                        console.log("Loaded from server because it was "+servertime+"[server] vs. "+localtime+"[local]");          
-                        localStorage.setItem(storKey, responseTxt);
-                    }
-                } else {
-                    setLoginError("API responded with an error: " + responseTxt);
-                    console.log("Sembra un errore da dechiffre.dk", responseTxt);
-                }
-                init();
-            });
+            fetchFromServer();
 
             primoAuth = false;
         }
     });
     
-    if (get(appState).authState != "authorized") { // If user has been authorized beforehand
-        init();
-    }
+    // if (get(appState).authState != "authorized") { // If user has not been authorized beforehand
+    init();
+    //}
+
+    let lastSync = Date.now();
+    window.addEventListener('focus', () => {
+        if (lastSync < (Date.now() - 6000)){
+            if (get(appState).authState === "authorized") {
+                fetchFromServer();
+            }
+            lastSync = Date.now();
+        }
+    })
 }
 
 export function reset() {
