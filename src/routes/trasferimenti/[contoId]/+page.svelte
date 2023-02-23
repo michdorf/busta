@@ -60,7 +60,8 @@
 {#if trasferimenti.length < 1}
 <h3>Ingen overførsler</h3>
 {:else}
-    {#each filteredTras as trasferimento (trasferimento.id)}
+    {#each filteredTras as trasferimento, i (trasferimento.id)}
+        {#if i !== 0 && filteredTras[i-1].data !== trasferimento.data}<div style="padding: 0.2rem 0; margin: 0.4rem 0 0 0; text-align: center; font-weight: bold; background-color: rgb(var(--silver)); border: 1px solid silver;">{trasferimento.data}:</div>{/if}
         <span title={JSON.stringify(trasferimento)}><Trasferimento trasferimento={trasferimento} on:salva={salva} on:elimina={elimina}></Trasferimento></span>
     {/each}
 {/if}
