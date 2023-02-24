@@ -31,18 +31,16 @@ function fetchFromServer() {
             if (servertime > localtime) {   
                 console.log("Loaded from server because it was "+servertime+"[server] vs. "+localtime+"[local]");          
                 localStorage.setItem(storKey, responseTxt);
+                integraLocalStorage();
             }
         } else {
             setLoginError("API responded with an error: " + responseTxt);
             console.log("Sembra un errore da dechiffre.dk", responseTxt);
         }
-        // init();
     });
 }
 
-if (typeof window != "undefined" && 'localStorage' in window) {
-    
-    function init() {
+function integraLocalStorage() {
         let statostr = localStorage.getItem(storKey) || "{}";
         const localtime = statostr.substring(0, statostr.indexOf("{"));
         const jsonstr = statostr.substring(statostr.indexOf("{"));
@@ -61,7 +59,11 @@ if (typeof window != "undefined" && 'localStorage' in window) {
             $appState.aggiornato = stato.aggiornato || toISOstr(new Date());
             return $appState;
         });
-        
+    }
+
+if (typeof window != "undefined" && 'localStorage' in window) {
+    
+    function initSincChanges() {
         let primoSinc = true;
         /* Subscribe dopo che hai caricato lo stato corretto */
         Stato.subscribe((valore) => {
@@ -92,9 +94,10 @@ if (typeof window != "undefined" && 'localStorage' in window) {
         }
     });
     
-    // if (get(appState).authState != "authorized") { // If user has not been authorized beforehand
-    init();
-    //}
+    if (get(appState).authState != "authorized") { // If user has not been authorized beforehand
+        integraLocalStorage();
+        initSincChanges();
+    }
 
     let lastSync = Date.now();
     window.addEventListener('focus', () => {
