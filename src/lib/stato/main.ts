@@ -3,7 +3,7 @@ import Buste, { type BustaT } from './buste';
 import Conti from './conti'
 import Trasferimenti from './trasferimenti'
 import {sync} from '$lib/api';
-import appState, { setLoginError } from './app-state';
+import appState, { initLogin, setLoginError } from './app-state';
 import Categorie from './categorie';
 import { toISOstr } from '$lib/date';
 import { nuovaModifica, setNuovaModifica } from '$lib/salvabile';
@@ -102,9 +102,11 @@ if (typeof window != "undefined" && 'localStorage' in window) {
     let lastSync = Date.now();
     window.addEventListener('focus', () => {
         if (lastSync < (Date.now() - 6000)){
-            if (get(appState).authState === "authorized") {
-                fetchFromServer();
-            }
+            initLogin(() => {
+                if (get(appState).authState === "authorized") {
+                    fetchFromServer();
+                }
+            });
             lastSync = Date.now();
         }
     })

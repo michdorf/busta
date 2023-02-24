@@ -28,7 +28,7 @@ export function setLoginError(error: string) {
     });
 }
 
-export async function initLogin() {
+export async function initLogin(callback?: () => void) {
     if (!useOauth) {
         updateAuthState("authorized");
         return;
@@ -42,6 +42,9 @@ export async function initLogin() {
         console.log(`initLogin ${authed}`);
         if (authed == false) {
             return;
+        }
+        if (typeof callback === "function") {
+            callback();
         }
     } catch (e) {
         console.error(`initLogin auth error`, e);
