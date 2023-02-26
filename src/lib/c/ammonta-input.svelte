@@ -1,4 +1,5 @@
 <script lang="ts">
+import stdValuta from "$lib/stato/valuta";
 export let id: string | undefined = undefined;
 export let value: number | undefined = undefined;
 export let name = "";
@@ -16,4 +17,13 @@ function comma2dot() {
 }
 </script>
 
-<input bind:value={value} on:change={comma2dot} step="0.01" on:click|stopPropagation {placeholder} {name} {id} on:blur on:change /> 
+<span>
+<input bind:value={value} on:change={comma2dot} step="0.01" on:click|stopPropagation {placeholder} {name} {id} on:blur on:change /> {["kr.", "€"][["dkk","eur"].indexOf($stdValuta)]}
+</span>
+
+<style>
+    input {
+        text-align: right;
+        width: 3em;
+    }
+</style>
