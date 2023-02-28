@@ -121,9 +121,14 @@
 
 <CambiaMese />
 <div id="daAssegnareCont" style="padding-bottom: 1rem">
-    <div class="daAssegnare" class:positivo={roundAmount(daAssegnare) > 0} class:overspent={roundAmount(daAssegnare) < 0} style="font-size: 2rem;">Ready to assign <span><Amonta amonta={daAssegnare} /></span> <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
+    <div class="daAssegnare" class:positivo={roundAmount(daAssegnare) > 0} class:overspent={roundAmount(daAssegnare) < 0} style="font-size: 2rem;">
+        Ready to assign <span><Amonta amonta={daAssegnare} /></span> 
+        <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug>
+    </div><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assigned. 
-    <Debug><Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).</Debug>
+    <Debug>Activity precedente: <Amonta amonta={mesePrec} /> il mese precedente <br>
+        assegnamenti precendenti: <Amonta amonta={$assegnamenti.precedente} />. rollover: <Amonta amonta={$totalRolloverAssegnamenti} /> rollover.
+    </Debug>
 </div>
 
 <div class="grid-cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>

@@ -14,6 +14,7 @@
 	import appState from "$lib/stato/app-state";
 	import { readable } from "svelte/store";
 	import { roundAmount } from "$lib/numeri";
+	import Debug from "./debug.svelte";
 
     export let busta: BustaT;
     $: ricorrente = busta.targetAbilitato && busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
@@ -48,9 +49,8 @@
         <div style="flex: 1;"><input bind:value={busta.nome} on:click|stopPropagation on:change={() => salva()} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} on:change={() => daSalvare = true} /></div>
         <div>
-            val: {assegnamentoValue}. prec: {$assegnamenti.precedente}
             <AmmontaInput value={assegnamentoValue} on:change={(event) => {salva(event.detail)}} placeholder="Assign" /><br />
-            <Amonta amonta={$assegnamenti.precedente} /> prev. ({$rolloverAssegn} rollover)
+            <Debug><Amonta amonta={$assegnamenti.precedente} /> prev. ({roundAmount($rolloverAssegn)} rollover)</Debug>
         </div>
         <div title="Activity until now">
             <Amonta amonta={$activity.finora} />
