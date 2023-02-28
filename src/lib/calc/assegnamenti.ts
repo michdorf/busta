@@ -84,7 +84,7 @@ export function setAssegnatoDelMese(assegnato: number, busta: BustaT) {
 }
 
 export function calcRolloverAssegnabile() {
-    let prontoPerAssegnamento = calcActivity(($trasf) => $trasf.amount > 0 && !$trasf.busta);
+    let prontoPerAssegnamento = calcActivity(($trasf) => !$trasf.busta);
     return derived([calcAssegnamenti(), prontoPerAssegnamento], ([$assegnamenti, $prontoPerAssegnamento]) => {
         return $prontoPerAssegnamento.precedente - $assegnamenti.precedente;
     });
