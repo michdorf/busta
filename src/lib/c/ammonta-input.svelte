@@ -1,9 +1,17 @@
 <script lang="ts">
 import stdValuta from "$lib/stato/valuta";
+import { createEventDispatcher } from "svelte";
 export let id: string | undefined = undefined;
 export let value: number | undefined = undefined;
 export let name = "";
 export let placeholder = "Estimat"
+
+let dispatch = createEventDispatcher<{change: number}>();
+
+function onChange() {
+    let num = comma2dot();
+    dispatch('change', num);
+}
 
 // ToDo: split in aritmic junks (+ - / * ()) - parse as number and correct comma-sign - join by aritmic characters
 function comma2dot() {
@@ -25,11 +33,12 @@ function comma2dot() {
     }
 
     value = Math.round(num * 100) / 100;
+    return value;
 }
 </script>
 
 <span>
-<input bind:value={value} on:change={comma2dot} step="0.01" on:click|stopPropagation {placeholder} {name} {id} on:blur on:change /> {["kr.", "€"][["dkk","eur"].indexOf($stdValuta)]}
+<input bind:value={value} on:change={onChange} step="0.01" on:click|stopPropagation {placeholder} {name} {id} on:blur /> {["kr.", "€"][["dkk","eur"].indexOf($stdValuta)]}
 </span>
 
 <style>

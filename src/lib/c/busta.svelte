@@ -7,11 +7,9 @@
 	import AmmontaInput from "./ammonta-input.svelte";
 	import Amonta from "./amonta.svelte";
 	import CategoriaSelect from "./categoria-select.svelte";
-	import TargetAzzera from "./target-azzera.svelte";
 	import Target from "./target.svelte";
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
-	import Debug from "./debug.svelte";
 	import Ricorrente from "../../../moduli/moduli/ricorrente";
 	import appState from "$lib/stato/app-state";
 	import { readable } from "svelte/store";
@@ -24,12 +22,7 @@
             a: Ricorrente.prossima(ricorrente, $appState.meseSelez)
         } 
         : undefined;
-    let assegnamenti = ricorrente ? calcAssegnamenti/*Periodo*/(/*periodo, */busta) : calcAssegnamenti(busta);
-    $: {
-        if (ricorrente) {
-            assegnamenti = calcAssegnamenti/*Periodo*/(/*periodo,*/ busta);
-        }
-    }
+    $: assegnamenti = ricorrente ? calcAssegnamenti/*Periodo*/(/*periodo, */busta) : calcAssegnamenti(busta);
     
     let daSalvare = false;
     $: activity = calcActivity/*Periodo*/(($trasf) => busta.id == $trasf.busta/*, periodo.da, periodo.a*/);
@@ -40,25 +33,23 @@
     $: suptarget = (roundAmount(available) > 0 && $assegnamenti.delmese > $targetXmese);
     $: subtarget = (!overspent && $assegnamenti.delmese < $targetXmese);
 
-    let assegnamentoValue = 0;
-    assegnamenti.subscribe((ass) => {
-        assegnamentoValue = ass.delmese;
-    });
+    $: assegnamentoValue = $assegnamenti.delmese;
 
-    function salva() {
-        busta = setAssegnatoDelMese(assegnamentoValue, busta);
+    function salva(assegnamento?: number) {
+        busta = setAssegnatoDelMese(typeof assegnamento !== "undefined" ? assegnamento : assegnamentoValue, busta);
         salvaWritable(busta, buste);
         daSalvare = false;
     }
 </script>
 
 <div style="background-color: aliceblue; margin: 0.4rem; padding: 0.6rem">
-<form on:submit|preventDefault={salva}>
+<form on:submit|preventDefault={() => salva()}>
     <div class="busta-cont">
-        <div style="flex: 1;"><input bind:value={busta.nome} on:click|stopPropagation on:change={salva} /></div>
+        <div style="flex: 1;"><input bind:value={busta.nome} on:click|stopPropagation on:change={() => salva()} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} on:change={() => daSalvare = true} /></div>
         <div>
-            <AmmontaInput bind:value={assegnamentoValue} on:change={salva} placeholder="Assign" /><br />
+            val: {assegnamentoValue}. prec: {$assegnamenti.precedente}
+            <AmmontaInput value={assegnamentoValue} on:change={(event) => {salva(event.detail)}} placeholder="Assign" /><br />
             <Amonta amonta={$assegnamenti.precedente} /> prev. ({$rolloverAssegn} rollover)
         </div>
         <div title="Activity until now">
