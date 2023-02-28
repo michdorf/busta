@@ -45,7 +45,7 @@
 </script>
 
 <Debug>#{trasferimento.id}:</Debug>
-<div class="cont">
+<div class="cont" class:senza-busta={(outflow || 0) > 0 && !trasferimento.busta}>
 <form on:submit|preventDefault={salva}>
     <input name="date" type="date" bind:value={trasferimento.data} placeholder="Date" />
     <input name="payee" bind:value={trasferimento.payee} placeholder="Payee" />
@@ -66,6 +66,13 @@
 </div>
 
 <style>
+    .cont {
+        padding: 0.2rem;
+    }
+    .cont.senza-busta {
+        background-color: orange;
+    }
+
     form {
         display: grid; 
         grid-template-columns: repeat(7, 1fr); 
