@@ -33,6 +33,11 @@ describe('test Ricorrente in anni', () => {
         expect(Ricorrente.scorsa(r, new Date(2023,4,5))).toStrictEqual(new Date(2023,2,4));
     })
 
+    it('can repeat each year - earlier date in month', () => {
+		let r = new Ricorrente('a',1,new Date(2022,11,7));
+		expect(Ricorrente.prossima(r, new Date(2023,2,1))).toStrictEqual(new Date(2023,11,7));
+	})
+
     it('can find the previous date same date', () => {
         let r = new Ricorrente('a',1,new Date(2023,2,4));
         expect(Ricorrente.scorsa(r, new Date(2023,2,4))).toStrictEqual(new Date(2023,2,4));
