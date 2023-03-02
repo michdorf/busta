@@ -1,5 +1,5 @@
 import { PUBLIC_CLIENT_ID, PUBLIC_CLIENT_SECRET, PUBLIC_REDIRECT_URI } from '$env/static/public';
-import OAuthClient from '../../oauth-client/src/oauthclient'
+import OAuthClient from '../oauth-client/src/oauthclient'
 import appState, { updateAuthState } from './stato/app-state';
 
 export const useOauth = true; // process.env.NODE_ENV === 'development';

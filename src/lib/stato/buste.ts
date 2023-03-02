@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import Ricorrente from '../../../moduli/moduli/ricorrente'
+import Ricorrente from '../../moduli/moduli/ricorrente'
 import type { SpendingTarget, SavingTarget } from "../interfacce/target";
 import { toISOstr } from "$lib/date";
 import type { ISOstr } from "$lib/interfacce/ISOstr";

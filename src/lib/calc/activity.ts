@@ -1,6 +1,6 @@
 import { inPeriodo, monthsDiff, primoDelMese } from "$lib/date";
 import { roundAmount } from "$lib/numeri";
-import Ricorrente from "../../../moduli/moduli/ricorrente";
+import Ricorrente from "../../moduli/moduli/ricorrente";
 import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";

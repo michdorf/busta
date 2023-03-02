@@ -1,4 +1,4 @@
-import type RicorrenteT from "../../../moduli/moduli/ricorrente";
+import type RicorrenteT from "../../moduli/moduli/ricorrente";
 import type { ISOstr } from "./ISOstr";
 
 interface TargetBase {

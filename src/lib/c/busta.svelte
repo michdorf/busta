@@ -10,7 +10,7 @@
 	import Target from "./target.svelte";
 	import { goto } from "$app/navigation";
 	import { BASEPATH } from "$lib/base-path";
-	import Ricorrente from "../../../moduli/moduli/ricorrente";
+	import Ricorrente from "../../moduli/moduli/ricorrente";
 	import appState from "$lib/stato/app-state";
 	import { readable } from "svelte/store";
 	import { roundAmount } from "$lib/numeri";
