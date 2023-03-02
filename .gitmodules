@@ -1,6 +1,6 @@
 [submodule "oauth-client"]
-	path = oauth-client
+	path = src/oauth-client
 	url = https://github.com/michdorf/oauth-client
 [submodule "moduli"]
-	path = moduli
+	path = src/moduli
 	url = https://michdorf@github.com/michdorf/moduli
