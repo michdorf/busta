@@ -147,13 +147,13 @@
                 </div>
             </summary>
             {#each conCategoria[i] as busta, binx}
-                <span on:click={() => {bustaSelez = busta}} on:keydown>
+                <span>
                     <div style="text-align: center;">
                         Move {busta.nome}: 
                         <button type="button" on:click={() => swapBusta(i, binx, -1)} disabled={binx === 0}>Up</button>
                         <button type="button" on:click={() => swapBusta(i, binx, 1)} disabled={binx === conCategoria[i].length - 1}>Down</button>
                     </div>
-                    <Busta {busta} />
+                    <Busta {busta} on:setTarget={() => {bustaSelez = busta}} />
                 </span>
             {/each}
         </details>

@@ -16,8 +16,10 @@
 	import { roundAmount } from "$lib/numeri";
 	import Debug from "./debug.svelte";
 	import Dropmenu from "./dropmenu.svelte";
+	import { createEventDispatcher } from "svelte";
 
     export let busta: BustaT;
+    let dispatch = createEventDispatcher<{setTarget:boolean}>();
     $: ricorrente = busta.targetAbilitato && busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
     $: periodo = ricorrente ? {
             da: Ricorrente.scorsa(ricorrente, $appState.meseSelez), 
@@ -50,6 +52,9 @@
         <Dropmenu alignRight={true}>
             <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>
                 Trasactions
+            </button>
+            <button on:click={() => { dispatch('setTarget', true) }}>
+                Set target
             </button>
         </Dropmenu>
     </div>
