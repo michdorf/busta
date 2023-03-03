@@ -160,7 +160,7 @@
         {/each}
     </div>
     
-    <div class="busta-detail" style:top={assegnamentoContOffset + "px"}>
+    <div class="busta-detail" style:display={bustaSelez ? 'block' : 'none'}>
        <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail} on:close={() => {bustaSelez = undefined}} />
     </div>
 </div>
@@ -205,6 +205,14 @@ details summary {
     padding: 4px;
     position: sticky;
     top: 0;
+}
+
+.busta-detail {
+    position: fixed;
+    z-index: 100;
+    width: 80%;
+    top: 10px;
+    left: 10%;
 }
 
 .grid-cont {
