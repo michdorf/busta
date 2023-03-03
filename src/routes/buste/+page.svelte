@@ -139,7 +139,7 @@
             <summary style:top={assegnamentoContOffset + "px"}>
                 {categoria.nome}
                 <div style="float: right">
-                    <Dropmenu>
+                    <Dropmenu alignRight={true}>
                         <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
                         <button type="button" on:click={() => swapCategory(categoria, -1)} disabled={i === 0}>Up</button>
                         <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>

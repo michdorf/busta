@@ -47,7 +47,7 @@
 <div style="background-color: aliceblue; margin: 0.4rem; padding: 0.6rem">
 <form on:submit|preventDefault={() => salva()}>
     <div style="float: right">
-        <Dropmenu>
+        <Dropmenu alignRight={true}>
             <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>
                 Trasactions
             </button>
