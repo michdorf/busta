@@ -43,7 +43,7 @@
     }
 </script>
 
-<div style="padding: 1rem; background-color: bisque; position: sticky; top: 1rem;">
+<div style="padding: 1rem; background-color: bisque; /* position: sticky; top: 1rem; */">
 {#if busta}
 <div style="float: right;"><button on:click={close}>X</button></div>
 

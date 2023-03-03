@@ -4,6 +4,7 @@
     import Busta from "$lib/c/busta.svelte";
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
 	import Debug from "$lib/c/debug.svelte";
+	import Dropmenu from "$lib/c/dropmenu.svelte";
 	import { calcActivity } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcRolloverAssegnabile } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
@@ -131,33 +132,35 @@
     </Debug>
 </div>
 
-<div class="grid-cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
+<div class="cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
     <div class="categorie">
         {#each $Categorie as categoria, i}
         <details open>
             <summary style:top={assegnamentoContOffset + "px"}>
                 {categoria.nome}
-                <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
                 <div style="float: right">
-                    <button type="button" on:click={() => swapCategory(categoria, -1)} disabled={i === 0}>Up</button>
-                    <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>
+                    <Dropmenu alignRight={true}>
+                        <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
+                        <button type="button" on:click={() => swapCategory(categoria, -1)} disabled={i === 0}>Up</button>
+                        <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>
+                    </Dropmenu>
                 </div>
             </summary>
             {#each conCategoria[i] as busta, binx}
-                <span on:click={() => {bustaSelez = busta}} on:keydown>
+                <span>
                     <div style="text-align: center;">
                         Move {busta.nome}: 
                         <button type="button" on:click={() => swapBusta(i, binx, -1)} disabled={binx === 0}>Up</button>
                         <button type="button" on:click={() => swapBusta(i, binx, 1)} disabled={binx === conCategoria[i].length - 1}>Down</button>
                     </div>
-                    <Busta {busta} />
+                    <Busta {busta} on:setTarget={() => {bustaSelez = busta}} />
                 </span>
             {/each}
         </details>
         {/each}
     </div>
     
-    <div class="busta-detail" style:top={assegnamentoContOffset + "px"}>
+    <div class="busta-detail" style:display={bustaSelez ? 'block' : 'none'}>
        <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail} on:close={() => {bustaSelez = undefined}} />
     </div>
 </div>
@@ -171,11 +174,15 @@ summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
 }
 
+details summary/*:has(.dropdown.open)*//*<-- doesn't seem necessary; always apply */ {
+    z-index: 1;
+}
+
 #daAssegnareCont {
     position: sticky;
     top: 0;
     background-color: white;
-    z-index: 1;
+    z-index: 2; /* Copri details summary */
 }
 
 .daAssegnare.positivo span {
@@ -198,6 +205,14 @@ details summary {
     padding: 4px;
     position: sticky;
     top: 0;
+}
+
+.busta-detail {
+    position: fixed;
+    z-index: 100;
+    width: 80%;
+    top: 10px;
+    left: 10%;
 }
 
 .grid-cont {

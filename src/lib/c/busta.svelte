@@ -15,8 +15,11 @@
 	import { readable } from "svelte/store";
 	import { roundAmount } from "$lib/numeri";
 	import Debug from "./debug.svelte";
+	import Dropmenu from "./dropmenu.svelte";
+	import { createEventDispatcher } from "svelte";
 
     export let busta: BustaT;
+    let dispatch = createEventDispatcher<{setTarget:boolean}>();
     $: ricorrente = busta.targetAbilitato && busta.target.tipo === "spending" ? busta.target.ripeti : undefined;
     $: periodo = ricorrente ? {
             da: Ricorrente.scorsa(ricorrente, $appState.meseSelez), 
@@ -45,6 +48,16 @@
 
 <div style="background-color: aliceblue; margin: 0.4rem; padding: 0.6rem">
 <form on:submit|preventDefault={() => salva()}>
+    <div style="float: right">
+        <Dropmenu alignRight={true}>
+            <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>
+                Trasactions
+            </button>
+            <button on:click={() => { dispatch('setTarget', true) }}>
+                Set target
+            </button>
+        </Dropmenu>
+    </div>
     <div class="busta-cont">
         <div style="flex: 1;"><input bind:value={busta.nome} on:click|stopPropagation on:change={() => salva()} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} on:change={() => daSalvare = true} /></div>
@@ -58,7 +71,6 @@
         <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
         <div>{#if daSalvare}<button type="submit" on:click|stopPropagation>Save</button>{/if}</div>
         <!--<TargetAzzera busta={busta} />-->
-        <button on:click={() => { goto(`${BASEPATH}/buste/trasferimenti/${busta.id}`) }}>Trasactions</button>
     </div>
 </form><br>
 <Target busta={busta} periodo={periodo} subtarget={subtarget} overspent={overspent} suptarget={suptarget} available={available} activity={activity} assegnamenti={assegnamenti} targetXmese={targetXmese}></Target>

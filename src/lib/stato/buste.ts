@@ -6,6 +6,7 @@ import type { ISOstr } from "$lib/interfacce/ISOstr";
 
 interface BustaBase {
     id: string;
+    archived: boolean;
     nome: string;
     categoria: string;
     // assegnato: number;
@@ -27,6 +28,7 @@ let buste = writable<Array<SpendingBusta | SavingBusta>>([]);
 export function nuovaBusta(): SpendingBusta {
     return {
         id: "-1",
+        archived: false,
         nome: "",
         assegnamenti: [[toISOstr(new Date()), 0]],
         categoria: "",
@@ -39,6 +41,17 @@ export function nuovaBusta(): SpendingBusta {
         },
         creato: new Date()
     }
+}
+
+export function archiveCategoria(bustaId: string) {
+    buste.update(bs => {
+        return bs.map(busta => {
+            if (busta.id === bustaId) {
+                busta.archived = true;
+            }
+            return busta;
+        })
+    })
 }
 
 export function bustaTipo(busta: BustaT) {

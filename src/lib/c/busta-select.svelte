@@ -3,20 +3,25 @@ import buste, { nuovaBusta as genBusta, type BustaT } from "$lib/stato/buste";
 import { salvaWritable } from "$lib/salvabile";
 import CategoriaSelect from "$lib/c/categoria-select.svelte";
 	import { derived } from "svelte/store";
-	import categorie from "$lib/stato/categorie";
+	import categorie, { type Categoria } from "$lib/stato/categorie";
 
 export let value: string | null = "--hdr-placeholder";
 
 $: derivedBuste = derived([buste, categorie], ([$buste, $categorie]) => {
     let r: Array<{categoriaNome: string} & BustaT> = [];
-    
 
     $categorie.map(($categoria) => {
-        return $buste.filter($busta => $busta.categoria === $categoria.id).map($busta => {
-            r.push(Object.assign({categoriaNome: $categoria.nome}, $busta));
-        });
+        return $buste.filter($busta => !$busta.archived)
+                .filter($busta => $busta.categoria === $categoria.id).map($busta => {
+                    r.push(Object.assign({categoriaNome: $categoria.nome}, $busta));
+                });
     });
     return r;
+});
+
+$: archivedBuste = $buste.filter($busta => $busta.archived).map($busta => {
+    const categoria = $categorie.find($cat => $cat.id === $busta.categoria);
+    return Object.assign({categoriaNome: categoria?.nome}, $busta);
 });
 
 let aggiungi = false;
@@ -60,6 +65,13 @@ function salvaBusta() {
     {#each $derivedBuste as busta}
         <option value={busta.id}>{busta.categoriaNome} - {busta.nome}</option>
     {/each}
+    {#if archivedBuste.length}
+    <optgroup label="Archived">
+        {#each archivedBuste as busta}
+            <option value={busta.id}>{busta.categoriaNome} - {busta.nome}</option>
+        {/each}
+    </optgroup>
+    {/if}
     <option value="">Da asegnare</option>
     <option value="agg">Aggiungi</option>
 </select>
