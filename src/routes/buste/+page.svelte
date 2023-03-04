@@ -76,8 +76,11 @@
     $: totalRolloverAssegnamenti = calcRolloverAssegnabile();
 
     let assegnamentoContOffset: number;
+    let busteTheadOffset: number;
     function resizeStickyHeader() {
         assegnamentoContOffset = document.getElementById("daAssegnareCont")?.offsetHeight || 0;
+        let busteThead = document.getElementsByClassName("buste-thead")[0] as HTMLElement;
+        busteTheadOffset = assegnamentoContOffset + (busteThead?.offsetHeight || 0);
     }
     onMount(() => {
         resizeStickyHeader();
@@ -98,6 +101,14 @@
                 return c;
             }));
         }
+    }
+
+    function toggleAllCategories() {
+        const apri = tutteCategCollapsed;
+        Categorie.update(cs => cs.map(c => {
+            c.collapsed = !apri;
+            return c;
+        }));
     }
 
     function swapCategory(categoria: Categoria, direzione: -1 | 1) {
@@ -133,6 +144,7 @@
         }
     },0);
     $: daAssegnare = $totalRolloverAssegnamenti + prontoPerAssegnamento - assegnato;
+    $: tutteCategCollapsed = $categorie.reduce((prev, cur) => cur.collapsed && prev,true);
 </script>
 
 <CambiaMese />
@@ -148,10 +160,20 @@
 </div>
 
 <div class="cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
+    <div class="buste-thead" style:top={assegnamentoContOffset + "px"} on:click={toggleAllCategories} on:keydown>
+        <div>
+            {#if tutteCategCollapsed}&#9658;{:else}&#9660;{/if} Nome
+        </div>
+        <div>Categoria</div>
+        <div></div>
+        <div>Activity</div>
+        <div>Available<!-- Available --></div>
+        <div><!-- Salva btn --></div>
+    </div>
     <div class="categorie">
         {#each $Categorie as categoria, i}
         <details open={!categoria.collapsed}>
-            <summary style:top={assegnamentoContOffset + "px"} on:click|preventDefault={(ev) => salvaCollapseState(ev, categoria)}>
+            <summary style:top={busteTheadOffset + "px"} on:click|preventDefault={(ev) => salvaCollapseState(ev, categoria)}>
                 {categoria.nome}
                 <div style="float: right">
                     <Dropmenu alignRight={true}>
@@ -189,8 +211,23 @@ summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
 }
 
-details summary/*:has(.dropdown.open)*//*<-- doesn't seem necessary; always apply */ {
+details summary, .buste-thead {
     z-index: 1;
+    font-size: 1.2rem;
+    background-color: rgb(235, 235, 235);
+    padding: 4px;
+    position: sticky;
+    top: 0;
+}
+
+.buste-thead {
+    z-index: 2;
+    padding: 0.4rem; /* Da busta.svelte */
+    position: sticky;
+    display: flex;
+}
+.buste-thead > div {
+    flex: 1;
 }
 
 #daAssegnareCont {
@@ -212,14 +249,6 @@ details summary/*:has(.dropdown.open)*//*<-- doesn't seem necessary; always appl
     border-radius: 0.3rem;
     border: 1px solid rgb(255, 50, 50);
     padding: 0.2rem;
-}
-
-details summary {
-    font-size: 1.2rem;
-    background-color: rgb(235, 235, 235);
-    padding: 4px;
-    position: sticky;
-    top: 0;
 }
 
 .busta-detail {

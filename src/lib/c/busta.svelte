@@ -46,7 +46,7 @@
     }
 </script>
 
-<div style="background-color: aliceblue; margin: 0.4rem; padding: 0.6rem">
+<div style="background-color: aliceblue; padding: 0.6rem">
 <form on:submit|preventDefault={() => salva()}>
     <div style="float: right">
         <Dropmenu alignRight={true}>
@@ -59,7 +59,7 @@
         </Dropmenu>
     </div>
     <div class="busta-cont">
-        <div style="flex: 1;"><input bind:value={busta.nome} on:click|stopPropagation on:change={() => salva()} /></div>
+        <div><input bind:value={busta.nome} on:click|stopPropagation on:change={() => salva()} /></div>
         <div><CategoriaSelect bind:value={busta.categoria} on:change={() => daSalvare = true} /></div>
         <div>
             <AmmontaInput value={assegnamentoValue} on:change={(event) => {salva(event.detail)}} placeholder="Assign" /><br />
@@ -80,16 +80,16 @@
     .busta-cont {
         display: flex;
     }
+    .busta-cont > div {
+        flex: 1;
+        padding: 0 0.4rem;
+        /* border-left: 1px solid black; */
+    }
 
     @media only screen and (max-width: 640px) {
         .busta-cont {
             display: initial;
         }
-    }
-
-    .busta-cont > div {
-        padding: 0 0.4rem;
-        border-left: 1px solid black;
     }
 
     .available {
