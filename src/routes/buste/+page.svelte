@@ -84,9 +84,24 @@
         window.addEventListener("resize", resizeStickyHeader);
 	});
 
+    function salvaCollapseState(event: MouseEvent, categoria: Categoria) {
+        const summary = event.target as HTMLElement;
+        if (summary === null || summary.parentNode === null) {
+            return;
+        }
+        if ('open' in summary.parentNode && typeof summary.parentNode.open === "boolean") {
+            const open = summary.parentNode.open;
+            Categorie.update($categorie => $categorie.map(c => {
+                if (c.id === categoria.id) {
+                    c.collapsed = open;
+                }
+                return c;
+            }));
+        }
+    }
+
     function swapCategory(categoria: Categoria, direzione: -1 | 1) {
         const i = $categorie.indexOf(categoria);
-        debugger;
         Categorie.update($categorie => {
             $categorie[i] = $categorie.splice(i + direzione, 1, $categorie[i])[0];
             return $categorie;
@@ -135,8 +150,8 @@
 <div class="cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
     <div class="categorie">
         {#each $Categorie as categoria, i}
-        <details open>
-            <summary style:top={assegnamentoContOffset + "px"}>
+        <details open={!categoria.collapsed}>
+            <summary style:top={assegnamentoContOffset + "px"} on:click|preventDefault={(ev) => salvaCollapseState(ev, categoria)}>
                 {categoria.nome}
                 <div style="float: right">
                     <Dropmenu alignRight={true}>

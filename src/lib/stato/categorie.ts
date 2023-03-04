@@ -4,6 +4,7 @@ import { get, writable } from "svelte/store";
 export interface Categoria {
     id: string;
     archived: boolean;
+    collapsed: boolean; /* Se collapsed in ui */
     nome: string;
 }
 
@@ -13,6 +14,7 @@ export function nuovaCategoria(): Categoria {
     return {
         id: "-1",
         archived: false,
+        collapsed: false,
         nome: "",
     }
 }
