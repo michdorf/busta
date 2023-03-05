@@ -86,6 +86,12 @@
         resizeStickyHeader();
         window.addEventListener("resize", resizeStickyHeader);
 	});
+    $: {
+        if (daAssegnare === 0) {
+            busteTheadOffset -= assegnamentoContOffset;
+            assegnamentoContOffset = 0;
+        }
+    }
 
     function salvaCollapseState(event: MouseEvent, categoria: Categoria) {
         const summary = event.target as HTMLElement;
@@ -143,13 +149,13 @@
             return prev;
         }
     },0);
-    $: daAssegnare = $totalRolloverAssegnamenti + prontoPerAssegnamento - assegnato;
+    $: daAssegnare = roundAmount($totalRolloverAssegnamenti + prontoPerAssegnamento - assegnato);
     $: tutteCategCollapsed = $categorie.reduce((prev, cur) => cur.collapsed && prev,true);
 </script>
 
 <CambiaMese />
-<div id="daAssegnareCont" style="padding-bottom: 1rem">
-    <div class="daAssegnare" class:positivo={roundAmount(daAssegnare) > 0} class:overspent={roundAmount(daAssegnare) < 0} style="font-size: 2rem;">
+<div id="daAssegnareCont" style="padding-bottom: 1rem" style:position={daAssegnare !== 0 ? 'sticky' : 'initial'}>
+    <div class="daAssegnare" class:positivo={daAssegnare > 0} class:overspent={daAssegnare < 0} style="font-size: 2rem;">
         Ready to assign <span><Amonta amonta={daAssegnare} /></span> 
         <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug>
     </div><br/>
