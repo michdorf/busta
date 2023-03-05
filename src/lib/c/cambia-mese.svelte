@@ -38,7 +38,7 @@
 </script>
 
 <Debug>{$appState.meseSelez}<br></Debug>
-<div style="width: 148px; text-align: center; font-size: 1.5rem">
+<div style="text-align: center; font-size: 1.5rem">
 <button on:click={scorsa}>&lt;</button>
 {nomeMese}
 <button on:click={() => {prossima()}}>&gt;</button>
