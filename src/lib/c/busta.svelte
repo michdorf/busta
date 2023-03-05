@@ -68,7 +68,9 @@
         <div title="Activity until now">
             <Amonta amonta={$activity.finora} />
         </div>
-        <div class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></div>
+        <div>
+            <span class="available" class:overspent class:subtarget class:suptarget><Amonta amonta={available} /></span>
+        </div>
         <div>{#if daSalvare}<button type="submit" on:click|stopPropagation>Save</button>{/if}</div>
         <!--<TargetAzzera busta={busta} />-->
     </div>
@@ -93,6 +95,7 @@
     }
 
     .available {
+        padding: 0.2rem;
         font-weight: bold;
         background-color: rgb(var(--silver));
         border-radius: 0.6em;
