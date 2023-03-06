@@ -1,6 +1,6 @@
 import { inPeriodo, monthsDiff, primoDelMese } from "$lib/date";
 import { roundAmount } from "$lib/numeri";
-import Ricorrente from "../../../moduli/moduli/ricorrente";
+import Ricorrente from "../../moduli/moduli/ricorrente";
 import appState from "$lib/stato/app-state";
 import type { BustaT } from "$lib/stato/buste";
 import trasferimenti, { type Trasferimento } from "$lib/stato/trasferimenti";
@@ -93,7 +93,7 @@ export function calcTargetXMese(busta: BustaT, periodo?: {da: Date, a: Date}/*, 
         if (busta.target.tipo == 'spending') {
             result = (busta.target.target - $assegnamenti.precedente) / $numMesi;
         } else {
-            result = (busta.target.target - $activity.precedente - $assegnamenti.precedente) / $numMesi;
+            result = (busta.target.target - $activity.finora - $assegnamenti.precedente) / $numMesi;
         }
     
         return roundAmount(result);

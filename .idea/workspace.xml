@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9351377-6db3-44fc-90e9-e4aea52bdef2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/c/busta.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/c/busta.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/c/conti-lista.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/c/conti-lista.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/c/progress-bar.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/c/progress-bar.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/c/target.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/c/target.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/calc/assegnamenti.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/calc/assegnamenti.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/oauth-client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/oauth-client.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/buste/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/buste/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/c/cambia-mese.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/c/cambia-mese.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,6 +136,7 @@
       <workItem from="1675863183446" duration="2364000" />
       <workItem from="1675875806875" duration="2592000" />
       <workItem from="1676228535763" duration="2200000" />
+      <workItem from="1678010782659" duration="77000" />
     </task>
     <servers />
   </component>

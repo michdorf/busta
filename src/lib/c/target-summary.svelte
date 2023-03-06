@@ -15,7 +15,7 @@
     $: nnMesi = numMesi(busta);
 
     // $: targetXmese = calcTargetXMese(busta, attivitaPrec)
-    $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - assegnato : targetXmese - available);
+    $: mancaAlTarget = roundAmount(busta.target.tipo == "spending" ? targetXmese - assegnato : targetXmese - assegnato);
 </script>
 
 <div>

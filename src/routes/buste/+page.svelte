@@ -4,6 +4,7 @@
     import Busta from "$lib/c/busta.svelte";
 	import CambiaMese from "$lib/c/cambia-mese.svelte";
 	import Debug from "$lib/c/debug.svelte";
+	import Dropmenu from "$lib/c/dropmenu.svelte";
 	import { calcActivity } from "$lib/calc/activity";
 	import { calcAssegnamenti, calcRolloverAssegnabile } from "$lib/calc/assegnamenti";
 	import { primoDelMese } from "$lib/date";
@@ -75,17 +76,49 @@
     $: totalRolloverAssegnamenti = calcRolloverAssegnabile();
 
     let assegnamentoContOffset: number;
+    let busteTheadOffset: number;
     function resizeStickyHeader() {
         assegnamentoContOffset = document.getElementById("daAssegnareCont")?.offsetHeight || 0;
+        let busteThead = document.getElementsByClassName("buste-thead")[0] as HTMLElement;
+        busteTheadOffset = assegnamentoContOffset + (busteThead?.offsetHeight || 0);
     }
     onMount(() => {
         resizeStickyHeader();
         window.addEventListener("resize", resizeStickyHeader);
 	});
+    $: {
+        if (daAssegnare === 0) {
+            busteTheadOffset -= assegnamentoContOffset;
+            assegnamentoContOffset = 0;
+        }
+    }
+
+    function salvaCollapseState(event: MouseEvent, categoria: Categoria) {
+        const summary = event.target as HTMLElement;
+        if (summary === null || summary.parentNode === null) {
+            return;
+        }
+        if ('open' in summary.parentNode && typeof summary.parentNode.open === "boolean") {
+            const open = summary.parentNode.open;
+            Categorie.update($categorie => $categorie.map(c => {
+                if (c.id === categoria.id) {
+                    c.collapsed = open;
+                }
+                return c;
+            }));
+        }
+    }
+
+    function toggleAllCategories() {
+        const apri = tutteCategCollapsed;
+        Categorie.update(cs => cs.map(c => {
+            c.collapsed = !apri;
+            return c;
+        }));
+    }
 
     function swapCategory(categoria: Categoria, direzione: -1 | 1) {
         const i = $categorie.indexOf(categoria);
-        debugger;
         Categorie.update($categorie => {
             $categorie[i] = $categorie.splice(i + direzione, 1, $categorie[i])[0];
             return $categorie;
@@ -116,43 +149,61 @@
             return prev;
         }
     },0);
-    $: daAssegnare = $totalRolloverAssegnamenti + prontoPerAssegnamento - assegnato;
+    $: daAssegnare = roundAmount($totalRolloverAssegnamenti + prontoPerAssegnamento - assegnato);
+    $: tutteCategCollapsed = $categorie.reduce((prev, cur) => cur.collapsed && prev,true);
 </script>
 
 <CambiaMese />
-<div id="daAssegnareCont" style="padding-bottom: 1rem">
-    <div class="daAssegnare" class:positivo={roundAmount(daAssegnare) > 0} class:overspent={roundAmount(daAssegnare) < 0} style="font-size: 2rem;">Ready to assign <span><Amonta amonta={daAssegnare} /></span> <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug></div><br/>
+<div id="daAssegnareCont" style="padding-bottom: 1rem" style:position={daAssegnare !== 0 ? 'sticky' : 'initial'}>
+    <div class="daAssegnare" class:positivo={daAssegnare > 0} class:overspent={daAssegnare < 0} style="font-size: 2rem;">
+        Ready to assign <span><Amonta amonta={daAssegnare} /></span> 
+        <Debug>({prontoPerAssegnamento} "Ready to assign")</Debug>
+    </div><br/>
     <Amonta amonta={balance} /> balance - <Amonta amonta={assegnato} /> assigned. 
-    <Debug><Amonta amonta={mesePrec} /> il mese precedente (<Amonta amonta={$totalRolloverAssegnamenti} /> rollover).</Debug>
+    <Debug>Activity precedente: <Amonta amonta={mesePrec} /> il mese precedente <br>
+        assegnamenti precendenti: <Amonta amonta={$assegnamenti.precedente} />. rollover: <Amonta amonta={$totalRolloverAssegnamenti} /> rollover.
+    </Debug>
 </div>
 
-<div class="grid-cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
+<div class="cont" class:targetInEdita={typeof bustaSelez !== "undefined"}>
+    <div class="buste-thead" style:top={assegnamentoContOffset + "px"} on:click={toggleAllCategories} on:keydown>
+        <div>
+            {#if tutteCategCollapsed}&#9658;{:else}&#9660;{/if} Nome
+        </div>
+        <div>Categoria</div>
+        <div></div>
+        <div>Activity</div>
+        <div>Available<!-- Available --></div>
+        <div><!-- Salva btn --></div>
+    </div>
     <div class="categorie">
         {#each $Categorie as categoria, i}
-        <details open>
-            <summary style:top={assegnamentoContOffset + "px"}>
+        <details open={!categoria.collapsed}>
+            <summary style:top={busteTheadOffset + "px"} on:click|preventDefault={(ev) => salvaCollapseState(ev, categoria)}>
                 {categoria.nome}
-                <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
                 <div style="float: right">
-                    <button type="button" on:click={() => swapCategory(categoria, -1)} disabled={i === 0}>Up</button>
-                    <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>
+                    <Dropmenu alignRight={true}>
+                        <button on:click={() => { cambiaCategoriaNome(categoria)}}>Rename</button>
+                        <button type="button" on:click={() => swapCategory(categoria, -1)} disabled={i === 0}>Up</button>
+                        <button type="button" on:click={() => swapCategory(categoria, 1)} disabled={i === $Categorie.length - 1}>Down</button>
+                    </Dropmenu>
                 </div>
             </summary>
             {#each conCategoria[i] as busta, binx}
-                <span on:click={() => {bustaSelez = busta}} on:keydown>
+                <span>
                     <div style="text-align: center;">
                         Move {busta.nome}: 
                         <button type="button" on:click={() => swapBusta(i, binx, -1)} disabled={binx === 0}>Up</button>
                         <button type="button" on:click={() => swapBusta(i, binx, 1)} disabled={binx === conCategoria[i].length - 1}>Down</button>
                     </div>
-                    <Busta {busta} />
+                    <Busta {busta} on:setTarget={() => {bustaSelez = busta}} />
                 </span>
             {/each}
         </details>
         {/each}
     </div>
     
-    <div class="busta-detail" style:top={assegnamentoContOffset + "px"}>
+    <div class="busta-detail" style:display={bustaSelez ? 'block' : 'none'}>
        <BustaDetail busta={bustaSelez} on:salva={salvaBustaDetail} on:close={() => {bustaSelez = undefined}} />
     </div>
 </div>
@@ -166,11 +217,30 @@ summary::-webkit-details-marker {
   /* display: none; */ /* Hide arrow icon */
 }
 
+details summary, .buste-thead {
+    z-index: 1;
+    font-size: 1.2rem;
+    background-color: rgb(235, 235, 235);
+    padding: 4px;
+    position: sticky;
+    top: 0;
+}
+
+.buste-thead {
+    z-index: 2;
+    padding: 0.4rem; /* Da busta.svelte */
+    position: sticky;
+    display: flex;
+}
+.buste-thead > div {
+    flex: 1;
+}
+
 #daAssegnareCont {
     position: sticky;
     top: 0;
     background-color: white;
-    z-index: 1;
+    z-index: 2; /* Copri details summary */
 }
 
 .daAssegnare.positivo span {
@@ -187,12 +257,12 @@ summary::-webkit-details-marker {
     padding: 0.2rem;
 }
 
-details summary {
-    font-size: 1.2rem;
-    background-color: rgb(235, 235, 235);
-    padding: 4px;
-    position: sticky;
-    top: 0;
+.busta-detail {
+    position: fixed;
+    z-index: 100;
+    width: 80%;
+    top: 10px;
+    left: 10%;
 }
 
 .grid-cont {

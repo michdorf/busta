@@ -7,3 +7,9 @@
 </script>
 
 <span>{roundAmount(amonta)} {valutaStr}</span>
+
+<style>
+	span {
+		font-weight: bold;
+	}
+</style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toISOstr } from "$lib/date";
-	import Ricorrente from "../../../moduli/moduli/ricorrente";
+	import Ricorrente from "../../moduli/moduli/ricorrente";
 	import { salvaWritable } from "$lib/salvabile";
 	import type { BustaT } from "$lib/stato/buste";
 	import Buste from "$lib/stato/buste";

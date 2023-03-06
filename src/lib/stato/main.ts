@@ -7,7 +7,7 @@ import appState, { initLogin, setLoginError } from './app-state';
 import Categorie from './categorie';
 import { toISOstr } from '$lib/date';
 import { nuovaModifica, setNuovaModifica } from '$lib/salvabile';
-import Ricorrente, { type RicorrenteJSONT } from '../../../moduli/moduli/ricorrente';
+import Ricorrente, { type RicorrenteJSONT } from '../../moduli/moduli/ricorrente';
 
 let Stato = derived([Conti, Trasferimenti, Buste, Categorie, appState], ([$conti, $trasferimenti, $buste, $categorie, $appState]) => {
     return {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { toISOstr } from "$lib/date";
 	import  type { BustaT, SavingBusta, SpendingBusta } from "$lib/stato/buste";
-	import Ricorrente from "../../../moduli/moduli/ricorrente";
+	import Ricorrente from "../../moduli/moduli/ricorrente";
 	import { createEventDispatcher } from "svelte";
 	import AmmontaInput from "./ammonta-input.svelte";
 	import RicorrenteSelect from "./ricorrente-select.svelte";
@@ -43,7 +43,7 @@
     }
 </script>
 
-<div style="padding: 1rem; background-color: bisque; position: sticky; top: 1rem;">
+<div style="padding: 1rem; background-color: bisque; /* position: sticky; top: 1rem; */">
 {#if busta}
 <div style="float: right;"><button on:click={close}>X</button></div>
 
